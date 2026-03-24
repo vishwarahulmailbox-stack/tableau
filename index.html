@@ -80,9 +80,7 @@
     box-shadow: 0 4px 16px rgba(0,0,0,0.28);
     transform: scale(1.12);
   }
-  .zoom-btn:active {
-    transform: scale(0.97);
-  }
+  .zoom-btn:active { transform: scale(0.97); }
 
   /* ── Modal backdrop ── */
   #zoom-backdrop {
@@ -137,7 +135,6 @@
     transition: background 0.15s;
   }
   .zoom-close-btn:hover { background: rgba(255,255,255,0.15); }
-
   .modal-iframe-wrap iframe { display: block; border: 0; }
 
   /* ══════════════════════════════════════════
@@ -151,6 +148,9 @@
     cursor: crosshair;
   }
   body.locate-mode #locate-overlay { display: block; }
+
+  /* Hide existing zoom buttons in locate mode so they don't interfere */
+  body.locate-mode .zoom-btn { pointer-events: none; opacity: 0.4; }
 
   #locate-tooltip {
     display: none;
@@ -173,9 +173,9 @@
     position: absolute;
     width: 40px;
     height: 40px;
-    background: rgba(255,80,80,0.35);
+    background: rgba(255,80,80,0.4);
     border: 2px solid red;
-    border-radius: 4px;
+    border-radius: 6px;
     z-index: 610;
     pointer-events: none;
   }
@@ -223,14 +223,9 @@
   #locate-panel h4 { color: #fff; margin-bottom: 6px; font-size: 13px; }
   #locate-panel pre { white-space: pre-wrap; word-break: break-all; }
   #locate-panel .copy-btn {
-    background: #0a0;
-    color: #fff;
-    border: none;
-    padding: 4px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-top: 8px;
+    background: #0a0; color: #fff; border: none;
+    padding: 4px 10px; border-radius: 4px;
+    cursor: pointer; font-size: 12px; margin-top: 8px;
   }
 
   @media screen and (max-width: 768px) {
@@ -255,53 +250,53 @@
       allowfullscreen>
     </iframe>
 
-    <!-- ═══════════════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════
          ZOOM BUTTON OVERLAYS
-         Positions are in % — use ?locate to find exact values.
-         Each button shows the zoom icon and opens the modal on click.
-         ─────────────────────────────────────────────────────── -->
+         Use ?locate to get % values, then paste here.
+         top/left are % of the container's height/width.
+         ═══════════════════════════════════════════════ -->
 
-    <div class="zoom-btn" data-sheet="Sheet1" data-name="Sheet 1 – Series title 1"
-         style="top:5%; left:50%;">
+     <div class="zoom-btn" data-sheet="Sheet1" data-name="Sheet1 – Title"
+     style="top:0.38%; left:58.40%;">
+  <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+    </div>
+
+    <div class="zoom-btn" data-sheet="Sheet2" data-name="Sheet2 – Title"
+         style="top:60.21%; left:38.40%;">
       <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
     </div>
 
-    <div class="zoom-btn" data-sheet="Sheet2" data-name="Sheet 2 – Series title 2"
-         style="top:80%; left:20%;">
+    <div class="zoom-btn" data-sheet="Sheet3" data-name="Sheet3 – Title"
+         style="top:0.32%; left:9.04%;">
       <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
     </div>
 
-    <div class="zoom-btn" data-sheet="Sheet3" data-name="Sheet 3 – Series title 3"
-         style="top:5%; left:5%;">
+    <div class="zoom-btn" data-sheet="Sheet4" data-name="Sheet4 – Title"
+         style="top:20.81%; left:39.26%;">
       <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
     </div>
 
-    <div class="zoom-btn" data-sheet="Sheet4" data-name="Sheet 4 – Series title 4"
-         style="top:25%; left:30%;">
+    <div class="zoom-btn" data-sheet="Sheet5" data-name="Sheet5 – Title"
+         style="top:50.86%; left:36.61%;">
       <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
     </div>
 
-    <div class="zoom-btn" data-sheet="Sheet5" data-name="Sheet 5 – Series title 5"
-         style="top:35%; left:30%;">
+    <div class="zoom-btn" data-sheet="Sheet6" data-name="Sheet6 – Title"
+         style="top:0.65%; left:36.83%;">
       <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
     </div>
 
-    <div class="zoom-btn" data-sheet="Sheet6" data-name="Sheet 6 – Status"
-         style="top:5%; left:40%;">
+    <div class="zoom-btn" data-sheet="Sheet7" data-name="Sheet7 – Title"
+         style="top:40.32%; left:34.54%;">
       <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
     </div>
 
-    <div class="zoom-btn" data-sheet="Sheet7" data-name="Sheet 7 – Subject"
-         style="top:45%; left:30%;">
+    <div class="zoom-btn" data-sheet="Sheet8" data-name="Sheet8 – Title"
+         style="top:20.54%; left:9.54%;">
       <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
     </div>
 
-    <div class="zoom-btn" data-sheet="Sheet8" data-name="Sheet 8 – Units"
-         style="top:40%; left:20%;">
-      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
-    </div>
-
-    <!-- Locate mode overlay -->
+    <!-- Locate mode overlay (invisible unless ?locate) -->
     <div id="locate-overlay"></div>
 
   </div>
@@ -374,8 +369,16 @@
   });
 
   // ══════════════════════════════════════════════════════════
-  //  LOCATE MODE  —  ?locate
-  //  Outputs % positions so overlays scale with any screen size
+  //  LOCATE MODE  —  add ?locate to the URL
+  //
+  //  HOW IT WORKS:
+  //  - A transparent overlay sits on top of the iframe
+  //  - Hover → tooltip shows top/left as % of the CONTAINER
+  //    (not the viewport — so values are the same regardless
+  //     of scroll position or window size)
+  //  - Click → drops a 40×40 red pin at that % position
+  //  - Bottom panel shows ready-to-paste HTML for each pin
+  //  - Right-click → clears all pins
   // ══════════════════════════════════════════════════════════
   const params = new URLSearchParams(window.location.search);
   if (!params.has("locate")) return;
@@ -387,50 +390,60 @@
   const tooltip   = document.getElementById("locate-tooltip");
   const codeEl    = document.getElementById("locate-code");
 
-  const pins = [];
+  const pins   = [];
   const SHEETS = ["Sheet1","Sheet2","Sheet3","Sheet4","Sheet5","Sheet6","Sheet7","Sheet8"];
-  let pinCount = 0;
+  let pinCount  = 0;
 
+  // Tooltip follows mouse
   document.addEventListener("mousemove", e => {
     tooltip.style.left = (e.clientX + 18) + "px";
     tooltip.style.top  = (e.clientY + 12) + "px";
   });
 
+  // Show % coords relative to CONTAINER (not viewport)
   overlay.addEventListener("mousemove", e => {
     const rect = container.getBoundingClientRect();
-    const xPct = (((e.clientX - rect.left) / rect.width)  * 100).toFixed(1);
-    const yPct = (((e.clientY - rect.top)  / rect.height) * 100).toFixed(1);
+    // Clamp to container bounds
+    const relX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+    const relY = Math.max(0, Math.min(e.clientY - rect.top,  rect.height));
+    const xPct = ((relX / rect.width)  * 100).toFixed(2);
+    const yPct = ((relY / rect.height) * 100).toFixed(2);
+
     tooltip.textContent =
-      `top:  ${yPct}%\nleft: ${xPct}%\n\n(click to pin here)`;
+      `top:  ${yPct}%\nleft: ${xPct}%\n\n(click to pin 40×40 here)`;
   });
 
+  // Drop pin on click — centre the 40×40 pin on the click point
   overlay.addEventListener("click", e => {
-    const rect  = container.getBoundingClientRect();
-    const xPct  = (((e.clientX - rect.left) / rect.width)  * 100).toFixed(1);
-    const yPct  = (((e.clientY - rect.top)  / rect.height) * 100).toFixed(1);
-    // Offset pin so its centre sits on the click point
-    const xPinPx = e.clientX - rect.left - 20;
-    const yPinPx = e.clientY - rect.top  - 20;
+    const rect = container.getBoundingClientRect();
+    const relX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+    const relY = Math.max(0, Math.min(e.clientY - rect.top,  rect.height));
+
+    // % for the style (top-left corner of the 40px button)
+    // Subtract half the button size (20px) to centre it on the click
+    const xPct = (((relX - 20) / rect.width)  * 100).toFixed(2);
+    const yPct = (((relY - 20) / rect.height) * 100).toFixed(2);
 
     const sheet = SHEETS[pinCount % SHEETS.length];
     pinCount++;
 
-    // Draw pin
+    // Visual pin at click position (px, relative to container)
     const pin = document.createElement("div");
     pin.className = "locate-pin";
-    pin.style.top  = yPinPx + "px";
-    pin.style.left = xPinPx + "px";
+    pin.style.left = (relX - 20) + "px";
+    pin.style.top  = (relY - 20) + "px";
 
-    const label = document.createElement("div");
-    label.className = "locate-pin-label";
-    label.textContent = `top:${yPct}% left:${xPct}% → ${sheet}`;
-    pin.appendChild(label);
+    const lbl = document.createElement("div");
+    lbl.className = "locate-pin-label";
+    lbl.textContent = `top:${yPct}% left:${xPct}% → ${sheet}`;
+    pin.appendChild(lbl);
     container.appendChild(pin);
 
     pins.push({ top: yPct, left: xPct, sheet });
     updateCode();
   });
 
+  // Right-click → clear
   overlay.addEventListener("contextmenu", e => {
     e.preventDefault();
     document.querySelectorAll(".locate-pin").forEach(p => p.remove());
@@ -451,8 +464,8 @@
 
   window.copyCode = function () {
     navigator.clipboard.writeText(codeEl.textContent)
-      .then(() => alert("✅ Code copied! Paste it into your HTML replacing the existing .zoom-btn divs."))
-      .catch(() => alert("Select the code above and copy manually."));
+      .then(() => alert("✅ Code copied! Paste into your HTML replacing the existing .zoom-btn divs."))
+      .catch(() => alert("Select the code above and copy it manually."));
   };
 
 })();
