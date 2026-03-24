@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tableau Dashboard | Accan</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f2f2;
+  }
+
+  .top-header {
+    background: #000;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+  }
+  .top-header img { height: 48px; max-width: 100%; }
+
+  .tableau-wrapper {
+    background: #fff;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .tableau-wix-container {
+    position: relative;
+    width: 95%;
+    max-width: 1400px;
+    height: 1850px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .tableau-wix-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Hide Tableau footer toolbar */
+  .tableau-wix-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 50px;
+    background: #fff;
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  /* ── Zoom button overlays ── */
+  .zoom-btn {
+    position: absolute;
+    z-index: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    background: transparent;
+    transition: background 0.15s;
+  }
+  .zoom-btn:hover {
+    background: rgba(52, 110, 163, 0.18);
+    outline: 2px solid rgba(52, 110, 163, 0.5);
+  }
+
+  /* ── Modal backdrop ── */
+  #zoom-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.72);
+    z-index: 10000;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  #zoom-backdrop.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.22s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  .zoom-modal {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.55);
+    overflow: hidden;
+    animation: popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    max-width: 96vw;
+    max-height: 92vh;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.88); opacity:0; }
+    to   { transform: scale(1);    opacity:1; }
+  }
+
+  .zoom-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: #000;
+    color: #fff;
+  }
+  .zoom-modal-header span { font-size: 15px; font-weight: 600; }
+
+  .zoom-close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .zoom-close-btn:hover { background: rgba(255,255,255,0.15); }
+
+  .modal-iframe-wrap iframe { display: block; border: 0; }
+
+  /* ══════════════════════════════════════════
+     COORDINATE FINDER TOOL  (?locate mode)
+     Visit: tableau.html?locate
+  ══════════════════════════════════════════ */
+
+  /* Crosshair overlay — only in locate mode */
+  #locate-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 600;
+    cursor: crosshair;
+  }
+  body.locate-mode #locate-overlay { display: block; }
+
+  /* Tooltip that follows the cursor */
+  #locate-tooltip {
+    display: none;
+    position: fixed;
+    background: #000;
+    color: #0f0;
+    font-family: monospace;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    pointer-events: none;
+    z-index: 20000;
+    white-space: pre;
+    border: 1px solid #0f0;
+    line-height: 1.7;
+  }
+  body.locate-mode #locate-tooltip { display: block; }
+
+  /* Pinned markers dropped on click */
+  .locate-pin {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,80,80,0.35);
+    border: 2px solid red;
+    border-radius: 4px;
+    z-index: 610;
+    pointer-events: none;
+  }
+  .locate-pin-label {
+    position: absolute;
+    top: -22px; left: 0;
+    background: red;
+    color: #fff;
+    font-size: 10px;
+    font-family: monospace;
+    padding: 1px 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  /* Locate mode banner */
+  #locate-banner {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #0a0;
+    color: #fff;
+    font-family: monospace;
+    font-size: 13px;
+    padding: 10px 16px;
+    z-index: 19999;
+    text-align: center;
+  }
+  body.locate-mode #locate-banner { display: block; }
+
+  /* Locate panel — shows generated code */
+  #locate-panel {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #111;
+    color: #0f0;
+    font-family: monospace;
+    font-size: 12px;
+    padding: 12px 16px;
+    z-index: 19999;
+    max-height: 200px;
+    overflow-y: auto;
+    border-top: 2px solid #0a0;
+  }
+  body.locate-mode #locate-panel { display: block; }
+  #locate-panel h4 { color: #fff; margin-bottom: 6px; font-size: 13px; }
+  #locate-panel pre { white-space: pre-wrap; word-break: break-all; }
+  #locate-panel .copy-btn {
+    background: #0a0;
+    color: #fff;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+
+  /* Debug mode */
+  body.debug-mode .zoom-btn {
+    background: rgba(255,0,0,0.2) !important;
+    outline: 2px dashed red !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    .top-header { padding: 16px; }
+    .top-header img { height: 36px; }
+    .tableau-wix-container { height: 3050px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-header">
+  <img src="https://i.ibb.co/Nj0PYDw/Pegion.jpg" alt="Pegion Logo">
+</div>
+
+<div class="tableau-wrapper">
+  <div class="tableau-wix-container" id="mainContainer">
+
+    <iframe
+      src="https://public.tableau.com/views/Trial_17743318838450/Dashboard1?:showVizHome=no&toolbar=no"
+      scrolling="no"
+      allowfullscreen>
+    </iframe>
+
+    <!-- ═══════════════════════════════════════════════════════
+         ZOOM BUTTON OVERLAYS
+         Paste the top/left/width/height values from ?locate mode
+         ─────────────────────────────────────────────────────── -->
+
+    <div class="zoom-btn" data-sheet="Sheet3" data-name="Sheet 3 – Series title 3"
+         style="top:88px; left:20px; width:40px; height:40px;"></div>
+
+    <div class="zoom-btn" data-sheet="Sheet6" data-name="Sheet 6 – Status"
+         style="top:88px; left:215px; width:40px; height:40px;"></div>
+
+    <div class="zoom-btn" data-sheet="Sheet1" data-name="Sheet 1 – Series title 1"
+         style="top:88px; right:20px; width:40px; height:40px;"></div>
+
+    <div class="zoom-btn" data-sheet="Sheet8" data-name="Sheet 8 – Units"
+         style="top:445px; left:20px; width:40px; height:40px;"></div>
+
+    <div class="zoom-btn" data-sheet="Sheet4" data-name="Sheet 4 – Series title 4"
+         style="top:445px; left:215px; width:40px; height:40px;"></div>
+
+    <div class="zoom-btn" data-sheet="Sheet7" data-name="Sheet 7 – Subject"
+         style="top:800px; left:20px; width:40px; height:40px;"></div>
+
+    <div class="zoom-btn" data-sheet="Sheet5" data-name="Sheet 5 – Series title 5"
+         style="top:1000px; left:20px; width:40px; height:40px;"></div>
+
+    <div class="zoom-btn" data-sheet="Sheet2" data-name="Sheet 2 – Series title 2"
+         style="top:1165px; left:20px; width:40px; height:40px;"></div>
+
+    <!-- Coordinate finder overlay (locate mode only) -->
+    <div id="locate-overlay"></div>
+
+  </div>
+</div>
+
+<!-- Zoom Modal -->
+<div id="zoom-backdrop">
+  <div class="zoom-modal" id="zoomModal">
+    <div class="zoom-modal-header">
+      <span id="modalChartName">Chart</span>
+      <button class="zoom-close-btn" id="closeModalBtn" title="Close (Esc)">✕</button>
+    </div>
+    <div class="modal-iframe-wrap" id="modalIframeWrap"></div>
+  </div>
+</div>
+
+<!-- Locate mode UI -->
+<div id="locate-banner">
+  🎯 LOCATE MODE — Hover to see coordinates. Click to drop a 40×40 pin. Right-click to clear pins.
+  &nbsp;&nbsp;<a href="?" style="color:#fff;font-weight:bold;">[Exit locate mode]</a>
+</div>
+<div id="locate-tooltip"></div>
+<div id="locate-panel">
+  <h4>📋 Generated overlay code — copy into your HTML:</h4>
+  <pre id="locate-code">← Click on the dashboard to drop pins and generate code here.</pre>
+  <button class="copy-btn" onclick="copyCode()">Copy code</button>
+</div>
+
+<script>
+(function () {
+  const BASE_URL = "https://public.tableau.com/views/Trial_17743318838450/";
+  const backdrop = document.getElementById("zoom-backdrop");
+  const modal    = document.getElementById("zoomModal");
+  const nameEl   = document.getElementById("modalChartName");
+  const wrapEl   = document.getElementById("modalIframeWrap");
+  const closeBtn = document.getElementById("closeModalBtn");
+
+  const MODAL_W = Math.min(Math.round(window.innerWidth  * 0.88), 1300);
+  const MODAL_H = Math.min(Math.round(window.innerHeight * 0.80), 820);
+  modal.style.width   = MODAL_W + "px";
+  wrapEl.style.width  = MODAL_W + "px";
+  wrapEl.style.height = MODAL_H + "px";
+
+  function openModal(btn) {
+    const sheet = btn.dataset.sheet;
+    const name  = btn.dataset.name;
+    nameEl.textContent = name;
+    const url = BASE_URL + sheet + "?:showVizHome=no&:toolbar=no&:embed=y";
+    wrapEl.innerHTML = `<iframe src="${url}" width="${MODAL_W}" height="${MODAL_H}" allowfullscreen style="border:0"></iframe>`;
+    backdrop.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    backdrop.classList.remove("active");
+    document.body.style.overflow = "";
+    setTimeout(() => { wrapEl.innerHTML = ""; }, 260);
+  }
+
+  document.querySelectorAll(".zoom-btn").forEach(btn => {
+    btn.addEventListener("click", () => openModal(btn));
+  });
+
+  closeBtn.addEventListener("click", closeModal);
+  backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && backdrop.classList.contains("active")) closeModal();
+  });
+
+  // ── Debug mode ────────────────────────────────────────────
+  if (new URLSearchParams(window.location.search).has("debug")) {
+    document.body.classList.add("debug-mode");
+  }
+
+  // ══════════════════════════════════════════════════════════
+  //  LOCATE MODE  —  ?locate
+  //  Hover over dashboard → see pixel coords
+  //  Click → drop a 40×40 pin → auto-generates the .zoom-btn div code
+  // ══════════════════════════════════════════════════════════
+  const params = new URLSearchParams(window.location.search);
+  if (!params.has("locate")) return;
+
+  document.body.classList.add("locate-mode");
+
+  const container  = document.getElementById("mainContainer");
+  const overlay    = document.getElementById("locate-overlay");
+  const tooltip    = document.getElementById("locate-tooltip");
+  const codeEl     = document.getElementById("locate-code");
+
+  const pins = []; // { top, left, sheet }
+  const SHEETS = ["Sheet1","Sheet2","Sheet3","Sheet4","Sheet5","Sheet6","Sheet7","Sheet8"];
+  let pinCount = 0;
+
+  // Move tooltip with cursor
+  document.addEventListener("mousemove", e => {
+    tooltip.style.left = (e.clientX + 18) + "px";
+    tooltip.style.top  = (e.clientY + 12) + "px";
+  });
+
+  // Show coords relative to container on overlay hover
+  overlay.addEventListener("mousemove", e => {
+    const rect = container.getBoundingClientRect();
+    const x = Math.round(e.clientX - rect.left);
+    const y = Math.round(e.clientY - rect.top);
+    tooltip.textContent =
+      `top:  ${y}px\nleft: ${x}px\n\n(click to pin 40×40 overlay here)`;
+  });
+
+  // Drop a pin on click
+  overlay.addEventListener("click", e => {
+    const rect = container.getBoundingClientRect();
+    const x = Math.round(e.clientX - rect.left);
+    const y = Math.round(e.clientY - rect.top);
+
+    const sheet = SHEETS[pinCount % SHEETS.length];
+    pinCount++;
+
+    // Draw pin box
+    const pin = document.createElement("div");
+    pin.className = "locate-pin";
+    pin.style.top  = (y - 20) + "px";
+    pin.style.left = (x - 20) + "px";
+
+    const label = document.createElement("div");
+    label.className = "locate-pin-label";
+    label.textContent = `top:${y-20} left:${x-20} → ${sheet}`;
+    pin.appendChild(label);
+    container.appendChild(pin);
+
+    pins.push({ top: y - 20, left: x - 20, sheet });
+    updateCode();
+  });
+
+  // Right-click clears pins
+  overlay.addEventListener("contextmenu", e => {
+    e.preventDefault();
+    document.querySelectorAll(".locate-pin").forEach(p => p.remove());
+    pins.length = 0;
+    pinCount = 0;
+    codeEl.textContent = "← Pins cleared. Click again to place new ones.";
+  });
+
+  function updateCode() {
+    const lines = pins.map(p =>
+      `<div class="zoom-btn" data-sheet="${p.sheet}" data-name="${p.sheet} – Title"\n` +
+      `     style="top:${p.top}px; left:${p.left}px; width:40px; height:40px;"></div>`
+    );
+    codeEl.textContent = lines.join("\n\n");
+  }
+
+  window.copyCode = function () {
+    navigator.clipboard.writeText(codeEl.textContent)
+      .then(() => alert("✅ Code copied! Paste it into your HTML."))
+      .catch(() => alert("Select the code above and copy manually."));
+  };
+
+})();
+</script>
+</body>
+</html>
