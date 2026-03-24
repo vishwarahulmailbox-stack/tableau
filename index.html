@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tableau Dashboard | Accan</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f2f2;
+  }
+
+  .top-header {
+    background: #000;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+  }
+  .top-header img { height: 48px; max-width: 100%; }
+
+  .tableau-wrapper {
+    background: #fff;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .tableau-wix-container {
+    position: relative;
+    width: 95%;
+    max-width: 1400px;
+    /*
+      Height uses a padding-top trick to maintain the exact
+      aspect ratio of your Tableau dashboard (900 × 1500 = 1:1.667).
+      Formula: (dashboardHeight / dashboardWidth) × 100 = 166.67%
+      This means the container always matches the iframe's aspect
+      ratio at any screen width — overlays in % will stay locked.
+    */
+    height: 0;
+    padding-top: 166.67%;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .tableau-wix-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Hide Tableau footer toolbar */
+  .tableau-wix-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    /*
+      Footer height as % of total dashboard height:
+      50px / 1500px = 3.33%
+    */
+    height: 3.33%;
+    background: #fff;
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  /*
+  ══════════════════════════════════════════════════════════════
+    ZOOM BUTTON OVERLAYS
+    All positions are in % of the container so they scale
+    perfectly at any screen size.
+
+    Width/height are also in % so the hit area scales too:
+      41px wide  / 900px dashboard width  = 4.56%
+      41px tall  / 1500px dashboard height = 2.73%
+
+    HOW TO RECALCULATE if your dashboard size changes:
+      top%  = (px from top  / dashboard height) × 100
+      left% = (px from left / dashboard width)  × 100
+      w%    = (image width  / dashboard width)  × 100
+      h%    = (image height / dashboard height) × 100
+
+    Add ?debug to the URL to see overlays highlighted in red.
+  ══════════════════════════════════════════════════════════════
+  */
+  .zoom-btn {
+    position: absolute;
+    z-index: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    background: transparent;
+    transition: background 0.15s;
+    /* 41×41px as % of 900×1500 dashboard */
+    width:  4.56%;
+    height: 2.73%;
+  }
+  .zoom-btn:hover {
+    background: rgba(52, 110, 163, 0.18);
+    outline: 2px solid rgba(52, 110, 163, 0.45);
+  }
+
+  /* ── Modal backdrop ── */
+  #zoom-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.72);
+    z-index: 10000;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  #zoom-backdrop.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.22s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  .zoom-modal {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.55);
+    overflow: hidden;
+    animation: popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    max-width: 96vw;
+    max-height: 92vh;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.88); opacity:0; }
+    to   { transform: scale(1);    opacity:1; }
+  }
+
+  .zoom-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: #000;
+    color: #fff;
+  }
+  .zoom-modal-header span { font-size: 15px; font-weight: 600; }
+
+  .zoom-close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .zoom-close-btn:hover { background: rgba(255,255,255,0.15); }
+  .modal-iframe-wrap iframe { display: block; border: 0; }
+
+  /* ── Debug mode: add ?debug to URL ── */
+  body.debug-mode .zoom-btn {
+    background: rgba(255, 0, 0, 0.30) !important;
+    outline: 2px dashed red !important;
+  }
+  body.debug-mode .zoom-btn::after {
+    content: attr(data-label);
+    position: absolute;
+    top: 2px; left: 2px;
+    font-size: 9px;
+    color: red;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .top-header { padding: 16px; }
+    .top-header img { height: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-header">
+  <img src="https://i.ibb.co/Nj0PYDw/Pegion.jpg" alt="Pegion Logo">
+</div>
+
+<div class="tableau-wrapper">
+  <div class="tableau-wix-container" id="mainContainer">
+
+    <iframe
+      src="https://public.tableau.com/views/Trial_17743318838450/Dashboard1?:showVizHome=no&toolbar=no"
+      scrolling="no"
+      allowfullscreen>
+    </iframe>
+
+    <!--
+    ══════════════════════════════════════════════════════════════
+      ALL POSITIONS ARE % OF CONTAINER (not px)
+      Dashboard size in Tableau: 900 × 1500 px
+
+      To find exact positions:
+        1. Add ?debug to URL — overlays show in red
+        2. In DevTools find the tab-zone for each image
+        3. Read top/left px values
+        4. top%  = (topPx  / 1500) × 100
+           left% = (leftPx / 900)  × 100
+        5. Update the style below
+
+      Current values are from your DevTools screenshot.
+    ══════════════════════════════════════════════════════════════
+
+    ── ROW 1 (top ≈ 379–386px) ──────────────────────────────── -->
+
+    <!-- Sheet 3 — top-left   379/1500=25.27%  8/900=0.89% -->
+    <div class="zoom-btn"
+         data-sheet="Sheet3"
+         data-label="Sheet3"
+         style="top: 25.27%; left: 0.89%;">
+    </div>
+
+    <!-- Sheet 6 — top-centre  386/1500=25.73%  169/900=18.78% -->
+    <div class="zoom-btn"
+         data-sheet="Sheet6"
+         data-label="Sheet6"
+         style="top: 25.73%; left: 18.78%;">
+    </div>
+
+    <!-- Sheet 1 — top-right  379/1500=25.27%  right side 8/900=0.89% -->
+    <div class="zoom-btn"
+         data-sheet="Sheet1"
+         data-label="Sheet1"
+         style="top: 25.27%; right: 0.89%;">
+    </div>
+
+    <!-- ── ROW 2 (top ≈ 750px) ───────────────────────────────── -->
+
+    <!-- Sheet 8 — mid-left   750/1500=50.00%  8/900=0.89% -->
+    <div class="zoom-btn"
+         data-sheet="Sheet8"
+         data-label="Sheet8"
+         style="top: 50.00%; left: 0.89%;">
+    </div>
+
+    <!-- Sheet 4 — mid-centre  750/1500=50.00%  169/900=18.78% -->
+    <div class="zoom-btn"
+         data-sheet="Sheet4"
+         data-label="Sheet4"
+         style="top: 50.00%; left: 18.78%;">
+    </div>
+
+    <!-- ── ROW 3 ──────────────────────────────────────────────
+         Adjust these top% values using ?debug + DevTools
+         for Sheet 7, Sheet 5, Sheet 2                       -->
+
+    <!-- Sheet 7 — subject bar  ~73.33% = 1100/1500 -->
+    <div class="zoom-btn"
+         data-sheet="Sheet7"
+         data-label="Sheet7"
+         style="top: 73.33%; left: 0.89%;">
+    </div>
+
+    <!-- Sheet 5 — horizontal bar  ~86% = 1290/1500 -->
+    <div class="zoom-btn"
+         data-sheet="Sheet5"
+         data-label="Sheet5"
+         style="top: 86.00%; left: 0.89%;">
+    </div>
+
+    <!-- Sheet 2 — bottom wide  ~97% = 1455/1500 -->
+    <div class="zoom-btn"
+         data-sheet="Sheet2"
+         data-label="Sheet2"
+         style="top: 97.00%; left: 0.89%;">
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Zoom Modal ── -->
+<div id="zoom-backdrop">
+  <div class="zoom-modal" id="zoomModal">
+    <div class="zoom-modal-header">
+      <span id="modalChartName">Chart</span>
+      <button class="zoom-close-btn" id="closeModalBtn" title="Close (Esc)">✕</button>
+    </div>
+    <div class="modal-iframe-wrap" id="modalIframeWrap"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const SHEET_REGISTRY = {
+    Sheet1: "Series title 1",
+    Sheet2: "Series title 2",
+    Sheet3: "Series title 3",
+    Sheet4: "Series title 4",
+    Sheet5: "Series title 5",
+    Sheet6: "Status",
+    Sheet7: "Subject",
+    Sheet8: "Units",
+  };
+
+  const BASE_URL = "https://public.tableau.com/views/Trial_17743318838450/";
+  const backdrop = document.getElementById("zoom-backdrop");
+  const modal    = document.getElementById("zoomModal");
+  const nameEl   = document.getElementById("modalChartName");
+  const wrapEl   = document.getElementById("modalIframeWrap");
+  const closeBtn = document.getElementById("closeModalBtn");
+
+  const MODAL_W = Math.min(Math.round(window.innerWidth  * 0.88), 1300);
+  const MODAL_H = Math.min(Math.round(window.innerHeight * 0.80), 820);
+  modal.style.width   = MODAL_W + "px";
+  wrapEl.style.width  = MODAL_W + "px";
+  wrapEl.style.height = MODAL_H + "px";
+
+  function openModal(sheetKey) {
+    const label = SHEET_REGISTRY[sheetKey] || sheetKey;
+    nameEl.textContent = label;
+    const url = BASE_URL + sheetKey + "?:showVizHome=no&:toolbar=no&:embed=y";
+    wrapEl.innerHTML =
+      `<iframe src="${url}" width="${MODAL_W}" height="${MODAL_H}"
+               allowfullscreen style="border:0"></iframe>`;
+    backdrop.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    backdrop.classList.remove("active");
+    document.body.style.overflow = "";
+    setTimeout(() => { wrapEl.innerHTML = ""; }, 260);
+  }
+
+  document.querySelectorAll(".zoom-btn").forEach(btn => {
+    btn.addEventListener("click", () => openModal(btn.dataset.sheet));
+  });
+
+  closeBtn.addEventListener("click", closeModal);
+  backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && backdrop.classList.contains("active")) closeModal();
+  });
+
+  /* Debug mode — add ?debug to URL */
+  if (new URLSearchParams(window.location.search).has("debug")) {
+    document.body.classList.add("debug-mode");
+  }
+})();
+</script>
+</body>
+</html>
