@@ -53,18 +53,35 @@
     pointer-events: none;
   }
 
-  /* ── Zoom button overlays ── */
+  /* ── Zoom button overlays — always visible with icon ── */
   .zoom-btn {
     position: absolute;
     z-index: 500;
     cursor: pointer;
-    border-radius: 4px;
-    background: transparent;
-    transition: background 0.15s;
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+  .zoom-btn img {
+    width: 24px;
+    height: 24px;
+    display: block;
+    pointer-events: none;
   }
   .zoom-btn:hover {
-    background: rgba(52, 110, 163, 0.18);
-    outline: 2px solid rgba(52, 110, 163, 0.5);
+    background: rgba(255,255,255,1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.28);
+    transform: scale(1.12);
+  }
+  .zoom-btn:active {
+    transform: scale(0.97);
   }
 
   /* ── Modal backdrop ── */
@@ -124,11 +141,8 @@
   .modal-iframe-wrap iframe { display: block; border: 0; }
 
   /* ══════════════════════════════════════════
-     COORDINATE FINDER TOOL  (?locate mode)
-     Visit: tableau.html?locate
+     LOCATE MODE  (?locate)
   ══════════════════════════════════════════ */
-
-  /* Crosshair overlay — only in locate mode */
   #locate-overlay {
     display: none;
     position: absolute;
@@ -138,7 +152,6 @@
   }
   body.locate-mode #locate-overlay { display: block; }
 
-  /* Tooltip that follows the cursor */
   #locate-tooltip {
     display: none;
     position: fixed;
@@ -156,7 +169,6 @@
   }
   body.locate-mode #locate-tooltip { display: block; }
 
-  /* Pinned markers dropped on click */
   .locate-pin {
     position: absolute;
     width: 40px;
@@ -179,7 +191,6 @@
     white-space: nowrap;
   }
 
-  /* Locate mode banner */
   #locate-banner {
     display: none;
     position: fixed;
@@ -194,7 +205,6 @@
   }
   body.locate-mode #locate-banner { display: block; }
 
-  /* Locate panel — shows generated code */
   #locate-panel {
     display: none;
     position: fixed;
@@ -205,7 +215,7 @@
     font-size: 12px;
     padding: 12px 16px;
     z-index: 19999;
-    max-height: 200px;
+    max-height: 220px;
     overflow-y: auto;
     border-top: 2px solid #0a0;
   }
@@ -221,12 +231,6 @@
     cursor: pointer;
     font-size: 12px;
     margin-top: 8px;
-  }
-
-  /* Debug mode */
-  body.debug-mode .zoom-btn {
-    background: rgba(255,0,0,0.2) !important;
-    outline: 2px dashed red !important;
   }
 
   @media screen and (max-width: 768px) {
@@ -253,33 +257,51 @@
 
     <!-- ═══════════════════════════════════════════════════════
          ZOOM BUTTON OVERLAYS
-         Paste the top/left/width/height values from ?locate mode
+         Positions are in % — use ?locate to find exact values.
+         Each button shows the zoom icon and opens the modal on click.
          ─────────────────────────────────────────────────────── -->
-<div class="zoom-btn" data-sheet="Sheet1" data-name="Sheet1 – Title"
-     style="top:5%; left:50%; width:40px; height:40px;"></div>
 
-<div class="zoom-btn" data-sheet="Sheet2" data-name="Sheet2 – Title"
-     style="top:80%; left:20%; width:40px; height:40px;"></div>
+    <div class="zoom-btn" data-sheet="Sheet1" data-name="Sheet 1 – Series title 1"
+         style="top:5%; left:50%;">
+      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+    </div>
 
-<div class="zoom-btn" data-sheet="Sheet3" data-name="Sheet3 – Title"
-     style="top:5%; left:5%; width:40px; height:40px;"></div>
+    <div class="zoom-btn" data-sheet="Sheet2" data-name="Sheet 2 – Series title 2"
+         style="top:80%; left:20%;">
+      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+    </div>
 
-<div class="zoom-btn" data-sheet="Sheet4" data-name="Sheet4 – Title"
-     style="top:25%; left:30%; width:40px; height:40px;"></div>
+    <div class="zoom-btn" data-sheet="Sheet3" data-name="Sheet 3 – Series title 3"
+         style="top:5%; left:5%;">
+      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+    </div>
 
-<div class="zoom-btn" data-sheet="Sheet5" data-name="Sheet5 – Title"
-     style="top:35%; left:30%; width:40px; height:40px;"></div>
+    <div class="zoom-btn" data-sheet="Sheet4" data-name="Sheet 4 – Series title 4"
+         style="top:25%; left:30%;">
+      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+    </div>
 
-<div class="zoom-btn" data-sheet="Sheet6" data-name="Sheet6 – Title"
-     style="top:5%; left:40%; width:40px; height:40px;"></div>
+    <div class="zoom-btn" data-sheet="Sheet5" data-name="Sheet 5 – Series title 5"
+         style="top:35%; left:30%;">
+      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+    </div>
 
-<div class="zoom-btn" data-sheet="Sheet7" data-name="Sheet7 – Title"
-     style="top:45%; left:30%; width:40px; height:40px;"></div>
+    <div class="zoom-btn" data-sheet="Sheet6" data-name="Sheet 6 – Status"
+         style="top:5%; left:40%;">
+      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+    </div>
 
-<div class="zoom-btn" data-sheet="Sheet8" data-name="Sheet8 – Title"
-     style="top:40%; left:20%; width:40px; height:40px;"></div>
+    <div class="zoom-btn" data-sheet="Sheet7" data-name="Sheet 7 – Subject"
+         style="top:45%; left:30%;">
+      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+    </div>
 
-    <!-- Coordinate finder overlay (locate mode only) -->
+    <div class="zoom-btn" data-sheet="Sheet8" data-name="Sheet 8 – Units"
+         style="top:40%; left:20%;">
+      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+    </div>
+
+    <!-- Locate mode overlay -->
     <div id="locate-overlay"></div>
 
   </div>
@@ -298,12 +320,12 @@
 
 <!-- Locate mode UI -->
 <div id="locate-banner">
-  🎯 LOCATE MODE — Hover to see coordinates. Click to drop a 40×40 pin. Right-click to clear pins.
+  🎯 LOCATE MODE — Hover to see % coordinates. Click to drop a pin. Right-click to clear all pins.
   &nbsp;&nbsp;<a href="?" style="color:#fff;font-weight:bold;">[Exit locate mode]</a>
 </div>
 <div id="locate-tooltip"></div>
 <div id="locate-panel">
-  <h4>📋 Generated overlay code — copy into your HTML:</h4>
+  <h4>📋 Generated overlay code (% positions) — copy into your HTML:</h4>
   <pre id="locate-code">← Click on the dashboard to drop pins and generate code here.</pre>
   <button class="copy-btn" onclick="copyCode()">Copy code</button>
 </div>
@@ -311,6 +333,8 @@
 <script>
 (function () {
   const BASE_URL = "https://public.tableau.com/views/Trial_17743318838450/";
+  const ICON_URL = "https://i.ibb.co/4RHpxwDc/search.png";
+
   const backdrop = document.getElementById("zoom-backdrop");
   const modal    = document.getElementById("zoomModal");
   const nameEl   = document.getElementById("modalChartName");
@@ -349,71 +373,64 @@
     if (e.key === "Escape" && backdrop.classList.contains("active")) closeModal();
   });
 
-  // ── Debug mode ────────────────────────────────────────────
-  if (new URLSearchParams(window.location.search).has("debug")) {
-    document.body.classList.add("debug-mode");
-  }
-
   // ══════════════════════════════════════════════════════════
   //  LOCATE MODE  —  ?locate
-  //  Hover over dashboard → see pixel coords
-  //  Click → drop a 40×40 pin → auto-generates the .zoom-btn div code
+  //  Outputs % positions so overlays scale with any screen size
   // ══════════════════════════════════════════════════════════
   const params = new URLSearchParams(window.location.search);
   if (!params.has("locate")) return;
 
   document.body.classList.add("locate-mode");
 
-  const container  = document.getElementById("mainContainer");
-  const overlay    = document.getElementById("locate-overlay");
-  const tooltip    = document.getElementById("locate-tooltip");
-  const codeEl     = document.getElementById("locate-code");
+  const container = document.getElementById("mainContainer");
+  const overlay   = document.getElementById("locate-overlay");
+  const tooltip   = document.getElementById("locate-tooltip");
+  const codeEl    = document.getElementById("locate-code");
 
-  const pins = []; // { top, left, sheet }
+  const pins = [];
   const SHEETS = ["Sheet1","Sheet2","Sheet3","Sheet4","Sheet5","Sheet6","Sheet7","Sheet8"];
   let pinCount = 0;
 
-  // Move tooltip with cursor
   document.addEventListener("mousemove", e => {
     tooltip.style.left = (e.clientX + 18) + "px";
     tooltip.style.top  = (e.clientY + 12) + "px";
   });
 
-  // Show coords relative to container on overlay hover
   overlay.addEventListener("mousemove", e => {
     const rect = container.getBoundingClientRect();
-    const x = Math.round(e.clientX - rect.left);
-    const y = Math.round(e.clientY - rect.top);
+    const xPct = (((e.clientX - rect.left) / rect.width)  * 100).toFixed(1);
+    const yPct = (((e.clientY - rect.top)  / rect.height) * 100).toFixed(1);
     tooltip.textContent =
-      `top:  ${y}px\nleft: ${x}px\n\n(click to pin 40×40 overlay here)`;
+      `top:  ${yPct}%\nleft: ${xPct}%\n\n(click to pin here)`;
   });
 
-  // Drop a pin on click
   overlay.addEventListener("click", e => {
-    const rect = container.getBoundingClientRect();
-    const x = Math.round(e.clientX - rect.left);
-    const y = Math.round(e.clientY - rect.top);
+    const rect  = container.getBoundingClientRect();
+    const xPct  = (((e.clientX - rect.left) / rect.width)  * 100).toFixed(1);
+    const yPct  = (((e.clientY - rect.top)  / rect.height) * 100).toFixed(1);
+    // Offset pin so its centre sits on the click point
+    const xPinPx = e.clientX - rect.left - 20;
+    const yPinPx = e.clientY - rect.top  - 20;
 
     const sheet = SHEETS[pinCount % SHEETS.length];
     pinCount++;
 
-    // Draw pin box
+    // Draw pin
     const pin = document.createElement("div");
     pin.className = "locate-pin";
-    pin.style.top  = (y - 20) + "px";
-    pin.style.left = (x - 20) + "px";
+    pin.style.top  = yPinPx + "px";
+    pin.style.left = xPinPx + "px";
 
     const label = document.createElement("div");
     label.className = "locate-pin-label";
-    label.textContent = `top:${y-20} left:${x-20} → ${sheet}`;
+    label.textContent = `top:${yPct}% left:${xPct}% → ${sheet}`;
     pin.appendChild(label);
     container.appendChild(pin);
 
-    pins.push({ top: y - 20, left: x - 20, sheet });
+    pins.push({ top: yPct, left: xPct, sheet });
     updateCode();
   });
 
-  // Right-click clears pins
   overlay.addEventListener("contextmenu", e => {
     e.preventDefault();
     document.querySelectorAll(".locate-pin").forEach(p => p.remove());
@@ -425,14 +442,16 @@
   function updateCode() {
     const lines = pins.map(p =>
       `<div class="zoom-btn" data-sheet="${p.sheet}" data-name="${p.sheet} – Title"\n` +
-      `     style="top:${p.top}px; left:${p.left}px; width:40px; height:40px;"></div>`
+      `     style="top:${p.top}%; left:${p.left}%;">\n` +
+      `  <img src="${ICON_URL}" alt="Zoom">\n` +
+      `</div>`
     );
     codeEl.textContent = lines.join("\n\n");
   }
 
   window.copyCode = function () {
     navigator.clipboard.writeText(codeEl.textContent)
-      .then(() => alert("✅ Code copied! Paste it into your HTML."))
+      .then(() => alert("✅ Code copied! Paste it into your HTML replacing the existing .zoom-btn divs."))
       .catch(() => alert("Select the code above and copy manually."));
   };
 
