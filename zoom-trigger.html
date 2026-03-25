@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Opening...</title>
+<style>
+  /* Pure black — if visible for a millisecond, no jarring flash */
+  html, body { margin: 0; padding: 0; background: #000; }
+</style>
+</head>
+<body>
+<script>
+(function () {
+  const sheet = new URLSearchParams(window.location.search).get("zoom");
+
+  if (sheet) {
+    try {
+      // Write sheet name — index.html picks this up within 300ms
+      localStorage.setItem("tableau_zoom_sheet", sheet);
+    } catch (e) {}
+  }
+
+  // Close this tab immediately
+  window.close();
+
+  // Fallback: if window.close() is blocked by the browser,
+  // redirect back to the main page after 150ms
+  setTimeout(function () {
+    window.location.replace("https://vishwarahulmailbox-stack.github.io/tableau/");
+  }, 150);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tableau Dashboard | Accan</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f2f2f2;
+  }
+
+  .top-header {
+    background: #000;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+  }
+  .top-header img { height: 48px; max-width: 100%; }
+
+  .tableau-wrapper {
+    background: #fff;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .tableau-wix-container {
+    position: relative;
+    width: 95%;
+    max-width: 1400px;
+    height: 1850px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .tableau-wix-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Hide Tableau footer toolbar */
+  .tableau-wix-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 50px;
+    background: #fff;
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  /* ── Modal backdrop ── */
+  #zoom-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.72);
+    z-index: 10000;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+  }
+  #zoom-backdrop.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.22s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  .zoom-modal {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.55);
+    overflow: hidden;
+    animation: popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    max-width: 96vw;
+    max-height: 92vh;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.88); opacity:0; }
+    to   { transform: scale(1);    opacity:1; }
+  }
+
+  .zoom-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: #000;
+    color: #fff;
+  }
+  .zoom-modal-header span { font-size: 15px; font-weight: 600; }
+
+  .zoom-close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .zoom-close-btn:hover { background: rgba(255,255,255,0.15); }
+  .modal-iframe-wrap iframe { display: block; border: 0; }
+
+  @media screen and (max-width: 768px) {
+    .top-header { padding: 16px; }
+    .top-header img { height: 36px; }
+    .tableau-wix-container { height: 3050px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-header">
+  <img src="https://i.ibb.co/Nj0PYDw/Pegion.jpg" alt="Pegion Logo">
+</div>
+
+<div class="tableau-wrapper">
+  <div class="tableau-wix-container">
+    <iframe
+      src="https://public.tableau.com/views/Trial_17743318838450/Dashboard1?:showVizHome=no&toolbar=no"
+      scrolling="no"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
+
+<!-- Zoom Modal -->
+<div id="zoom-backdrop">
+  <div class="zoom-modal" id="zoomModal">
+    <div class="zoom-modal-header">
+      <span id="modalChartName">Chart</span>
+      <button class="zoom-close-btn" id="closeModalBtn" title="Close (Esc)">✕</button>
+    </div>
+    <div class="modal-iframe-wrap" id="modalIframeWrap"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const BASE_URL  = "https://public.tableau.com/views/Trial_17743318838450/";
+  const LS_KEY    = "tableau_zoom_sheet";
+  const backdrop  = document.getElementById("zoom-backdrop");
+  const modal     = document.getElementById("zoomModal");
+  const nameEl    = document.getElementById("modalChartName");
+  const wrapEl    = document.getElementById("modalIframeWrap");
+  const closeBtn  = document.getElementById("closeModalBtn");
+
+  const MODAL_W = Math.min(Math.round(window.innerWidth  * 0.88), 1300);
+  const MODAL_H = Math.min(Math.round(window.innerHeight * 0.80), 820);
+  modal.style.width   = MODAL_W + "px";
+  wrapEl.style.width  = MODAL_W + "px";
+  wrapEl.style.height = MODAL_H + "px";
+
+  const SHEET_LABELS = {
+    Sheet1: "Sheet 1 – Series title 1",
+    Sheet2: "Sheet 2 – Series title 2",
+    Sheet3: "Sheet 3 – Series title 3",
+    Sheet4: "Sheet 4 – Series title 4",
+    Sheet5: "Sheet 5 – Series title 5",
+    Sheet6: "Sheet 6 – Status",
+    Sheet7: "Sheet 7 – Subject",
+    Sheet8: "Sheet 8 – Units",
+  };
+
+  function openModal(sheet) {
+    nameEl.textContent = SHEET_LABELS[sheet] || sheet;
+    const url = BASE_URL + sheet + "?:showVizHome=no&:toolbar=no&:embed=y";
+    wrapEl.innerHTML = `<iframe src="${url}" width="${MODAL_W}" height="${MODAL_H}" allowfullscreen style="border:0"></iframe>`;
+    backdrop.classList.add("active");
+    document.body.style.overflow = "hidden";
+    localStorage.removeItem(LS_KEY); // clear signal immediately after reading
+  }
+
+  function closeModal() {
+    backdrop.classList.remove("active");
+    document.body.style.overflow = "";
+    setTimeout(() => { wrapEl.innerHTML = ""; }, 260);
+  }
+
+  // ── Poll localStorage every 300ms ─────────────────────────────────────────
+  // zoom-trigger.html writes the sheet name here, this page picks it up
+  // and opens the modal — no page navigation, no flash.
+  setInterval(function () {
+    try {
+      const sheet = localStorage.getItem(LS_KEY);
+      if (sheet && !backdrop.classList.contains("active")) {
+        openModal(sheet);
+      }
+    } catch (e) {
+      // localStorage blocked (e.g. Safari private mode) — fail silently
+    }
+  }, 300);
+
+  closeBtn.addEventListener("click", closeModal);
+  backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && backdrop.classList.contains("active")) closeModal();
+  });
+})();
+</script>
+</body>
+</html>
