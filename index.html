@@ -1,474 +1,764 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tableau Dashboard | Accan</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PromptCraft</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0f0e11;
+  --paper: #f5f3ef;
+  --cream: #ede9e1;
+  --warm: #e8e0d0;
+  --accent: #c8501a;
+  --accent2: #2d5a8e;
+  --gold: #b8960c;
+  --muted: #8a8070;
+  --border: #d4ccbc;
+  --surface: #faf8f4;
+  --dark: #1a1816;
+}
 
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f2f2f2;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  .top-header {
-    background: #000;
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-  }
-  .top-header img { height: 48px; max-width: 100%; }
+html, body {
+  height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Outfit', sans-serif;
+}
 
-  .tableau-wrapper {
-    background: #fff;
-    padding: 40px 0;
-    display: flex;
-    justify-content: center;
-  }
+/* ── grain texture overlay ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.6;
+}
 
-  .tableau-wix-container {
-    position: relative;
-    width: 95%;
-    max-width: 1400px;
-    height: 1850px;
-    overflow: hidden;
-    background: #fff;
-  }
+/* ── APP SHELL ── */
+.app {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  grid-template-rows: 64px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
 
-  .tableau-wix-container iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
+/* ── HEADER ── */
+.header {
+  grid-column: 1 / -1;
+  display: flex; align-items: center; gap: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0;
+}
 
-  /* Hide Tableau footer toolbar */
-  .tableau-wix-container::after {
-    content: "";
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 100%; height: 50px;
-    background: #fff;
-    z-index: 9999;
-    pointer-events: none;
-  }
+.header-logo {
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 28px;
+  border-right: 1px solid var(--border);
+  height: 100%;
+}
 
-  /* ── Zoom button overlays — always visible with icon ── */
-  .zoom-btn {
-    position: absolute;
-    z-index: 500;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border-radius: 6px;
-    background: rgba(255,255,255,0.85);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
-    border: 1px solid rgba(0,0,0,0.08);
-  }
-  .zoom-btn img {
-    width: 24px;
-    height: 24px;
-    display: block;
-    pointer-events: none;
-  }
-  .zoom-btn:hover {
-    background: rgba(255,255,255,1);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.28);
-    transform: scale(1.12);
-  }
-  .zoom-btn:active { transform: scale(0.97); }
+.logo-glyph {
+  width: 36px; height: 36px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px; font-style: italic;
+}
 
-  /* ── Modal backdrop ── */
-  #zoom-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.72);
-    z-index: 10000;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-  }
-  #zoom-backdrop.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.22s ease;
-  }
-  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.logo-text {
+  font-family: 'Instrument Serif', serif;
+  font-size: 22px; font-style: italic;
+  letter-spacing: -0.3px;
+}
 
-  .zoom-modal {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 32px 80px rgba(0,0,0,0.55);
-    overflow: hidden;
-    animation: popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
-    max-width: 96vw;
-    max-height: 92vh;
-  }
-  @keyframes popIn {
-    from { transform: scale(0.88); opacity:0; }
-    to   { transform: scale(1);    opacity:1; }
-  }
+.logo-text span { color: var(--accent); }
 
-  .zoom-modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 18px;
-    background: #000;
-    color: #fff;
-  }
-  .zoom-modal-header span { font-size: 15px; font-weight: 600; }
+.header-meta {
+  padding: 0 24px;
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
 
-  .zoom-close-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    font-size: 22px;
-    cursor: pointer;
-    padding: 2px 6px;
-    border-radius: 4px;
-    transition: background 0.15s;
-  }
-  .zoom-close-btn:hover { background: rgba(255,255,255,0.15); }
-  .modal-iframe-wrap iframe { display: block; border: 0; }
+.header-badge {
+  margin-left: auto;
+  margin-right: 24px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600;
+  color: var(--accent2);
+  background: rgba(45,90,142,0.08);
+  border: 1px solid rgba(45,90,142,0.18);
+  padding: 5px 14px; border-radius: 100px;
+  letter-spacing: 0.3px;
+}
 
-  /* ══════════════════════════════════════════
-     LOCATE MODE  (?locate)
-  ══════════════════════════════════════════ */
-  #locate-overlay {
-    display: none;
-    position: absolute;
-    inset: 0;
-    z-index: 600;
-    cursor: crosshair;
-  }
-  body.locate-mode #locate-overlay { display: block; }
+.badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent2);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
-  /* Hide existing zoom buttons in locate mode so they don't interfere */
-  body.locate-mode .zoom-btn { pointer-events: none; opacity: 0.4; }
+/* ── LEFT PANEL ── */
+.left {
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-  #locate-tooltip {
-    display: none;
-    position: fixed;
-    background: #000;
-    color: #0f0;
-    font-family: monospace;
-    font-size: 13px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    pointer-events: none;
-    z-index: 20000;
-    white-space: pre;
-    border: 1px solid #0f0;
-    line-height: 1.7;
-  }
-  body.locate-mode #locate-tooltip { display: block; }
+.left-inner {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 24px 32px;
+}
+.left-inner::-webkit-scrollbar { width: 3px; }
+.left-inner::-webkit-scrollbar-thumb { background: var(--border); }
 
-  .locate-pin {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: rgba(255,80,80,0.4);
-    border: 2px solid red;
-    border-radius: 6px;
-    z-index: 610;
-    pointer-events: none;
-  }
-  .locate-pin-label {
-    position: absolute;
-    top: -22px; left: 0;
-    background: red;
-    color: #fff;
-    font-size: 10px;
-    font-family: monospace;
-    padding: 1px 5px;
-    border-radius: 3px;
-    white-space: nowrap;
-  }
+/* Section label */
+.lbl {
+  font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--muted); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.lbl::after { content:''; flex:1; height:1px; background:var(--border); }
 
-  #locate-banner {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    background: #0a0;
-    color: #fff;
-    font-family: monospace;
-    font-size: 13px;
-    padding: 10px 16px;
-    z-index: 19999;
-    text-align: center;
-  }
-  body.locate-mode #locate-banner { display: block; }
+/* Idea input (THE MAIN INPUT) */
+.idea-wrap { position: relative; margin-bottom: 24px; }
 
-  #locate-panel {
-    display: none;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: #111;
-    color: #0f0;
-    font-family: monospace;
-    font-size: 12px;
-    padding: 12px 16px;
-    z-index: 19999;
-    max-height: 220px;
-    overflow-y: auto;
-    border-top: 2px solid #0a0;
-  }
-  body.locate-mode #locate-panel { display: block; }
-  #locate-panel h4 { color: #fff; margin-bottom: 6px; font-size: 13px; }
-  #locate-panel pre { white-space: pre-wrap; word-break: break-all; }
-  #locate-panel .copy-btn {
-    background: #0a0; color: #fff; border: none;
-    padding: 4px 10px; border-radius: 4px;
-    cursor: pointer; font-size: 12px; margin-top: 8px;
-  }
+.idea-box {
+  width: 100%;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px; font-weight: 400;
+  line-height: 1.65;
+  padding: 18px 18px 48px;
+  resize: none;
+  height: 140px;
+  outline: none;
+  transition: box-shadow 0.2s;
+  letter-spacing: 0.1px;
+}
+.idea-box::placeholder {
+  color: rgba(245,243,239,0.3);
+  font-size: 13.5px;
+}
+.idea-box:focus {
+  box-shadow: 0 0 0 3px rgba(200,80,26,0.25);
+}
 
-  @media screen and (max-width: 768px) {
-    .top-header { padding: 16px; }
-    .top-header img { height: 36px; }
-    .tableau-wix-container { height: 3050px; }
-  }
+.idea-hint {
+  position: absolute; bottom: 14px; left: 18px;
+  font-size: 10px; color: rgba(245,243,239,0.35);
+  font-family: 'Geist Mono', monospace;
+  pointer-events: none;
+}
+
+/* Style chips */
+.chip-wrap { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 24px; }
+.chip {
+  padding: 7px 14px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border);
+  font-size: 11.5px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: var(--paper);
+  color: var(--ink);
+  user-select: none;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip.sel {
+  background: var(--ink); color: var(--paper);
+  border-color: var(--ink);
+}
+
+/* Color palette */
+.palette-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+.pal-item {
+  border-radius: 10px; padding: 10px 8px;
+  border: 2px solid var(--border);
+  cursor: pointer; text-align: center;
+  transition: all 0.18s; background: var(--paper);
+  user-select: none;
+}
+.pal-item:hover { border-color: var(--ink); transform: translateY(-1px); }
+.pal-item.sel { border-color: var(--ink); box-shadow: 0 2px 12px rgba(0,0,0,0.12); }
+.pal-dot {
+  width: 24px; height: 24px; border-radius: 50%;
+  margin: 0 auto 5px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.pal-name { font-size: 9px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; line-height: 1.3; }
+
+/* Toggles row */
+.toggle-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+.toggle-group { display: flex; flex-direction: column; gap: 6px; }
+.toggle-chips { display: flex; flex-direction: column; gap: 5px; }
+.tog {
+  padding: 8px 12px; border-radius: 8px;
+  border: 1.5px solid var(--border);
+  font-size: 11px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; background: var(--paper);
+  color: var(--muted); user-select: none;
+  display: flex; align-items: center; gap: 7px;
+}
+.tog:hover { border-color: var(--ink); color: var(--ink); }
+.tog.sel { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.tog-icon { font-size: 13px; }
+
+/* Dimension select */
+.dim-select {
+  width: 100%;
+  background: var(--paper);
+  border: 1.5px solid var(--border);
+  color: var(--ink);
+  padding: 10px 32px 10px 14px;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px; font-weight: 500;
+  outline: none; cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%238a8070' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: border-color 0.15s;
+}
+.dim-select:focus { border-color: var(--ink); }
+
+/* Generate button */
+.gen-btn {
+  width: 100%; margin-top: 22px;
+  background: var(--accent);
+  color: #fff; border: none; border-radius: 12px;
+  padding: 16px 20px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px; font-weight: 600;
+  cursor: pointer; letter-spacing: 0.2px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: all 0.25s;
+  position: relative; overflow: hidden;
+}
+.gen-btn:hover { background: #a83e12; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,80,26,0.35); }
+.gen-btn:active { transform: translateY(0); }
+.gen-btn:disabled { background: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+
+.spinner {
+  display: none; width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff;
+  border-radius: 50%; animation: spin 0.65s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.err {
+  margin-top: 12px; padding: 11px 14px; border-radius: 9px;
+  background: rgba(200,80,26,0.08); border: 1px solid rgba(200,80,26,0.2);
+  color: var(--accent); font-size: 12px; display: none;
+}
+
+/* ── RIGHT PANEL ── */
+.right {
+  background: var(--cream);
+  overflow-y: auto;
+  padding: 0;
+}
+.right::-webkit-scrollbar { width: 3px; }
+.right::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* Empty state */
+.empty {
+  height: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 16px; padding: 60px;
+  text-align: center;
+}
+.empty-mark {
+  font-family: 'Instrument Serif', serif;
+  font-size: 72px; font-style: italic;
+  color: var(--border); line-height: 1;
+}
+.empty-h { font-family: 'Instrument Serif', serif; font-size: 24px; font-style: italic; color: var(--muted); }
+.empty-p { font-size: 13px; color: var(--muted); max-width: 280px; line-height: 1.7; }
+
+/* Result */
+.result { display: none; padding: 32px 36px 60px; animation: up 0.35s ease both; }
+@keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+/* Result header */
+.result-top {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 28px; gap: 16px;
+}
+.result-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--accent);
+  background: rgba(200,80,26,0.08); border: 1px solid rgba(200,80,26,0.18);
+  padding: 5px 12px; border-radius: 100px; margin-bottom: 8px;
+}
+.result-headline {
+  font-family: 'Instrument Serif', serif;
+  font-size: 28px; font-style: italic;
+  color: var(--ink); line-height: 1.2;
+}
+
+.copy-btn {
+  flex-shrink: 0;
+  background: var(--ink); color: var(--paper);
+  border: none; border-radius: 10px;
+  padding: 10px 18px; font-family: 'Outfit', sans-serif;
+  font-size: 12.5px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; gap: 7px;
+  transition: all 0.2s; white-space: nowrap;
+}
+.copy-btn:hover { background: var(--accent); }
+
+/* Analysis grid */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.an-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.an-label {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.8px; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 7px;
+}
+.an-text {
+  font-size: 12.5px; line-height: 1.7; color: var(--ink);
+}
+
+.an-card.c1 { border-top: 3px solid var(--accent); }
+.an-card.c1 .an-label { color: var(--accent); }
+.an-card.c2 { border-top: 3px solid var(--accent2); }
+.an-card.c2 .an-label { color: var(--accent2); }
+.an-card.c3 { border-top: 3px solid var(--gold); }
+.an-card.c3 .an-label { color: var(--gold); }
+.an-card.c4 { border-top: 3px solid #5a8a6a; }
+.an-card.c4 .an-label { color: #5a8a6a; }
+.an-card.c5 { border-top: 3px solid #7a5a8a; }
+.an-card.c5 .an-label { color: #7a5a8a; }
+.an-card.c6 { border-top: 3px solid #8a6a4a; }
+.an-card.c6 .an-label { color: #8a6a4a; }
+
+/* The big prompt box */
+.prompt-wrap {
+  background: var(--ink);
+  border-radius: 16px;
+  padding: 28px 30px;
+  position: relative;
+}
+.prompt-top-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.prompt-top-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px; color: rgba(245,243,239,0.4);
+  text-transform: uppercase; letter-spacing: 2px;
+}
+.wc {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px; font-weight: 500;
+  padding: 3px 10px; border-radius: 100px;
+}
+.wc.good { color: #6dd6a0; background: rgba(109,214,160,0.1); }
+.wc.ok   { color: #ffd166; background: rgba(255,209,102,0.1); }
+.wc.low  { color: #ff9898; background: rgba(255,152,152,0.1); }
+
+.prompt-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13.5px; line-height: 1.95;
+  color: rgba(245,243,239,0.88);
+  white-space: pre-wrap; word-break: break-word;
+}
+
+.copy-prompt-btn {
+  margin-top: 18px;
+  background: rgba(245,243,239,0.08);
+  border: 1px solid rgba(245,243,239,0.15);
+  color: rgba(245,243,239,0.7);
+  padding: 9px 18px; border-radius: 8px;
+  font-family: 'Geist Mono', monospace; font-size: 11px;
+  cursor: pointer; display: flex; align-items: center; gap: 7px;
+  transition: all 0.2s;
+}
+.copy-prompt-btn:hover { background: rgba(245,243,239,0.14); color: var(--paper); }
+
+.tools-note {
+  margin-top: 14px;
+  font-size: 11px; color: var(--muted);
+  padding: 10px 14px;
+  background: rgba(45,90,142,0.06);
+  border: 1px solid rgba(45,90,142,0.13);
+  border-radius: 8px;
+  font-family: 'Geist Mono', monospace;
+}
 </style>
 </head>
 <body>
+<div class="app">
 
-<div class="top-header">
-  <img src="https://i.ibb.co/Nj0PYDw/Pegion.jpg" alt="Pegion Logo">
-</div>
-
-<div class="tableau-wrapper">
-  <div class="tableau-wix-container" id="mainContainer">
-
-    <iframe
-      src="https://public.tableau.com/views/Trial_17743318838450/Dashboard1?:showVizHome=no&toolbar=no"
-      scrolling="no"
-      allowfullscreen>
-    </iframe>
-
-    <!-- ═══════════════════════════════════════════════
-         ZOOM BUTTON OVERLAYS
-         Use ?locate to get % values, then paste here.
-         top/left are % of the container's height/width.
-         ═══════════════════════════════════════════════ -->
-
-     <div class="zoom-btn" data-sheet="Sheet1" data-name="Sheet1 – Title"
-     style="top:0.38%; left:58.40%;">
-  <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-logo">
+      <div class="logo-glyph">P</div>
+      <div class="logo-text">Prompt<span>Craft</span></div>
     </div>
+    <span class="header-meta">Describe your idea → Get a production-ready image prompt</span>
+    <div class="header-badge"><div class="badge-dot"></div> Groq Llama 4 Connected</div>
+  </header>
 
-    <div class="zoom-btn" data-sheet="Sheet2" data-name="Sheet2 – Title"
-         style="top:60.21%; left:38.40%;">
-      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+  <!-- LEFT PANEL -->
+  <aside class="left">
+    <div class="left-inner">
+
+      <!-- IDEA INPUT -->
+      <div class="lbl">Your Idea</div>
+      <div class="idea-wrap">
+        <textarea class="idea-box" id="ideaInput"
+          placeholder="Describe what you want to show...&#10;&#10;e.g. 'support team helping clients with Salesforce'&#10;e.g. 'hero image for a data analytics SaaS homepage'&#10;e.g. 'team celebrating a product launch'"></textarea>
+        <span class="idea-hint">short description → AI builds the full prompt</span>
+      </div>
+
+      <!-- VISUAL STYLE -->
+      <div class="lbl">Visual Style</div>
+      <div class="chip-wrap" id="styleChips">
+        <div class="chip sel" data-val="Soft 3D illustration — Salesforce-style, bubbly rounded characters, bright airy feel, clay-like materials">🫧 Soft 3D</div>
+        <div class="chip" data-val="Flat vector illustration — Clean 2D, geometric shapes, bold solid colors, no gradients, icon-like">🎨 Flat Vector</div>
+        <div class="chip" data-val="Cinematic 3D render — Photorealistic CGI, dramatic studio lighting, premium product-feel, subsurface scattering">🎬 Cinematic 3D</div>
+        <div class="chip" data-val="Isometric illustration — 3/4 view, geometric precision, structured minimal, tech-diagram aesthetic">📐 Isometric</div>
+        <div class="chip" data-val="Abstract gradient art — Flowing morphic blobs, no characters, light refractions, glass and liquid shapes">🌊 Abstract</div>
+        <div class="chip" data-val="Editorial photograph — Candid real people, bright modern office, natural window light, authentic unposed">📸 Editorial Photo</div>
+        <div class="chip" data-val="Line art illustration — Minimal clean lines, single color strokes on white, simple geometric figures">✏️ Line Art</div>
+        <div class="chip" data-val="Watercolor illustration — Soft organic washes, hand-painted feel, warm imperfect edges, artistic depth">🎭 Watercolor</div>
+      </div>
+
+      <!-- COLOR PALETTE -->
+      <div class="lbl">Color Palette</div>
+      <div class="palette-grid" id="palGrid">
+        <div class="pal-item sel" data-val="White, sky blue (#5bbfec), warm peach (#f4a07a) — Salesforce brand palette, light and airy">
+          <div class="pal-dot" style="background:linear-gradient(135deg,#5bbfec,#f4a07a)"></div>
+          <div class="pal-name">Sky & Peach</div>
+        </div>
+        <div class="pal-item" data-val="Deep navy (#0f2d5e), electric blue (#1d7cf2), crisp white — corporate, trustworthy, enterprise">
+          <div class="pal-dot" style="background:linear-gradient(135deg,#0f2d5e,#1d7cf2)"></div>
+          <div class="pal-name">Navy & Blue</div>
+        </div>
+        <div class="pal-item" data-val="Soft mint green (#b2e4c8), white, light grey (#e8e8e8) — fresh, clean, health-tech">
+          <div class="pal-dot" style="background:linear-gradient(135deg,#b2e4c8,#e8e8e8)"></div>
+          <div class="pal-name">Mint & Grey</div>
+        </div>
+        <div class="pal-item" data-val="Rich purple (#6b35b5), soft lavender (#c8b4f0), cream white — creative, premium, modern">
+          <div class="pal-dot" style="background:linear-gradient(135deg,#6b35b5,#c8b4f0)"></div>
+          <div class="pal-name">Purple</div>
+        </div>
+        <div class="pal-item" data-val="Coral (#f4704a), warm orange (#f5a623), soft white — energetic, startup, friendly">
+          <div class="pal-dot" style="background:linear-gradient(135deg,#f4704a,#f5a623)"></div>
+          <div class="pal-name">Coral & Orange</div>
+        </div>
+        <div class="pal-item" data-val="Dark charcoal (#1a1a2e), neon cyan (#00e5ff), violet (#7c4dff) — dark mode, tech, futuristic">
+          <div class="pal-dot" style="background:linear-gradient(135deg,#1a1a2e,#00e5ff)"></div>
+          <div class="pal-name">Dark Neon</div>
+        </div>
+        <div class="pal-item" data-val="Matte black (#111111), warm gold (#d4a017), white — luxury, premium, high-end brand">
+          <div class="pal-dot" style="background:linear-gradient(135deg,#111111,#d4a017)"></div>
+          <div class="pal-name">Black & Gold</div>
+        </div>
+        <div class="pal-item" data-val="Terracotta (#c1693a), warm beige (#f0e0c8), forest green (#3a6b4a) — earthy, sustainable, organic brand">
+          <div class="pal-dot" style="background:linear-gradient(135deg,#c1693a,#3a6b4a)"></div>
+          <div class="pal-name">Earthy Tones</div>
+        </div>
+      </div>
+
+      <!-- HUMAN FIGURES + DIMENSIONS -->
+      <div class="toggle-row">
+        <div class="toggle-group">
+          <div class="lbl" style="margin-bottom:7px">People</div>
+          <div class="toggle-chips" id="humanChips">
+            <div class="tog sel" data-val="Include 1-2 diverse human professionals — max 2 figures for DALL-E clarity, each with a distinct clear single action">
+              <span class="tog-icon">🧑‍💼</span> Include People
+            </div>
+            <div class="tog" data-val="No human figures whatsoever — story told through objects, icons, UI elements, technology only">
+              <span class="tog-icon">🚫</span> No People
+            </div>
+            <div class="tog" data-val="Minimal stylized silhouettes only — no facial features, shapes are secondary to the main subject">
+              <span class="tog-icon">👤</span> Silhouettes
+            </div>
+          </div>
+        </div>
+        <div class="toggle-group">
+          <div class="lbl" style="margin-bottom:7px">Dimensions</div>
+          <select class="dim-select" id="dimSel">
+            <option value="1536×1024 wide landscape hero banner">1536×1024 — Wide Hero</option>
+            <option value="1024×1024 square format">1024×1024 — Square</option>
+            <option value="1024×1536 tall portrait format">1024×1536 — Portrait</option>
+            <option value="1920×1080 full HD widescreen">1920×1080 — Full HD</option>
+            <option value="800×600 blog card format">800×600 — Blog Card</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- GENERATE -->
+      <button class="gen-btn" id="genBtn" onclick="generate()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Generate Full Prompt
+        <div class="spinner" id="spinner"></div>
+      </button>
+      <div class="err" id="errBox"></div>
+
     </div>
+  </aside>
 
-    <div class="zoom-btn" data-sheet="Sheet3" data-name="Sheet3 – Title"
-         style="top:0.32%; left:9.04%;">
-      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
+  <!-- RIGHT PANEL -->
+  <main class="right">
+    <div class="empty" id="emptyState">
+      <div class="empty-mark">✦</div>
+      <div class="empty-h">Ready to craft your prompt</div>
+      <div class="empty-p">Type a short idea on the left — even one sentence. AI will think like a senior graphic designer and build a complete, production-ready image prompt.</div>
     </div>
+    <div class="result" id="result"></div>
+  </main>
 
-    <div class="zoom-btn" data-sheet="Sheet4" data-name="Sheet4 – Title"
-         style="top:20.81%; left:39.26%;">
-      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
-    </div>
-
-    <div class="zoom-btn" data-sheet="Sheet5" data-name="Sheet5 – Title"
-         style="top:50.86%; left:36.61%;">
-      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
-    </div>
-
-    <div class="zoom-btn" data-sheet="Sheet6" data-name="Sheet6 – Title"
-         style="top:0.65%; left:36.83%;">
-      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
-    </div>
-
-    <div class="zoom-btn" data-sheet="Sheet7" data-name="Sheet7 – Title"
-         style="top:40.32%; left:34.54%;">
-      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
-    </div>
-
-    <div class="zoom-btn" data-sheet="Sheet8" data-name="Sheet8 – Title"
-         style="top:20.54%; left:9.54%;">
-      <img src="https://i.ibb.co/4RHpxwDc/search.png" alt="Zoom">
-    </div>
-
-    <!-- Locate mode overlay (invisible unless ?locate) -->
-    <div id="locate-overlay"></div>
-
-  </div>
-</div>
-
-<!-- Zoom Modal -->
-<div id="zoom-backdrop">
-  <div class="zoom-modal" id="zoomModal">
-    <div class="zoom-modal-header">
-      <span id="modalChartName">Chart</span>
-      <button class="zoom-close-btn" id="closeModalBtn" title="Close (Esc)">✕</button>
-    </div>
-    <div class="modal-iframe-wrap" id="modalIframeWrap"></div>
-  </div>
-</div>
-
-<!-- Locate mode UI -->
-<div id="locate-banner">
-  🎯 LOCATE MODE — Hover to see % coordinates. Click to drop a pin. Right-click to clear all pins.
-  &nbsp;&nbsp;<a href="?" style="color:#fff;font-weight:bold;">[Exit locate mode]</a>
-</div>
-<div id="locate-tooltip"></div>
-<div id="locate-panel">
-  <h4>📋 Generated overlay code (% positions) — copy into your HTML:</h4>
-  <pre id="locate-code">← Click on the dashboard to drop pins and generate code here.</pre>
-  <button class="copy-btn" onclick="copyCode()">Copy code</button>
 </div>
 
 <script>
-(function () {
-  const BASE_URL = "https://public.tableau.com/views/Trial_17743318838450/";
-  const ICON_URL = "https://i.ibb.co/4RHpxwDc/search.png";
+const GROQ_KEY = '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';
 
-  const backdrop = document.getElementById("zoom-backdrop");
-  const modal    = document.getElementById("zoomModal");
-  const nameEl   = document.getElementById("modalChartName");
-  const wrapEl   = document.getElementById("modalIframeWrap");
-  const closeBtn = document.getElementById("closeModalBtn");
+// ── State ──
+let selStyle  = document.querySelector('#styleChips .chip.sel').dataset.val;
+let selPal    = document.querySelector('#palGrid .pal-item.sel').dataset.val;
+let selHuman  = document.querySelector('#humanChips .tog.sel').dataset.val;
 
-  const MODAL_W = Math.min(Math.round(window.innerWidth  * 0.88), 1300);
-  const MODAL_H = Math.min(Math.round(window.innerHeight * 0.80), 820);
-  modal.style.width   = MODAL_W + "px";
-  wrapEl.style.width  = MODAL_W + "px";
-  wrapEl.style.height = MODAL_H + "px";
+// ── Toggle handlers ──
+document.querySelectorAll('#styleChips .chip').forEach(c => {
+  c.onclick = () => { document.querySelectorAll('#styleChips .chip').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); selStyle = c.dataset.val; };
+});
+document.querySelectorAll('#palGrid .pal-item').forEach(c => {
+  c.onclick = () => { document.querySelectorAll('#palGrid .pal-item').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); selPal = c.dataset.val; };
+});
+document.querySelectorAll('#humanChips .tog').forEach(c => {
+  c.onclick = () => { document.querySelectorAll('#humanChips .tog').forEach(x=>x.classList.remove('sel')); c.classList.add('sel'); selHuman = c.dataset.val; };
+});
 
-  function openModal(btn) {
-    const sheet = btn.dataset.sheet;
-    const name  = btn.dataset.name;
-    nameEl.textContent = name;
-    const url = BASE_URL + sheet + "?:showVizHome=no&:toolbar=no&:embed=y";
-    wrapEl.innerHTML = `<iframe src="${url}" width="${MODAL_W}" height="${MODAL_H}" allowfullscreen style="border:0"></iframe>`;
-    backdrop.classList.add("active");
-    document.body.style.overflow = "hidden";
+// ── Safe stringify ──
+function toStr(v) {
+  if (!v) return '';
+  if (Array.isArray(v)) return v.map(x => typeof x==='object'&&x!==null ? Object.values(x).join(' — ') : String(x)).join('\n');
+  if (typeof v==='object') return Object.entries(v).map(([k,val])=>`${k}: ${val}`).join('\n');
+  return String(v);
+}
+
+function showErr(m) { const b=document.getElementById('errBox'); b.textContent='⚠ '+m; b.style.display='block'; }
+function hideErr()  { document.getElementById('errBox').style.display='none'; }
+
+async function generate() {
+  const idea = document.getElementById('ideaInput').value.trim();
+  const dim  = document.getElementById('dimSel').value;
+  hideErr();
+  if (!idea) return showErr('Please describe your idea first.');
+
+  const btn = document.getElementById('genBtn');
+  const sp  = document.getElementById('spinner');
+  btn.disabled=true; sp.style.display='block';
+  document.getElementById('result').style.display='none';
+  document.getElementById('emptyState').style.display='flex';
+
+  const SYSTEM = `You are a world-class senior graphic designer with 20 years of experience creating marketing visuals for top SaaS companies (Salesforce, Notion, HubSpot, Stripe, Figma). You specialize in art direction and writing production-ready AI image generation prompts for ChatGPT / DALL-E 3.
+
+A user will give you a SHORT rough idea or description. Your job is to think deeply like a creative director — interpret the brief, fill every gap with expert design judgment, and produce a comprehensive visual concept with a bulletproof DALL-E 3 image prompt.
+
+DALL-E 3 GOLDEN RULES (never break these):
+1. SINGLE HERO — one primary focal subject. No competing focal points.
+2. STYLE CONSISTENCY — one visual language only. Never mix photorealism with illustration.
+3. SPATIAL CLARITY — define exactly what is where: left, right, center, foreground, mid, background.
+4. TRANSPARENT BACKGROUND — MANDATORY in every prompt, no exception. For illustration or 3D styles: end with "transparent background, PNG format". For editorial photo style ONLY: use "clean white studio background" instead — never undefined.
+5. ZERO SPELLING ERRORS — any visible text labels on icons or UI screens must be short simple English words of 5 letters or fewer (e.g. "Data", "Users", "Cloud", "Sales", "Tasks") so DALL-E renders them correctly. Never use long or complex words as visible image text.
+6. ICON LABELS OK — short single-word labels (max 5 letters) on UI elements are encouraged for realism.
+7. START WITH STYLE TAG — first word(s) must declare render type: "Soft 3D illustration:", "Flat vector illustration:", "Editorial photograph:", "Isometric illustration:", etc.
+8. MAX CLARITY — if a detail would confuse DALL-E, simplify it.
+
+Return ONLY raw JSON — no markdown fences, no explanation, no preamble:
+{
+  "concept_title": "A catchy 4-6 word creative title for this visual concept",
+  "design_intent": "What emotion and message should this image convey? Who is the audience? What action should it inspire? — 2 sentences",
+  "visual_metaphor": "The ONE central visual idea or metaphor that makes this image memorable — 1-2 sentences",
+  "scene": "Exact setting and environment — indoor/outdoor, architectural details, background elements, atmosphere — 2-3 sentences",
+  "characters": "Based on the human figure setting: exact count, demographics, skin tones, hair, outfit colors and fabrics, precise pose, facial expression, hand positions, what each character is doing — OR rationale for no characters",
+  "visual_elements": "List exactly 4-5 key objects/elements. For each: name, exact color (hex or descriptive), material/texture, position on canvas, approximate scale, any glow or special effect",
+  "composition": "Focal point position. How elements are arranged. Foreground/midground/background breakdown. Camera perspective and angle. Negative space and breathing room. Rule of thirds or golden ratio application.",
+  "lighting": "Primary light source type and direction. Color temperature (warm 3200K / neutral 5500K / cool 7000K). Fill light and rim light details. Shadow softness. Any glow, bloom, or volumetric light effects. Overall mood created by lighting.",
+  "color_execution": "How the chosen palette is applied across the image. Primary dominant color percentage. Accent color usage. Where neutrals appear. Any gradients or color transitions.",
+  "prompt": "THE FINAL DALL-E 3 PROMPT — follow construction rules precisely"
+}
+
+PROMPT CONSTRUCTION — MANDATORY. Every single JSON field MUST appear in the final prompt. Nothing left out.
+
+The prompt is ONE continuous flowing paragraph. Build it in this exact order:
+
+SEGMENT 1 — STYLE + HERO [from visual_metaphor + scene]:
+Start with the render style tag (e.g. "Soft 3D illustration:"). Immediately state the ONE hero subject — its exact shape, color (use hex if available), material/texture, position on canvas (centered/left/right), and scale. Then in the same breath describe the scene: the setting, environment type, background gradient colors, atmosphere feel.
+
+SEGMENT 2 — CHARACTERS [from characters field]:
+If humans included: describe EVERY detail — exact count, each person's skin tone, hair color and style, outfit (color + fabric + cut), precise body pose (standing/leaning/gesturing), facial expression, eye direction, what each hand is doing or holding, spatial position relative to the hero. If no humans: explicitly state "no human figures appear" and describe what fills that space instead.
+
+SEGMENT 3 — VISUAL ELEMENTS [from visual_elements field]:
+Name every single one of the 4-5 key elements. For each: exact color (with hex code), material/texture (glossy/matte/clay/glass/neon), position on canvas (top-left/bottom-right/foreground/midground), relative size, and any special effect (glow, soft shadow, bloom, neon outline). Do NOT summarize — describe each element individually and specifically.
+
+SEGMENT 4 — COMPOSITION [from composition field]:
+State the focal point and its exact canvas position. Describe how all elements are spatially arranged around it. Define what is in foreground, midground, background. State the camera angle and perspective. Describe the negative space and breathing room.
+
+SEGMENT 5 — LIGHTING [from lighting field]:
+Primary light source type (soft box / sunlight / studio / ambient) and its direction (top-left / front / side). Exact color temperature (3200K warm / 5500K neutral / 7000K cool). Fill light and rim light if present. Shadow softness (hard-edged / feathered / none). Any glow, bloom, or volumetric effects and where they appear.
+
+SEGMENT 6 — COLOR EXECUTION [from color_execution field]:
+Dominant color name + hex + where it appears and approximate coverage percentage. Secondary accent color + hex + exact placement. Neutral tones and where they provide relief. Any gradients: describe start color, end color, direction. Overall palette mood.
+
+SEGMENT 7 — CLOSING (use word-for-word):
+"Any visible icon labels or UI text must use only simple 5-letter-or-fewer common English words spelled perfectly (e.g. Data, Users, Cloud, Sales, Tasks). No headlines, paragraphs, or body copy visible anywhere. Transparent background, PNG format. Ultra high resolution, professional print quality, crisp clean edges, website-ready, professional SaaS marketing quality."
+
+WORD COUNT: 450–520 words minimum. After writing, re-read and expand any segment that feels thin. Every segment must have at least 2-3 specific sentences.
+FORMAT: One single flowing paragraph with no line breaks, headers, or bullet points inside it.`;
+
+  const USER = `USER IDEA: "${idea}"
+
+SELECTED SETTINGS:
+- Visual Style: ${selStyle}
+- Color Palette: ${selPal}
+- Human Figures: ${selHuman}
+- Output Dimensions: ${dim}
+
+Interpret this idea with full creative director judgment. Fill every visual gap. Build the best possible DALL-E 3 image prompt — complete, specific, production-ready.`;
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${GROQ_KEY}`},
+      body: JSON.stringify({
+        model:'meta-llama/llama-4-scout-17b-16e-instruct',
+        max_tokens: 4000,
+        temperature: 0.82,
+        messages:[{role:'system',content:SYSTEM},{role:'user',content:USER}]
+      })
+    });
+
+    if(!res.ok){ const e=await res.json().catch(()=>({})); throw new Error(e?.error?.message||`Error ${res.status}`); }
+
+    const data = await res.json();
+    const raw  = data.choices?.[0]?.message?.content || '';
+
+    let p;
+    try { const m=raw.match(/\{[\s\S]*\}/); p=JSON.parse(m?m[0]:raw); }
+    catch { p={prompt:raw}; }
+
+    // ── Render ──
+    document.getElementById('emptyState').style.display='none';
+    const rc=document.getElementById('result');
+    rc.innerHTML=''; rc.style.display='block';
+
+    const title = toStr(p.concept_title) || 'Visual Concept';
+
+    rc.innerHTML += `
+      <div class="result-top">
+        <div>
+          <div class="result-tag">✦ AI Art Direction Complete</div>
+          <div class="result-headline">${title}</div>
+        </div>
+        <button class="copy-btn" onclick="copyAll()">Copy Full Prompt</button>
+      </div>`;
+
+    // Analysis cards
+    const cards = [
+      { key:'design_intent',     label:'Design Intent & Audience',  cls:'c1' },
+      { key:'visual_metaphor',   label:'Visual Metaphor / Big Idea', cls:'c2' },
+      { key:'scene',             label:'Scene & Environment',        cls:'c3' },
+      { key:'characters',        label:'Characters',                 cls:'c4' },
+      { key:'visual_elements',   label:'Key Visual Elements',        cls:'c5' },
+      { key:'composition',       label:'Composition & Layout',       cls:'c1' },
+      { key:'lighting',          label:'Lighting Direction',         cls:'c2' },
+      { key:'color_execution',   label:'Color Execution',            cls:'c3' },
+    ];
+
+    let grid = '<div class="analysis-grid">';
+    cards.forEach(c => {
+      const val = toStr(p[c.key]);
+      if(!val) return;
+      const html = val.includes('\n') ? '• '+val.split('\n').filter(Boolean).join('<br>• ') : val;
+      grid += `<div class="an-card ${c.cls}">
+        <div class="an-label">${c.label}</div>
+        <div class="an-text">${html}</div>
+      </div>`;
+    });
+    grid += '</div>';
+    rc.innerHTML += grid;
+
+    // Final prompt
+    const promptText = toStr(p.prompt) || raw;
+    const wc = promptText.trim().split(/\s+/).length;
+    const wcCls = wc>=450?'good':wc>=320?'ok':'low';
+
+    rc.innerHTML += `
+      <div class="prompt-wrap">
+        <div class="prompt-top-row">
+          <span class="prompt-top-label">// Final DALL-E 3 Prompt</span>
+          <span class="wc ${wcCls}">${wc} words</span>
+        </div>
+        <div class="prompt-text" id="finalPrompt">${promptText}</div>
+        <button class="copy-prompt-btn" onclick="copyPrompt()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Prompt
+        </button>
+      </div>
+      <div class="tools-note">// Optimized for ChatGPT / DALL-E 3 — also compatible with Midjourney v6, Adobe Firefly, Ideogram 2.0</div>`;
+
+  } catch(e) {
+    showErr(e.message||'Something went wrong. Try again.');
+  } finally {
+    btn.disabled=false; sp.style.display='none';
   }
+}
 
-  function closeModal() {
-    backdrop.classList.remove("active");
-    document.body.style.overflow = "";
-    setTimeout(() => { wrapEl.innerHTML = ""; }, 260);
-  }
+async function copyPrompt() {
+  const el=document.getElementById('finalPrompt');
+  if(!el) return;
+  try {
+    await navigator.clipboard.writeText(el.textContent);
+    const b=document.querySelector('.copy-prompt-btn');
+    b.innerHTML='✓ Copied!'; setTimeout(()=>{ b.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Prompt'; }, 2000);
+  } catch { alert('Please select and copy manually.'); }
+}
 
-  document.querySelectorAll(".zoom-btn").forEach(btn => {
-    btn.addEventListener("click", () => openModal(btn));
-  });
-
-  closeBtn.addEventListener("click", closeModal);
-  backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && backdrop.classList.contains("active")) closeModal();
-  });
-
-  // ══════════════════════════════════════════════════════════
-  //  LOCATE MODE  —  add ?locate to the URL
-  //
-  //  HOW IT WORKS:
-  //  - A transparent overlay sits on top of the iframe
-  //  - Hover → tooltip shows top/left as % of the CONTAINER
-  //    (not the viewport — so values are the same regardless
-  //     of scroll position or window size)
-  //  - Click → drops a 40×40 red pin at that % position
-  //  - Bottom panel shows ready-to-paste HTML for each pin
-  //  - Right-click → clears all pins
-  // ══════════════════════════════════════════════════════════
-  const params = new URLSearchParams(window.location.search);
-  if (!params.has("locate")) return;
-
-  document.body.classList.add("locate-mode");
-
-  const container = document.getElementById("mainContainer");
-  const overlay   = document.getElementById("locate-overlay");
-  const tooltip   = document.getElementById("locate-tooltip");
-  const codeEl    = document.getElementById("locate-code");
-
-  const pins   = [];
-  const SHEETS = ["Sheet1","Sheet2","Sheet3","Sheet4","Sheet5","Sheet6","Sheet7","Sheet8"];
-  let pinCount  = 0;
-
-  // Tooltip follows mouse
-  document.addEventListener("mousemove", e => {
-    tooltip.style.left = (e.clientX + 18) + "px";
-    tooltip.style.top  = (e.clientY + 12) + "px";
-  });
-
-  // Show % coords relative to CONTAINER (not viewport)
-  overlay.addEventListener("mousemove", e => {
-    const rect = container.getBoundingClientRect();
-    // Clamp to container bounds
-    const relX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-    const relY = Math.max(0, Math.min(e.clientY - rect.top,  rect.height));
-    const xPct = ((relX / rect.width)  * 100).toFixed(2);
-    const yPct = ((relY / rect.height) * 100).toFixed(2);
-
-    tooltip.textContent =
-      `top:  ${yPct}%\nleft: ${xPct}%\n\n(click to pin 40×40 here)`;
-  });
-
-  // Drop pin on click — centre the 40×40 pin on the click point
-  overlay.addEventListener("click", e => {
-    const rect = container.getBoundingClientRect();
-    const relX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-    const relY = Math.max(0, Math.min(e.clientY - rect.top,  rect.height));
-
-    // % for the style (top-left corner of the 40px button)
-    // Subtract half the button size (20px) to centre it on the click
-    const xPct = (((relX - 20) / rect.width)  * 100).toFixed(2);
-    const yPct = (((relY - 20) / rect.height) * 100).toFixed(2);
-
-    const sheet = SHEETS[pinCount % SHEETS.length];
-    pinCount++;
-
-    // Visual pin at click position (px, relative to container)
-    const pin = document.createElement("div");
-    pin.className = "locate-pin";
-    pin.style.left = (relX - 20) + "px";
-    pin.style.top  = (relY - 20) + "px";
-
-    const lbl = document.createElement("div");
-    lbl.className = "locate-pin-label";
-    lbl.textContent = `top:${yPct}% left:${xPct}% → ${sheet}`;
-    pin.appendChild(lbl);
-    container.appendChild(pin);
-
-    pins.push({ top: yPct, left: xPct, sheet });
-    updateCode();
-  });
-
-  // Right-click → clear
-  overlay.addEventListener("contextmenu", e => {
-    e.preventDefault();
-    document.querySelectorAll(".locate-pin").forEach(p => p.remove());
-    pins.length = 0;
-    pinCount = 0;
-    codeEl.textContent = "← Pins cleared. Click again to place new ones.";
-  });
-
-  function updateCode() {
-    const lines = pins.map(p =>
-      `<div class="zoom-btn" data-sheet="${p.sheet}" data-name="${p.sheet} – Title"\n` +
-      `     style="top:${p.top}%; left:${p.left}%;">\n` +
-      `  <img src="${ICON_URL}" alt="Zoom">\n` +
-      `</div>`
-    );
-    codeEl.textContent = lines.join("\n\n");
-  }
-
-  window.copyCode = function () {
-    navigator.clipboard.writeText(codeEl.textContent)
-      .then(() => alert("✅ Code copied! Paste into your HTML replacing the existing .zoom-btn divs."))
-      .catch(() => alert("Select the code above and copy it manually."));
-  };
-
-})();
+async function copyAll() {
+  const el=document.getElementById('finalPrompt');
+  if(!el) return;
+  try {
+    await navigator.clipboard.writeText(el.textContent);
+    const b=document.querySelector('.copy-btn');
+    b.textContent='✓ Copied!'; setTimeout(()=>b.textContent='Copy Full Prompt',2000);
+  } catch { alert('Please select and copy manually.'); }
+}
 </script>
 </body>
 </html>
