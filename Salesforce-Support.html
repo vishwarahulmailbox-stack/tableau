@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salesforce Support Services — Atlas Consulting (Mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;color:#1a1a1a;background:#fff;}
+.pg{max-width:960px;margin:0 auto;}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid #e5e7eb;background:#fff;position:sticky;top:0;z-index:100;}
+.logo-top{font-family:'Fraunces',serif;font-size:15px;font-weight:500;}
+.logo-sub{font-size:9px;color:#9ca3af;letter-spacing:0.06em;text-transform:uppercase;}
+.nav-links{display:flex;gap:22px;align-items:center;}
+.nav-links a{font-size:12px;color:#6b7280;text-decoration:none;}
+.nav-cta{background:#F59E0B;color:#111;font-size:12px;font-weight:500;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:56px 32px 52px;background:linear-gradient(135deg,#FFFBF0 0%,#FFF7ED 100%);align-items:center;}
+.hero-label{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#D97706;margin-bottom:12px;}
+.hero h1{font-family:'Fraunces',serif;font-size:40px;font-weight:500;line-height:1.12;margin-bottom:16px;color:#111;}
+.hero-desc{font-size:13px;color:#6b7280;line-height:1.8;margin-bottom:28px;max-width:360px;}
+.hero-btns{display:flex;gap:10px;}
+.btn-a{background:#F59E0B;color:#111;font-size:13px;font-weight:500;padding:11px 22px;border-radius:8px;border:none;cursor:pointer;}
+.btn-b{font-size:13px;color:#6b7280;padding:11px 18px;border-radius:8px;border:1px solid #d1d5db;background:transparent;cursor:pointer;}
+
+/* HERO SUPPORT HUB VISUAL */
+.hero-vis{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:24px;}
+.hub-center{text-align:center;margin-bottom:14px;}
+.hub-badge{display:inline-flex;align-items:center;gap:8px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:10px 18px;}
+.hub-icon{width:28px;height:28px;border-radius:50%;background:#3B82F6;display:flex;align-items:center;justify-content:center;}
+.hub-icon svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:1.5;}
+.hub-label{font-size:13px;font-weight:500;color:#1D4ED8;}
+.hub-spokes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.spoke{display:flex;flex-direction:column;align-items:center;gap:5px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:9px;padding:10px 6px;text-align:center;}
+.spoke-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.spoke-icon svg{width:13px;height:13px;fill:none;stroke-width:1.5;}
+.spoke-label{font-size:10px;color:#6b7280;line-height:1.35;}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);}
+.met{background:#fff;padding:28px 20px;text-align:center;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;}
+.met:first-child{border-left:1px solid #e5e7eb;}
+.met-n{font-family:'Fraunces',serif;font-size:32px;font-weight:500;color:#D97706;line-height:1;}
+.met-l{font-size:11px;color:#6b7280;margin-top:5px;}
+
+/* SECTIONS */
+.sec{padding:56px 32px;}
+.sec-alt{background:#f9fafb;}
+.ey{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#D97706;margin-bottom:10px;}
+.sec-t{font-family:'Fraunces',serif;font-size:30px;font-weight:500;line-height:1.2;margin-bottom:10px;color:#111;}
+.sec-s{font-size:13px;color:#6b7280;line-height:1.75;max-width:540px;}
+
+/* COST OF NO SUPPORT */
+.cost-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px;}
+.cost-card{border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;}
+.cost-front{background:#FEF2F2;padding:20px;}
+.cost-icon{width:32px;height:32px;border-radius:8px;background:#FEE2E2;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.cost-icon svg{width:15px;height:15px;stroke:#DC2626;fill:none;stroke-width:1.5;}
+.cost-front h3{font-size:13px;font-weight:500;color:#991B1B;margin-bottom:5px;}
+.cost-front p{font-size:11px;color:#B91C1C;line-height:1.6;}
+.cost-back{background:#F0FDF4;padding:14px 20px;border-top:1px solid #BBF7D0;}
+.cost-back-label{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:#15803D;margin-bottom:4px;}
+.cost-back p{font-size:11px;color:#166534;line-height:1.55;}
+
+/* SUPPORT TIERS */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.tier-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;}
+.tier-card.featured{border:2px solid #F59E0B;}
+.tier-header{padding:20px 22px;border-bottom:1px solid #f3f4f6;}
+.tier-header.feat-h{background:#FFFBF0;}
+.tier-badge{font-size:10px;font-weight:500;background:#FEF3C7;color:#92400E;padding:3px 9px;border-radius:4px;margin-bottom:8px;display:inline-block;}
+.tier-badge.pop{background:#F59E0B;color:#111;}
+.tier-name{font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:#111;margin-bottom:4px;}
+.tier-hours{font-size:12px;color:#6b7280;margin-bottom:4px;}
+.tier-sla{font-size:11px;color:#D97706;font-weight:500;}
+.tier-body{padding:20px 22px;}
+.tier-item{display:flex;gap:9px;align-items:flex-start;margin-bottom:10px;}
+.tier-check{width:16px;height:16px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.tier-check svg{width:8px;height:8px;stroke:#065F46;fill:none;stroke-width:2.5;}
+.tier-item p{font-size:11px;color:#374151;line-height:1.5;}
+.tier-cta{display:block;width:calc(100% - 44px);margin:0 22px 22px;text-align:center;font-size:12px;font-weight:500;padding:10px;border-radius:8px;border:1px solid #e5e7eb;cursor:pointer;background:#fff;color:#111;}
+.tier-cta.feat-cta{background:#F59E0B;border-color:#F59E0B;color:#111;}
+
+/* SCOPE BREAKDOWN */
+.scope-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.scope-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;}
+.scope-accent{width:3px;height:32px;border-radius:2px;background:#F59E0B;margin-bottom:14px;}
+.scope-card h3{font-size:13px;font-weight:500;color:#111;margin-bottom:6px;}
+.scope-card p{font-size:11px;color:#6b7280;line-height:1.6;margin-bottom:12px;}
+.scope-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.stag{font-size:10px;background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:4px;}
+
+/* SLA TABLE */
+.sla-table{width:100%;border-collapse:collapse;margin-top:28px;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;}
+.sla-table th{background:#0F172A;color:#94A3B8;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;padding:12px 16px;text-align:left;}
+.sla-table th:first-child{color:#E2E8F0;}
+.sla-table td{padding:12px 16px;font-size:12px;border-bottom:1px solid #f3f4f6;color:#374151;}
+.sla-table tr:last-child td{border-bottom:none;}
+.sla-table tr:nth-child(even) td{background:#f9fafb;}
+.sla-table td:first-child{font-weight:500;color:#111;}
+.p1{color:#DC2626;font-weight:500;}
+.p2{color:#D97706;font-weight:500;}
+.p3{color:#059669;font-weight:500;}
+.sla-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:4px;}
+.sla-p1{background:#FEE2E2;color:#991B1B;}
+.sla-p2{background:#FEF3C7;color:#92400E;}
+.sla-p3{background:#D1FAE5;color:#065F46;}
+
+/* PROACTIVE vs REACTIVE */
+.pvr{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:32px;border-radius:14px;overflow:hidden;border:1px solid #e5e7eb;}
+.pvr-header{padding:16px 24px;font-size:12px;font-weight:500;}
+.pv-header{background:#FEF2F2;color:#991B1B;border-right:1px solid #FEE2E2;}
+.pr-header{background:#F0FDF4;color:#065F46;}
+.pvr-header-label{font-size:9px;text-transform:uppercase;letter-spacing:0.06em;opacity:0.7;margin-bottom:2px;}
+.pvr-row{display:grid;grid-template-columns:1fr 1fr;}
+.pvr-cell{padding:13px 24px;font-size:11px;border-top:1px solid #f3f4f6;display:flex;align-items:flex-start;gap:8px;color:#6b7280;}
+.pvr-cell-right{background:#F9FAFB;color:#374151;}
+.cell-dot-red{width:6px;height:6px;border-radius:50%;background:#FCA5A5;flex-shrink:0;margin-top:4px;}
+.cell-dot-green{width:6px;height:6px;border-radius:50%;background:#6EE7B7;flex-shrink:0;margin-top:4px;}
+
+/* REPORTING PREVIEW */
+.split-section{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-top:32px;}
+.report-preview{background:#0F172A;border-radius:14px;padding:22px;}
+.rp-title{font-size:11px;font-weight:500;color:#94A3B8;margin-bottom:16px;}
+.rp-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #1E293B;}
+.rp-row:last-child{border-bottom:none;margin-bottom:0;}
+.rp-label{font-size:11px;color:#64748B;}
+.rp-val{font-size:11px;font-weight:500;}
+.rp-green{color:#34D399;}
+.rp-amber{color:#F59E0B;}
+.rp-blue{color:#60A5FA;}
+.rp-bar-row{margin-bottom:10px;}
+.rp-bar-label{display:flex;justify-content:space-between;margin-bottom:4px;}
+.rp-bar-label span{font-size:10px;color:#64748B;}
+.rp-bar-wrap{height:5px;border-radius:3px;background:#1E293B;}
+.rp-bar{height:5px;border-radius:3px;}
+.outcome-list{display:flex;flex-direction:column;gap:14px;}
+.oi{display:flex;gap:12px;align-items:flex-start;}
+.oi-num{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:#F59E0B;min-width:32px;line-height:1;}
+.oi-t h4{font-size:13px;font-weight:500;color:#111;margin-bottom:3px;}
+.oi-t p{font-size:11px;color:#6b7280;line-height:1.55;}
+
+/* CASE STUDIES */
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px;}
+.ccase{border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;}
+.cch{background:#1C3557;padding:20px 22px;}
+.cch-i{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#93C5FD;margin-bottom:5px;}
+.cch h3{font-size:13px;font-weight:500;color:#E0F2FE;line-height:1.4;}
+.ccb{padding:18px 22px;}
+.cc-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ccf label{font-size:9px;color:#9ca3af;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.05em;}
+.ccf p{font-size:11px;color:#374151;line-height:1.5;}
+.ccs{background:#FEF3C7;border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:center;}
+.ccs-n{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:#B45309;}
+.ccs-t{font-size:11px;color:#92400E;line-height:1.45;}
+
+/* TESTIMONIALS */
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.tc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;}
+.stars{display:flex;gap:3px;margin-bottom:12px;}
+.star{width:12px;height:12px;background:#F59E0B;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.tq{font-size:12px;color:#6b7280;line-height:1.7;font-style:italic;margin-bottom:14px;}
+.tau{display:flex;align-items:center;gap:9px;}
+.tav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.tn{font-size:12px;font-weight:500;color:#111;}
+.tr{font-size:11px;color:#9ca3af;}
+
+/* TEAM */
+.team-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.tmc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;text-align:center;}
+.tma{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;}
+.tmn{font-size:14px;font-weight:500;color:#111;margin-bottom:2px;}
+.tmr{font-size:11px;color:#9ca3af;margin-bottom:10px;}
+.certs{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
+.cert{font-size:10px;background:#DBEAFE;color:#1E40AF;padding:3px 7px;border-radius:4px;}
+
+/* INDUSTRIES */
+.ind-g{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:28px;}
+.ic{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px;text-align:center;}
+.id{width:28px;height:28px;border-radius:7px;margin:0 auto 8px;}
+.ic p{font-size:11px;color:#6b7280;}
+
+/* PARTNER STRIP */
+.pstrip{display:flex;align-items:center;justify-content:center;gap:32px;padding:30px 32px;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;margin-top:36px;flex-wrap:wrap;}
+.pb{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.pbi{width:42px;height:42px;border-radius:10px;background:#1C3557;display:flex;align-items:center;justify-content:center;}
+.pbi svg{width:20px;height:20px;fill:#93C5FD;}
+.pbl{font-size:10px;color:#9ca3af;text-align:center;line-height:1.4;}
+.pdiv{width:1px;height:36px;background:#e5e7eb;}
+.ps-stat{text-align:center;}
+.ps-n{font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:#D97706;}
+.ps-l{font-size:10px;color:#9ca3af;}
+.lpills{display:flex;gap:8px;flex-wrap:wrap;}
+.lp{background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:8px 14px;font-size:11px;color:#6b7280;}
+
+/* CTA */
+.cta-wrap{padding:0 32px 56px;}
+.cta-box{background:#1C3557;border-radius:16px;padding:44px;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;}
+.cta-ey{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#93C5FD;margin-bottom:10px;}
+.cta-box h2{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:#E0F2FE;line-height:1.25;margin-bottom:10px;}
+.cta-box p{font-size:12px;color:#93C5FD;line-height:1.7;margin-bottom:20px;}
+.cta-btns{display:flex;flex-direction:column;gap:9px;}
+.cta-ba{background:#F59E0B;color:#111;font-size:12px;font-weight:500;padding:11px 18px;border-radius:8px;border:none;cursor:pointer;text-align:left;}
+.cta-bb{background:transparent;color:#93C5FD;font-size:12px;padding:11px 18px;border-radius:8px;border:1px solid #2563EB;cursor:pointer;text-align:left;}
+.health-check{background:rgba(255,255,255,0.07);border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,0.12);}
+.hc-title{font-size:11px;font-weight:500;color:#E0F2FE;margin-bottom:12px;}
+.hc-row{display:flex;gap:8px;align-items:center;margin-bottom:9px;}
+.hc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.hc-row p{font-size:11px;color:#BAE6FD;}
+.hc-score-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1);}
+.hc-score-label{font-size:10px;color:#64748B;}
+.hc-score{font-size:18px;font-weight:500;font-family:'Fraunces',serif;color:#F59E0B;}
+
+/* RELATED */
+.rel-g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;}
+.rc{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:20px;}
+.ra{width:3px;height:30px;border-radius:2px;background:#F59E0B;margin-bottom:12px;}
+.rc h4{font-size:13px;font-weight:500;color:#111;margin-bottom:4px;}
+.rc p{font-size:11px;color:#6b7280;line-height:1.55;margin-bottom:10px;}
+.rl{font-size:11px;color:#D97706;font-weight:500;}
+
+/* BLOG */
+.bl-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.blc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;}
+.blt{height:76px;}
+.bltg{display:flex;gap:5px;padding:12px 14px 0;}
+.btg{font-size:10px;background:#FEF3C7;color:#92400E;padding:3px 7px;border-radius:4px;font-weight:500;}
+.blc h4{font-size:12px;font-weight:500;padding:7px 14px;line-height:1.45;color:#111;}
+.blc p{font-size:11px;color:#9ca3af;padding:0 14px 14px;line-height:1.55;}
+
+/* FAQ */
+.faq-l{margin-top:28px;}
+.fq{border-bottom:1px solid #f3f4f6;padding:15px 0;}
+.fqq{font-size:13px;font-weight:500;display:flex;justify-content:space-between;align-items:center;color:#111;cursor:pointer;}
+.fqq svg{width:14px;height:14px;stroke:#9ca3af;fill:none;stroke-width:2;flex-shrink:0;}
+.fqa{font-size:12px;color:#6b7280;line-height:1.7;margin-top:9px;max-width:660px;}
+
+/* FOOTER */
+.ft{background:#0F172A;padding:44px 32px 24px;}
+.ft-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:24px;margin-bottom:32px;}
+.ft-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:#fff;margin-bottom:4px;}
+.ft-tag{font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;}
+.ft-col h5{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:#94A3B8;margin-bottom:10px;}
+.ft-col a{display:block;font-size:11px;color:#475569;text-decoration:none;margin-bottom:5px;}
+.ft-bot{border-top:1px solid #1E293B;padding-top:18px;display:flex;justify-content:space-between;}
+.ft-bot p{font-size:11px;color:#475569;}
+</style>
+</head>
+<body>
+<div class="pg">
+
+<!-- NAV -->
+<nav class="nav">
+  <div>
+    <div class="logo-top">atlas consulting</div>
+    <div class="logo-sub">trusted by clients for over 12 years</div>
+  </div>
+  <div class="nav-links">
+    <a href="/tableau/Salesforce-Advisory-Services.html">Advisory Services</a>
+    <a href="/tableau/Salesforce-Implementation-Services.html">Implementation Services</a>
+    <a href="/tableau/Salesforce-Reimplementation-Services.html">Re-implementation Services</a>
+    <a href="/tableau/Salesforce-Custom-Development-Services.html">Custom Development Services</a>
+    <a href="/tableau/Salesforce-Support.html">Salesforce Support</a>
+    <button class="nav-cta">Contact us</button>
+  </div>
+</nav>
+
+<!-- HERO — based on your existing page, enhanced -->
+<section class="hero">
+  <div>
+    <div class="hero-label">Salesforce Support Services</div>
+    <h1>We look after your Salesforce like it's ours</h1>
+    <p class="hero-desc">Our support services are built to keep your platform running at its best. Whether it's managing your system, improving it regularly, keeping data clean, or supporting users — we've got you covered. We monitor and manage your Salesforce proactively to prevent issues before they happen.</p>
+    <div class="hero-btns">
+      <button class="btn-a">Get a free platform health check</button>
+      <button class="btn-b">View support plans →</button>
+    </div>
+  </div>
+
+  <!-- SUPPORT HUB VISUAL — keeps the spirit of your spider diagram but cleaner -->
+  <div class="hero-vis">
+    <div class="hub-center">
+      <div class="hub-badge">
+        <div class="hub-icon"><svg viewBox="0 0 14 14"><path d="M7 1l1.5 3.5 3.5.5-2.5 2.5.5 3.5L7 9.5 4 11l.5-3.5L2 5l3.5-.5z"/></svg></div>
+        <div class="hub-label">Salesforce Support Hub</div>
+      </div>
+    </div>
+    <div class="hub-spokes">
+      <div class="spoke">
+        <div class="spoke-icon" style="background:#DBEAFE;"><svg viewBox="0 0 13 13" stroke="#1D4ED8"><rect x="2" y="2" width="9" height="9" rx="1"/><line x1="4" y1="6" x2="9" y2="6"/></svg></div>
+        <div class="spoke-label">System admin & management</div>
+      </div>
+      <div class="spoke">
+        <div class="spoke-icon" style="background:#D1FAE5;"><svg viewBox="0 0 13 13" stroke="#065F46"><circle cx="6.5" cy="6.5" r="4"/><polyline points="4.5,6.5 6,8 8.5,5"/></svg></div>
+        <div class="spoke-label">Data quality & cleansing</div>
+      </div>
+      <div class="spoke">
+        <div class="spoke-icon" style="background:#FEF3C7;"><svg viewBox="0 0 13 13" stroke="#D97706"><polyline points="2,9 5,6 7,8 11,4"/></svg></div>
+        <div class="spoke-label">Routine enhancements</div>
+      </div>
+      <div class="spoke">
+        <div class="spoke-icon" style="background:#EDE9FE;"><svg viewBox="0 0 13 13" stroke="#5B21B6"><circle cx="6.5" cy="5" r="2.5"/><path d="M2 12c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/></svg></div>
+        <div class="spoke-label">End-user support & training</div>
+      </div>
+      <div class="spoke">
+        <div class="spoke-icon" style="background:#FCE7F3;"><svg viewBox="0 0 13 13" stroke="#9D174D"><circle cx="6.5" cy="6.5" r="4"/><line x1="6.5" y1="4" x2="6.5" y2="7"/><line x1="6.5" y1="8.5" x2="6.5" y2="9.5"/></svg></div>
+        <div class="spoke-label">Proactive issue prevention</div>
+      </div>
+      <div class="spoke">
+        <div class="spoke-icon" style="background:#FEE2E2;"><svg viewBox="0 0 13 13" stroke="#DC2626"><path d="M2 11l3-3 2 2 4-5"/></svg></div>
+        <div class="spoke-label">Release & update management</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="met"><div class="met-n">98%</div><div class="met-l">Client retention rate</div></div>
+  <div class="met"><div class="met-n">&lt;4 hrs</div><div class="met-l">Avg. P1 response time</div></div>
+  <div class="met"><div class="met-n">500+</div><div class="met-l">Support tickets resolved / yr</div></div>
+  <div class="met"><div class="met-n">99.9%</div><div class="met-l">Platform uptime maintained</div></div>
+</div>
+
+<!-- COST OF UNMANAGED SALESFORCE — NEW -->
+<section class="sec">
+  <div class="ey">The problem we solve</div>
+  <div class="sec-t">The real cost of unmanaged Salesforce</div>
+  <div class="sec-s">Most organisations treat Salesforce support as optional — until something breaks. These are the three most common and costly consequences of leaving your platform unmanaged.</div>
+  <div class="cost-grid">
+    <div class="cost-card">
+      <div class="cost-front">
+        <div class="cost-icon"><svg viewBox="0 0 15 15"><rect x="2" y="2" width="11" height="11" rx="2"/><line x1="2" y1="6" x2="13" y2="6"/></svg></div>
+        <h3>Dirty, unreliable data</h3>
+        <p>Without regular cleansing, duplicates multiply, records go stale, and reports become meaningless. Leadership loses confidence in the numbers and stops using Salesforce for decisions.</p>
+      </div>
+      <div class="cost-back">
+        <div class="cost-back-label">How Atlas prevents this</div>
+        <p>Monthly data quality reviews, automated deduplication rules, and validation maintenance keep your data clean and trustworthy year-round.</p>
+      </div>
+    </div>
+    <div class="cost-card">
+      <div class="cost-front">
+        <div class="cost-icon"><svg viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="5.5"/><line x1="7.5" y1="4.5" x2="7.5" y2="8"/><line x1="7.5" y1="10" x2="7.5" y2="11"/></svg></div>
+        <h3>Security gaps & compliance risks</h3>
+        <p>Unpatched Salesforce releases, outdated profiles, and unreviewed sharing rules create security vulnerabilities that put your business data — and your clients' data — at risk.</p>
+      </div>
+      <div class="cost-back">
+        <div class="cost-back-label">How Atlas prevents this</div>
+        <p>We apply every Salesforce release proactively, audit security settings quarterly, and keep your org compliant with current best practices throughout the year.</p>
+      </div>
+    </div>
+    <div class="cost-card">
+      <div class="cost-front">
+        <div class="cost-icon"><svg viewBox="0 0 15 15"><circle cx="7.5" cy="5.5" r="2.5"/><path d="M2.5 13c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg></div>
+        <h3>Low adoption & user frustration</h3>
+        <p>When users hit errors, broken flows, or missing features with no-one to call, they stop using Salesforce. Low adoption snowballs — and the investment you've made goes to waste.</p>
+      </div>
+      <div class="cost-back">
+        <div class="cost-back-label">How Atlas prevents this</div>
+        <p>Our dedicated helpdesk handles user queries fast, we monitor adoption metrics monthly, and we run targeted retraining when usage drops below threshold.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT TIERS — NEW, unique to this page -->
+<section class="sec sec-alt">
+  <div class="ey">Support plans</div>
+  <div class="sec-t">Choose the right level of support for your business</div>
+  <div class="sec-s">Every business has different needs. Our three support tiers are designed to scale with you — from essential cover for smaller teams to a fully dedicated support function for enterprise clients.</div>
+  <div class="tiers">
+    <div class="tier-card">
+      <div class="tier-header">
+        <div class="tier-badge">Essential</div>
+        <div class="tier-name">Essentials</div>
+        <div class="tier-hours">Up to 10 hrs / month</div>
+        <div class="tier-sla">P1 response: 8 hrs business</div>
+      </div>
+      <div class="tier-body">
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Salesforce admin & configuration</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Monthly data quality review</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>User query helpdesk (email)</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Salesforce release management</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Monthly health report</p></div>
+      </div>
+      <button class="tier-cta">Get started</button>
+    </div>
+
+    <div class="tier-card featured">
+      <div class="tier-header feat-h">
+        <div class="tier-badge pop">Most popular</div>
+        <div class="tier-name">Growth</div>
+        <div class="tier-hours">Up to 25 hrs / month</div>
+        <div class="tier-sla">P1 response: 4 hrs any day</div>
+      </div>
+      <div class="tier-body">
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Everything in Essentials</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Named support consultant</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Fortnightly enhancement sprints</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>End-user training sessions</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Quarterly strategic review</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Proactive monitoring & alerts</p></div>
+      </div>
+      <button class="tier-cta feat-cta">Get started</button>
+    </div>
+
+    <div class="tier-card">
+      <div class="tier-header">
+        <div class="tier-badge">Enterprise</div>
+        <div class="tier-name">Enterprise</div>
+        <div class="tier-hours">Unlimited / dedicated resource</div>
+        <div class="tier-sla">P1 response: 1 hr 24/7</div>
+      </div>
+      <div class="tier-body">
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Everything in Growth</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Dedicated support team (2–3 people)</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Weekly enhancement delivery</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Custom development included</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>24/7 monitoring & incident cover</p></div>
+        <div class="tier-item"><div class="tier-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Executive monthly reporting</p></div>
+      </div>
+      <button class="tier-cta">Contact us</button>
+    </div>
+  </div>
+</section>
+
+<!-- SCOPE BREAKDOWN — from your existing "How we support" section, expanded -->
+<section class="sec">
+  <div class="ey">What's included</div>
+  <div class="sec-t">How we support & optimise your Salesforce</div>
+  <div class="sec-s">Every support engagement covers six core work streams — designed to keep your platform healthy, your users happy, and your business moving forward.</div>
+  <div class="scope-grid">
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Proactive system management</h3>
+      <p>We handle all the behind-the-scenes tasks so you don't have to worry. With proactive administration, you avoid downtime, ensure compliance, and keep Salesforce aligned with your evolving business needs.</p>
+      <div class="scope-tags"><span class="stag">Admin</span><span class="stag">Configuration</span><span class="stag">Compliance</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Routine Salesforce enhancements</h3>
+      <p>Business needs change constantly. We deliver regular enhancements — new fields, updated workflows, revised reports — so Salesforce always reflects how your business works today.</p>
+      <div class="scope-tags"><span class="stag">Enhancements</span><span class="stag">Workflow</span><span class="stag">Reports</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Salesforce data quality management</h3>
+      <p>Clean data is the backbone of a trusted platform. We run monthly data reviews, identify duplicates, enforce validation rules, and maintain the data standards your team relies on.</p>
+      <div class="scope-tags"><span class="stag">Data cleansing</span><span class="stag">Deduplication</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>End-user support & adoption</h3>
+      <p>A dedicated helpdesk for your Salesforce users — handling queries, resolving errors, and providing training that keeps adoption high and frustration low across all your teams.</p>
+      <div class="scope-tags"><span class="stag">Helpdesk</span><span class="stag">Training</span><span class="stag">Adoption</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Fast issue resolution & support</h3>
+      <p>We manage support tickets and resolve technical challenges quickly. From workflow errors to user queries, our Salesforce helpdesk ensures seamless operations with minimal downtime.</p>
+      <div class="scope-tags"><span class="stag">Ticketing</span><span class="stag">SLA</span><span class="stag">Escalation</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Salesforce scalability & optimisation</h3>
+      <p>Your Salesforce should grow with your business. We continuously review your configuration against your evolving needs and implement improvements that keep your platform scalable and future-ready.</p>
+      <div class="scope-tags"><span class="stag">Optimisation</span><span class="stag">Scalability</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SLA COMMITMENTS — NEW, unique to this page -->
+<section class="sec sec-alt">
+  <div class="ey">SLA commitments</div>
+  <div class="sec-t">Response times you can count on</div>
+  <div class="sec-s">Our SLAs are not aspirational — they're contractual. Every support plan includes defined priority levels with guaranteed response and resolution targets.</div>
+  <table class="sla-table">
+    <thead>
+      <tr>
+        <th>Priority level</th>
+        <th>Definition</th>
+        <th>Essentials response</th>
+        <th>Growth response</th>
+        <th>Enterprise response</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="sla-tag sla-p1">P1 — Critical</span></td>
+        <td style="font-size:11px;color:#6b7280;">Platform down, data loss risk, business operations stopped</td>
+        <td class="p1">8 hrs (business)</td>
+        <td class="p1">4 hrs (any day)</td>
+        <td class="p1">1 hr (24/7)</td>
+      </tr>
+      <tr>
+        <td><span class="sla-tag sla-p2">P2 — High</span></td>
+        <td style="font-size:11px;color:#6b7280;">Major feature broken, significant user impact, no workaround</td>
+        <td class="p2">1 business day</td>
+        <td class="p2">4 hrs (business)</td>
+        <td class="p2">2 hrs (business)</td>
+      </tr>
+      <tr>
+        <td><span class="sla-tag sla-p3">P3 — Medium</span></td>
+        <td style="font-size:11px;color:#6b7280;">Non-critical issue, workaround available, user inconvenience</td>
+        <td class="p3">3 business days</td>
+        <td class="p3">1 business day</td>
+        <td class="p3">4 hrs (business)</td>
+      </tr>
+      <tr>
+        <td><span class="sla-tag sla-p3">P4 — Low</span></td>
+        <td style="font-size:11px;color:#6b7280;">Minor change request, how-to question, enhancement idea</td>
+        <td class="p3">5 business days</td>
+        <td class="p3">3 business days</td>
+        <td class="p3">1 business day</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- PROACTIVE VS REACTIVE — NEW -->
+<section class="sec">
+  <div class="ey">Our approach</div>
+  <div class="sec-t">Proactive support — not just reactive firefighting</div>
+  <div class="sec-s">Most support providers wait for you to raise a ticket. We don't. Here's the difference between how a typical reactive support model works versus our proactive approach.</div>
+  <div class="pvr">
+    <div class="pvr-header pv-header">
+      <div class="pvr-header-label">Typical reactive support</div>
+      What most providers deliver
+    </div>
+    <div class="pvr-header" style="background:#F0FDF4;color:#065F46;border-left:1px solid #BBF7D0;">
+      <div class="pvr-header-label">Atlas proactive support</div>
+      What we deliver every month
+    </div>
+    <div class="pvr-row">
+      <div class="pvr-cell" style="border-right:1px solid #f3f4f6;"><div class="cell-dot-red"></div>Waits for you to report a broken flow or automation</div>
+      <div class="pvr-cell pvr-cell-right"><div class="cell-dot-green"></div>Monitors automations weekly — flags and fixes issues before you notice</div>
+    </div>
+    <div class="pvr-row">
+      <div class="pvr-cell" style="border-right:1px solid #f3f4f6;"><div class="cell-dot-red"></div>Data quality degrades silently between your reviews</div>
+      <div class="pvr-cell pvr-cell-right"><div class="cell-dot-green"></div>Monthly data review catches duplicates and stale records before they spread</div>
+    </div>
+    <div class="pvr-row">
+      <div class="pvr-cell" style="border-right:1px solid #f3f4f6;"><div class="cell-dot-red"></div>Salesforce releases applied months late or not at all</div>
+      <div class="pvr-cell pvr-cell-right"><div class="cell-dot-green"></div>Every Salesforce release reviewed and applied within 2 weeks of launch</div>
+    </div>
+    <div class="pvr-row">
+      <div class="pvr-cell" style="border-right:1px solid #f3f4f6;"><div class="cell-dot-red"></div>No reporting — you don't know what's been done or what's pending</div>
+      <div class="pvr-cell pvr-cell-right"><div class="cell-dot-green"></div>Monthly health report with tickets resolved, hours used, and recommendations</div>
+    </div>
+    <div class="pvr-row">
+      <div class="pvr-cell" style="border-right:1px solid #f3f4f6;"><div class="cell-dot-red"></div>Adoption drops and no-one tells you until it's a crisis</div>
+      <div class="pvr-cell pvr-cell-right"><div class="cell-dot-green"></div>Adoption monitored monthly — retraining initiated when usage falls below threshold</div>
+    </div>
+  </div>
+</section>
+
+<!-- REPORTING & OUTCOMES — from your existing sections, enhanced -->
+<section class="sec sec-alt">
+  <div class="ey">Transparency & reporting</div>
+  <div class="sec-t">Monthly reporting & quarterly reviews</div>
+  <div class="sec-s">You always know exactly what we've done, what's been resolved, and where your platform stands. Every support client receives a structured monthly report and a quarterly strategic review.</div>
+  <div class="split-section">
+    <div class="report-preview">
+      <div class="rp-title">Monthly platform health report — sample</div>
+      <div class="rp-row">
+        <div class="rp-label">Support tickets resolved</div>
+        <div class="rp-val rp-green">24 / 24 ✓</div>
+      </div>
+      <div class="rp-row">
+        <div class="rp-label">Avg. resolution time</div>
+        <div class="rp-val rp-green">3.2 hrs</div>
+      </div>
+      <div class="rp-row">
+        <div class="rp-label">Data quality score</div>
+        <div class="rp-val rp-amber">↑ 94%</div>
+      </div>
+      <div class="rp-row">
+        <div class="rp-label">Enhancements delivered</div>
+        <div class="rp-val rp-blue">7 items</div>
+      </div>
+      <div style="margin-top:14px;">
+        <div class="rp-bar-row">
+          <div class="rp-bar-label"><span>User adoption</span><span style="color:#34D399;">89%</span></div>
+          <div class="rp-bar-wrap"><div class="rp-bar" style="width:89%;background:#34D399;"></div></div>
+        </div>
+        <div class="rp-bar-row">
+          <div class="rp-bar-label"><span>Automation health</span><span style="color:#60A5FA;">96%</span></div>
+          <div class="rp-bar-wrap"><div class="rp-bar" style="width:96%;background:#60A5FA;"></div></div>
+        </div>
+        <div class="rp-bar-row">
+          <div class="rp-bar-label"><span>Hours utilised</span><span style="color:#F59E0B;">22/25</span></div>
+          <div class="rp-bar-wrap"><div class="rp-bar" style="width:88%;background:#F59E0B;"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="outcome-list">
+      <div style="font-size:12px;font-weight:500;color:#111;margin-bottom:4px;">What you'll achieve</div>
+      <div class="oi"><div class="oi-num">01</div><div class="oi-t"><h4>Designed for continuous Salesforce improvement</h4><p>Regular enhancement sprints mean your platform never stands still — it evolves continuously alongside your business.</p></div></div>
+      <div class="oi"><div class="oi-num">02</div><div class="oi-t"><h4>Proactive issue prevention</h4><p>We catch and fix issues before they become outages — so your team never faces the disruption of an unexpected platform failure.</p></div></div>
+      <div class="oi"><div class="oi-num">03</div><div class="oi-t"><h4>Salesforce scalability & optimisation</h4><p>Your platform is continuously reviewed against your evolving needs — so it scales confidently as your business grows.</p></div></div>
+      <div class="oi"><div class="oi-num">04</div><div class="oi-t"><h4>Value realisation & continuous improvement</h4><p>Most clients find they unlock additional platform value within the first 3 months — through features they already own but weren't using.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES — NEW -->
+<section class="sec">
+  <div class="ey">Client stories</div>
+  <div class="sec-t">Support outcomes in the real world</div>
+  <div class="case-grid">
+    <div class="ccase">
+      <div class="cch">
+        <div class="cch-i">Professional Services</div>
+        <h3>Managed support for a 150-user Salesforce org — transforming a broken platform into a trusted business tool</h3>
+      </div>
+      <div class="ccb">
+        <div class="cc-meta">
+          <div class="ccf"><label>Before state</label><p>45% adoption, 12,000 duplicate records, broken automations, no helpdesk — IT fielding Salesforce queries</p></div>
+          <div class="ccf"><label>Our support</label><p>Growth plan — named consultant, monthly data reviews, helpdesk, fortnightly enhancements</p></div>
+        </div>
+        <div class="ccs"><div class="ccs-n">87%</div><div class="ccs-t">User adoption within 4 months — up from 45%. Data quality score improved from 51% to 93%</div></div>
+      </div>
+    </div>
+    <div class="ccase">
+      <div class="cch">
+        <div class="cch-i">Financial Services</div>
+        <h3>Enterprise support for a regulated FinServ firm — 24/7 monitoring across a mission-critical Salesforce environment</h3>
+      </div>
+      <div class="ccb">
+        <div class="cc-meta">
+          <div class="ccf"><label>Before state</label><p>Previous provider had a 2-day average response time for P1 issues — causing compliance exposure and client SLA breaches</p></div>
+          <div class="ccf"><label>Our support</label><p>Enterprise plan — dedicated team, 1-hr P1 SLA, 24/7 monitoring, monthly executive reporting</p></div>
+        </div>
+        <div class="ccs"><div class="ccs-n">100%</div><div class="ccs-t">SLA compliance maintained across 18 months — zero P1 escalations missed under Atlas management</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec sec-alt">
+  <div class="ey">What our clients say</div>
+  <div class="sec-t">Trusted by teams across the UK & Australia</div>
+  <div class="tg">
+    <div class="tc">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="tq">"We used to find out about Salesforce issues when users started complaining. Now Atlas flags things before they become problems. It's transformed how we feel about the platform — from anxious to confident."</p>
+      <div class="tau"><div class="tav" style="background:#DBEAFE;color:#1D4ED8;">GH</div><div><div class="tn">Gary H.</div><div class="tr">Head of Operations, Professional Services</div></div></div>
+    </div>
+    <div class="tc">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="tq">"The monthly health reports are genuinely useful — not just a summary of tickets. They show us adoption trends, what's improved, and what's coming next. It feels like having an internal Salesforce team."</p>
+      <div class="tau"><div class="tav" style="background:#D1FAE5;color:#065F46;">NC</div><div><div class="tn">Nina C.</div><div class="tr">CRM Manager, FinServ</div></div></div>
+    </div>
+    <div class="tc">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="tq">"Our previous support provider took 2 days to respond to a critical issue. Atlas had it resolved in under 3 hours and sent a root-cause analysis the same day. The difference is night and day."</p>
+      <div class="tau"><div class="tav" style="background:#EDE9FE;color:#5B21B6;">BW</div><div><div class="tn">Ben W.</div><div class="tr">IT Director, Retail</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="sec">
+  <div class="ey">Your dedicated team</div>
+  <div class="sec-t">The people who look after your platform</div>
+  <div class="team-g">
+    <div class="tmc">
+      <div class="tma" style="background:#DBEAFE;color:#1D4ED8;">OT</div>
+      <div class="tmn">Olivia Turner</div>
+      <div class="tmr">Support Lead & Named Consultant</div>
+      <div class="certs"><span class="cert">Admin</span><span class="cert">Sales Cloud</span><span class="cert">Service Cloud</span></div>
+    </div>
+    <div class="tmc">
+      <div class="tma" style="background:#D1FAE5;color:#065F46;">RM</div>
+      <div class="tmn">Rajan Mehta</div>
+      <div class="tmr">Data Quality Specialist</div>
+      <div class="certs"><span class="cert">Data Management</span><span class="cert">Analytics</span></div>
+    </div>
+    <div class="tmc">
+      <div class="tma" style="background:#FEF3C7;color:#B45309;">CL</div>
+      <div class="tmn">Charlotte Lee</div>
+      <div class="tmr">Helpdesk & Adoption Analyst</div>
+      <div class="certs"><span class="cert">Admin</span><span class="cert">Training</span><span class="cert">CPQ</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES + PARTNER STRIP -->
+<section class="sec sec-alt">
+  <div class="ey">Trusted by businesses across industry sectors</div>
+  <div class="sec-t">Support expertise across every sector we serve</div>
+  <div class="ind-g">
+    <div class="ic"><div class="id" style="background:#DBEAFE;"></div><p>Financial Services</p></div>
+    <div class="ic"><div class="id" style="background:#D1FAE5;"></div><p>Retail & eCommerce</p></div>
+    <div class="ic"><div class="id" style="background:#EDE9FE;"></div><p>Healthcare</p></div>
+    <div class="ic"><div class="id" style="background:#FEF3C7;"></div><p>Manufacturing</p></div>
+    <div class="ic"><div class="id" style="background:#FCE7F3;"></div><p>Professional Services</p></div>
+    <div class="ic"><div class="id" style="background:#D1FAE5;"></div><p>Not-for-Profit</p></div>
+    <div class="ic"><div class="id" style="background:#DBEAFE;"></div><p>Technology</p></div>
+    <div class="ic"><div class="id" style="background:#FEE2E2;"></div><p>Property & Real Estate</p></div>
+  </div>
+  <div class="pstrip">
+    <div class="pb">
+      <div class="pbi"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+      <div class="pbl">Salesforce<br>Summit Partner</div>
+    </div>
+    <div class="pdiv"></div>
+    <div class="ps-stat"><div class="ps-n">160+</div><div class="ps-l">Certifications held</div></div>
+    <div class="pdiv"></div>
+    <div class="ps-stat"><div class="ps-n">98%</div><div class="ps-l">Client retention</div></div>
+    <div class="pdiv"></div>
+    <div class="lpills">
+      <div class="lp">accan</div>
+      <div class="lp">AVIS Australia</div>
+      <div class="lp">Blue Harvest</div>
+    </div>
+  </div>
+</section>
+
+<!-- FREE HEALTH CHECK CTA — NEW, unique to this page -->
+<div class="cta-wrap">
+  <div class="cta-box">
+    <div>
+      <div class="cta-ey">Free platform health check</div>
+      <h2>Let us take a look under the hood — for free</h2>
+      <p>Not sure what state your Salesforce is in? Our certified consultants will assess your platform health, identify risks, and give you honest recommendations — at no cost and no commitment. Most clients are surprised by what we find.</p>
+      <div class="cta-btns">
+        <button class="cta-ba">Book your free platform health check</button>
+        <button class="cta-bb">Download our support plans guide →</button>
+      </div>
+    </div>
+    <div class="health-check">
+      <div class="hc-title">What we assess in your free health check</div>
+      <div class="hc-row"><div class="hc-dot" style="background:#34D399;"></div><p>User adoption rate & engagement metrics</p></div>
+      <div class="hc-row"><div class="hc-dot" style="background:#60A5FA;"></div><p>Data quality — duplicates, stale records, validation</p></div>
+      <div class="hc-row"><div class="hc-dot" style="background:#F59E0B;"></div><p>Automation health — broken flows & errors</p></div>
+      <div class="hc-row"><div class="hc-dot" style="background:#C4B5FD;"></div><p>Security settings & profile review</p></div>
+      <div class="hc-row"><div class="hc-dot" style="background:#F472B6;"></div><p>Release management & version status</p></div>
+      <div class="hc-row"><div class="hc-dot" style="background:#FDBA74;"></div><p>Licence utilisation & feature activation</p></div>
+      <div class="hc-score-row">
+        <div class="hc-score-label">Written report delivered within 5 business days</div>
+        <div class="hc-score">Free</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED SERVICES -->
+<section class="sec">
+  <div class="ey">Related services</div>
+  <div class="sec-t">Support as part of the full Atlas journey</div>
+  <div class="rel-g">
+    <div class="rc"><div class="ra"></div><h4>Salesforce Implementation</h4><p>Just gone live and need ongoing support? Our support team picks up seamlessly after implementation — you stay with the same people who built it.</p><div class="rl">Learn more →</div></div>
+    <div class="rc"><div class="ra"></div><h4>Re-implementation</h4><p>If your org needs more than support can fix, our re-implementation team can assess whether a rebuild is needed — and deliver it without disrupting your business.</p><div class="rl">Learn more →</div></div>
+    <div class="rc"><div class="ra"></div><h4>Custom Development</h4><p>Need a feature that doesn't exist in standard Salesforce? Our developers build tailored components and automations as part of your support engagement.</p><div class="rl">Learn more →</div></div>
+  </div>
+</section>
+
+<!-- BLOG — kept from your page, enhanced -->
+<section class="sec sec-alt">
+  <div class="ey">Insights & best practices</div>
+  <div class="sec-t">Salesforce support insights & best practices</div>
+  <div class="bl-g">
+    <div class="blc">
+      <div class="blt" style="background:#DBEAFE;"></div>
+      <div class="bltg"><span class="btg">Data quality</span></div>
+      <h4>5 Salesforce data quality challenges and proven solutions</h4>
+      <p>Clean data is the backbone of every successful Salesforce implementation. Yet many teams struggle with inaccurate, incomplete, or duplicate information that affects...</p>
+    </div>
+    <div class="blc">
+      <div class="blt" style="background:#D1FAE5;"></div>
+      <div class="bltg"><span class="btg">Enhancements</span></div>
+      <h4>How routine Salesforce enhancements improve business efficiency</h4>
+      <p>Salesforce is a powerful platform, but simply using it isn't enough. To truly maximise its value, routine enhancements are key. Small updates and continuous...</p>
+    </div>
+    <div class="blc">
+      <div class="blt" style="background:#FEF3C7;"></div>
+      <div class="bltg"><span class="btg">Maintenance</span></div>
+      <h4>The true cost of poor Salesforce maintenance</h4>
+      <p>Salesforce is a powerful tool, but without regular care, small issues can become big headaches. Poor maintenance quietly drains time, money, and productivity. Here is...</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQS — kept from your page + expanded -->
+<section class="sec" style="background:#F8FAFC;">
+  <div class="ey">FAQs</div>
+  <div class="sec-t">Salesforce Support FAQs</div>
+  <div class="faq-l">
+    <div class="fq">
+      <div class="fqq">Why are Salesforce support services important for business growth? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div>
+      <div class="fqa">Salesforce is a living platform — it needs ongoing management, regular updates, and continuous improvement to deliver value over time. Without support, small issues compound into major problems: data quality deteriorates, automations break, and users lose confidence. A managed support service ensures your investment keeps delivering measurable ROI month after month.</div>
+    </div>
+    <div class="fq"><div class="fqq">How does Salesforce end-user support increase adoption? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">What steps are taken to prevent Salesforce issues proactively? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">How does continuous enhancement benefit Salesforce users? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">How does Salesforce support help with scalability? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">What are the most common Salesforce data quality challenges? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Can Salesforce support improve data-driven decision-making? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">What's included in a managed Salesforce support plan? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ft">
+  <div class="ft-top">
+    <div>
+      <div class="ft-logo">atlas consulting</div>
+      <div class="ft-tag">trusted by clients for over 12 years</div>
+    </div>
+    <div class="ft-col">
+      <h5>Salesforce Clouds</h5>
+      <a href="#">Sales Cloud</a>
+      <a href="#">Service Cloud</a>
+      <a href="#">Marketing Cloud</a>
+      <a href="#">Experience Cloud</a>
+    </div>
+    <div class="ft-col">
+      <h5>Services</h5>
+      <a href="#">Advisory Services</a>
+      <a href="#">Implementation</a>
+      <a href="#">Re-implementation</a>
+      <a href="#">Custom Development</a>
+      <a href="#">Support</a>
+      <a href="#">Integration</a>
+    </div>
+    <div class="ft-col">
+      <h5>Industries</h5>
+      <a href="#">Financial Services</a>
+      <a href="#">Retail</a>
+      <a href="#">Healthcare</a>
+      <a href="#">Manufacturing</a>
+      <a href="#">Technology</a>
+    </div>
+    <div class="ft-col">
+      <h5>Solutions</h5>
+      <a href="#">Payments on Salesforce</a>
+      <a href="#">Sales & Marketing</a>
+      <a href="#">Data & Analytics</a>
+      <a href="#">AI & Automation</a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <p>© 2025 Atlas Consulting. All rights reserved.</p>
+    <p>Privacy · Terms · Contact</p>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
