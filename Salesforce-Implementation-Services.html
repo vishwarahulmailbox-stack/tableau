@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salesforce Implementation — Atlas Consulting (Mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;color:#1a1a1a;background:#fff;}
+.pg{max-width:960px;margin:0 auto;}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid #e5e7eb;background:#fff;position:sticky;top:0;z-index:100;}
+.logo-top{font-family:'Fraunces',serif;font-size:15px;font-weight:500;color:#1a1a1a;}
+.logo-sub{font-size:9px;color:#9ca3af;letter-spacing:0.06em;text-transform:uppercase;}
+.nav-links{display:flex;gap:22px;align-items:center;}
+.nav-links a{font-size:12px;color:#6b7280;text-decoration:none;}
+.nav-cta{background:#F59E0B;color:#111;font-size:12px;font-weight:500;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:40px;padding:56px 32px 52px;background:#FFFBF0;}
+.hero-label{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#D97706;margin-bottom:12px;}
+.hero h1{font-family:'Fraunces',serif;font-size:42px;font-weight:500;line-height:1.12;margin-bottom:16px;color:#111;}
+.hero-desc{font-size:13px;color:#6b7280;line-height:1.8;margin-bottom:28px;max-width:340px;}
+.hero-btns{display:flex;gap:10px;}
+.btn-a{background:#F59E0B;color:#111;font-size:13px;font-weight:500;padding:11px 22px;border-radius:8px;border:none;cursor:pointer;}
+.btn-b{font-size:13px;color:#6b7280;padding:11px 18px;border-radius:8px;border:1px solid #d1d5db;background:transparent;cursor:pointer;}
+.hero-vis{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:24px;}
+.vis-center{text-align:center;margin-bottom:16px;}
+.vis-gear-outer{width:72px;height:72px;border-radius:50%;background:#E0F2FE;border:3px solid #38BDF8;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+.vis-gear-inner{width:46px;height:46px;border-radius:50%;background:#0EA5E9;display:flex;align-items:center;justify-content:center;}
+.vis-gear-inner svg{width:22px;height:22px;fill:#fff;}
+.vis-label{font-size:11px;color:#9ca3af;}
+.phases{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px;}
+.ph{font-size:10px;font-weight:500;padding:6px 8px;border-radius:6px;text-align:center;}
+.ph1{background:#FEF3C7;color:#92400E;}.ph2{background:#D1FAE5;color:#065F46;}
+.ph3{background:#DBEAFE;color:#1E40AF;}.ph4{background:#EDE9FE;color:#5B21B6;}
+.ph5{background:#FCE7F3;color:#9D174D;}.ph6{background:#FEF9C3;color:#713F12;}
+.vis-divider{border:none;border-top:1px solid #f3f4f6;margin:12px 0;}
+.mini-outs{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.mout{display:flex;align-items:center;gap:6px;font-size:10px;color:#6b7280;}
+.gdot{width:6px;height:6px;border-radius:50%;background:#10B981;flex-shrink:0;}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);}
+.met{background:#fff;padding:28px 20px;text-align:center;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;}
+.met:first-child{border-left:1px solid #e5e7eb;}
+.met-n{font-family:'Fraunces',serif;font-size:32px;font-weight:500;color:#D97706;line-height:1;}
+.met-l{font-size:11px;color:#6b7280;margin-top:5px;}
+
+/* SECTIONS */
+.sec{padding:56px 32px;}
+.sec-alt{background:#f9fafb;}
+.ey{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#D97706;margin-bottom:10px;}
+.sec-t{font-family:'Fraunces',serif;font-size:30px;font-weight:500;line-height:1.2;margin-bottom:10px;color:#111;}
+.sec-s{font-size:13px;color:#6b7280;line-height:1.75;max-width:540px;}
+
+/* FAIL CARDS */
+.fail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.fc{border-radius:12px;overflow:hidden;border:1px solid #f3f4f6;}
+.fc-f{background:#FEF2F2;padding:22px;}
+.fc-icon{width:34px;height:34px;border-radius:8px;background:#FEE2E2;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.fc-icon svg{width:17px;height:17px;stroke:#DC2626;fill:none;stroke-width:1.5;}
+.fc-f h3{font-size:13px;font-weight:500;color:#991B1B;margin-bottom:6px;}
+.fc-f p{font-size:11px;color:#B91C1C;line-height:1.6;}
+.fc-b{background:#F0FDF4;padding:14px 22px;border-top:1px solid #BBF7D0;}
+.fc-bl{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:#15803D;margin-bottom:4px;}
+.fc-b p{font-size:11px;color:#166534;line-height:1.55;}
+
+/* HORIZONTAL TIMELINE */
+.htl{display:grid;grid-template-columns:repeat(6,1fr);position:relative;margin-top:40px;}
+.htl::after{content:'';position:absolute;top:18px;left:8%;right:8%;height:2px;background:#e5e7eb;z-index:0;}
+.hts{text-align:center;position:relative;z-index:1;}
+.hts-c{width:36px;height:36px;border-radius:50%;background:#F59E0B;color:#111;font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+.hts h4{font-size:12px;font-weight:500;color:#111;margin-bottom:2px;}
+.hts-t{font-size:10px;color:#9ca3af;}
+.hts p{font-size:10px;color:#6b7280;line-height:1.5;padding:0 4px;margin-top:5px;}
+
+/* CLOUDS */
+.clouds{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:30px;}
+.cc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px;text-align:center;}
+.cc-i{width:36px;height:36px;border-radius:8px;margin:0 auto 9px;display:flex;align-items:center;justify-content:center;}
+.cc h4{font-size:12px;font-weight:500;color:#111;margin-bottom:3px;}
+.cc p{font-size:10px;color:#9ca3af;line-height:1.45;}
+
+/* SPLIT SECTION */
+.split2{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-top:32px;}
+.tabs-box{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;}
+.tab-hs{display:flex;border-bottom:1px solid #e5e7eb;overflow-x:auto;}
+.tab-h{font-size:11px;padding:11px 14px;color:#9ca3af;white-space:nowrap;border-bottom:2px solid transparent;cursor:pointer;}
+.tab-h.a{color:#D97706;border-bottom:2px solid #F59E0B;font-weight:500;}
+.tab-bd{padding:18px;}
+.tab-bd-title{font-size:12px;font-weight:500;color:#111;margin-bottom:10px;}
+.ti{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;}
+.tck{width:16px;height:16px;border-radius:50%;background:#D1FAE5;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.tck svg{width:8px;height:8px;stroke:#065F46;fill:none;stroke-width:2.5;}
+.ti p{font-size:11px;color:#6b7280;line-height:1.55;}
+.tab-hint{font-size:10px;color:#d1d5db;margin-top:10px;}
+.outs-l{display:flex;flex-direction:column;gap:14px;}
+.outs-title{font-size:12px;font-weight:500;color:#111;margin-bottom:4px;}
+.oi{display:flex;gap:12px;align-items:flex-start;}
+.oi-n{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:#F59E0B;min-width:32px;line-height:1;}
+.oi-t h4{font-size:13px;font-weight:500;color:#111;margin-bottom:3px;}
+.oi-t p{font-size:11px;color:#6b7280;line-height:1.55;}
+
+/* CASE STUDIES */
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px;}
+.ccase{border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;}
+.cch{background:#1C3557;padding:20px 22px;}
+.cch-i{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#93C5FD;margin-bottom:5px;}
+.cch h3{font-size:13px;font-weight:500;color:#E0F2FE;line-height:1.4;}
+.ccb{padding:18px 22px;}
+.cc-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ccf label{font-size:9px;color:#9ca3af;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.05em;}
+.ccf p{font-size:11px;color:#374151;line-height:1.5;}
+.ccs{background:#FEF3C7;border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:center;}
+.ccs-n{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:#B45309;}
+.ccs-t{font-size:11px;color:#92400E;line-height:1.45;}
+
+/* TESTIMONIALS */
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.tc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;}
+.stars{display:flex;gap:3px;margin-bottom:12px;}
+.star{width:12px;height:12px;background:#F59E0B;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.tq{font-size:12px;color:#6b7280;line-height:1.7;font-style:italic;margin-bottom:14px;}
+.tau{display:flex;align-items:center;gap:9px;}
+.tav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.tn{font-size:12px;font-weight:500;color:#111;}.tr{font-size:11px;color:#9ca3af;}
+
+/* TEAM */
+.team-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.tmc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;text-align:center;}
+.tma{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;}
+.tmn{font-size:14px;font-weight:500;color:#111;margin-bottom:2px;}
+.tmr{font-size:11px;color:#9ca3af;margin-bottom:10px;}
+.certs{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
+.cert{font-size:10px;background:#DBEAFE;color:#1E40AF;padding:3px 7px;border-radius:4px;}
+
+/* INDUSTRIES */
+.ind-g{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:28px;}
+.ic{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px;text-align:center;}
+.id{width:28px;height:28px;border-radius:7px;margin:0 auto 8px;}
+.ic p{font-size:11px;color:#6b7280;}
+
+/* PARTNER STRIP */
+.pstrip{display:flex;align-items:center;justify-content:center;gap:32px;padding:30px 32px;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;margin-top:36px;flex-wrap:wrap;}
+.pb{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.pbi{width:42px;height:42px;border-radius:10px;background:#1C3557;display:flex;align-items:center;justify-content:center;}
+.pbi svg{width:20px;height:20px;fill:#93C5FD;}
+.pbl{font-size:10px;color:#9ca3af;text-align:center;line-height:1.4;}
+.pdiv{width:1px;height:36px;background:#e5e7eb;}
+.ps{text-align:center;}
+.ps-n{font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:#D97706;}
+.ps-l{font-size:10px;color:#9ca3af;}
+.lpills{display:flex;gap:8px;flex-wrap:wrap;}
+.lp{background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:8px 14px;font-size:11px;color:#6b7280;}
+
+/* CTA BOX */
+.cta-wrap{padding:0 32px 56px;}
+.cta-box{background:#1C3557;border-radius:16px;padding:44px;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;}
+.cta-ey{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#93C5FD;margin-bottom:10px;}
+.cta-box h2{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:#E0F2FE;line-height:1.25;margin-bottom:10px;}
+.cta-box p{font-size:12px;color:#93C5FD;line-height:1.7;margin-bottom:20px;}
+.cta-btns{display:flex;flex-direction:column;gap:9px;}
+.cta-ba{background:#F59E0B;color:#111;font-size:12px;font-weight:500;padding:11px 18px;border-radius:8px;border:none;cursor:pointer;text-align:left;}
+.cta-bb{background:transparent;color:#93C5FD;font-size:12px;padding:11px 18px;border-radius:8px;border:1px solid #2563EB;cursor:pointer;text-align:left;}
+.cl-prev{background:rgba(255,255,255,0.08);border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,0.12);}
+.cl-t{font-size:11px;font-weight:500;color:#E0F2FE;margin-bottom:12px;}
+.cr{display:flex;gap:8px;align-items:center;margin-bottom:9px;}
+.cb{width:14px;height:14px;border-radius:3px;border:1px solid #60A5FA;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.cb.ck{background:#10B981;border-color:#10B981;}
+.cb svg{width:8px;height:8px;stroke:#fff;fill:none;stroke-width:2.5;}
+.cr p{font-size:11px;color:#BAE6FD;}
+.cl-more{font-size:10px;color:#60A5FA;margin-top:9px;}
+
+/* RELATED */
+.rel-g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;}
+.rc{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:20px;}
+.ra{width:3px;height:30px;border-radius:2px;background:#F59E0B;margin-bottom:12px;}
+.rc h4{font-size:13px;font-weight:500;color:#111;margin-bottom:4px;}
+.rc p{font-size:11px;color:#6b7280;line-height:1.55;margin-bottom:10px;}
+.rl{font-size:11px;color:#D97706;font-weight:500;}
+
+/* BLOG */
+.bl-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.blc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;}
+.blt{height:76px;}
+.bltg{display:flex;gap:5px;padding:12px 14px 0;}
+.btg{font-size:10px;background:#FEF3C7;color:#92400E;padding:3px 7px;border-radius:4px;font-weight:500;}
+.blc h4{font-size:12px;font-weight:500;padding:7px 14px;line-height:1.45;color:#111;}
+.blc p{font-size:11px;color:#9ca3af;padding:0 14px 14px;line-height:1.55;}
+
+/* FAQ */
+.faq-l{margin-top:28px;}
+.fq{border-bottom:1px solid #f3f4f6;padding:15px 0;cursor:pointer;}
+.fqq{font-size:13px;font-weight:500;display:flex;justify-content:space-between;align-items:center;color:#111;}
+.fqq svg{width:14px;height:14px;stroke:#9ca3af;fill:none;stroke-width:2;flex-shrink:0;}
+.fqa{font-size:12px;color:#6b7280;line-height:1.7;margin-top:9px;max-width:660px;}
+
+/* FOOTER */
+.ft{background:#0F172A;padding:44px 32px 24px;}
+.ft-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:24px;margin-bottom:32px;}
+.ft-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:#fff;margin-bottom:4px;}
+.ft-tag{font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;}
+.ft-col h5{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:#94A3B8;margin-bottom:10px;}
+.ft-col a{display:block;font-size:11px;color:#475569;text-decoration:none;margin-bottom:5px;}
+.ft-col a:hover{color:#94A3B8;}
+.ft-bot{border-top:1px solid #1E293B;padding-top:18px;display:flex;justify-content:space-between;}
+.ft-bot p{font-size:11px;color:#475569;}
+</style>
+</head>
+<body>
+<div class="pg">
+
+<!-- NAV -->
+<nav class="nav">
+  <div>
+    <div class="logo-top">atlas consulting</div>
+    <div class="logo-sub">trusted by clients for over 12 years</div>
+  </div>
+  <div class="nav-links">
+    <a href="/Salesforce-Advisory-Services.html">Advisory Services</a>
+    <a href="/Salesforce-Implementation-Services.html">Implementation Services</a>
+    <a href="/Salesforce-Re-implementation-Services.html">Re-implementation Services</a>
+    <a href="/Salesforce-Custom-Development-Services.html">Custom Development Services</a>
+    <a href="/Salesforce-Support.html">Salesforce Support</a>
+    <button class="nav-cta">Contact us</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-label">Salesforce Implementation</div>
+    <h1>Go live with confidence</h1>
+    <p class="hero-desc">Getting Salesforce isn't the finish line — it's the starting point. We bring your people, processes, and technology together to create real impact. Smooth transition. Faster adoption. Quicker ROI.</p>
+    <div class="hero-btns">
+      <button class="btn-a">Get a free scoping call</button>
+      <button class="btn-b">See our work →</button>
+    </div>
+  </div>
+  <div class="hero-vis">
+    <div class="vis-center">
+      <div class="vis-gear-outer">
+        <div class="vis-gear-inner">
+          <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </div>
+      </div>
+      <div class="vis-label">Implementation lifecycle</div>
+    </div>
+    <div class="phases">
+      <div class="ph ph1">Initiation</div>
+      <div class="ph ph2">Discovery</div>
+      <div class="ph ph3">Design & Config</div>
+      <div class="ph ph4">Testing & QA</div>
+      <div class="ph ph5">Training</div>
+      <div class="ph ph6">Go Live</div>
+    </div>
+    <hr class="vis-divider">
+    <div class="mini-outs">
+      <div class="mout"><div class="gdot"></div>Cleaner, reliable data</div>
+      <div class="mout"><div class="gdot"></div>Higher user adoption</div>
+      <div class="mout"><div class="gdot"></div>Improved efficiency</div>
+      <div class="mout"><div class="gdot"></div>Reduced admin effort</div>
+      <div class="mout"><div class="gdot"></div>Streamlined processes</div>
+      <div class="mout"><div class="gdot"></div>Better ROI</div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="met"><div class="met-n">80+</div><div class="met-l">Implementations delivered</div></div>
+  <div class="met"><div class="met-n">12 wks</div><div class="met-l">Average go-live time</div></div>
+  <div class="met"><div class="met-n">95%</div><div class="met-l">On-time delivery rate</div></div>
+  <div class="met"><div class="met-n">98%</div><div class="met-l">Client satisfaction</div></div>
+</div>
+
+<!-- WHY IMPLEMENTATIONS FAIL -->
+<section class="sec">
+  <div class="ey">The problem we solve</div>
+  <div class="sec-t">Why implementations fail — and how we prevent it</div>
+  <div class="sec-s">Most Salesforce implementations underdeliver not because of the platform, but because of what happens around it. These are the three most common failure points we see and fix every day.</div>
+  <div class="fail-grid">
+    <div class="fc">
+      <div class="fc-f">
+        <div class="fc-icon"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><line x1="8" y1="5" x2="8" y2="8.5"/><line x1="8" y1="11" x2="8" y2="12"/></svg></div>
+        <h3>Poor upfront planning</h3>
+        <p>Jumping straight to configuration without clear scope leads to rework, delays, and budget overruns. Most failed projects skip this critical phase entirely.</p>
+      </div>
+      <div class="fc-b">
+        <div class="fc-bl">How Atlas prevents this</div>
+        <p>Every project starts with a structured Discovery phase — agreed scope, fixed milestones, and a delivery plan before a single line of config is written.</p>
+      </div>
+    </div>
+    <div class="fc">
+      <div class="fc-f">
+        <div class="fc-icon"><svg viewBox="0 0 16 16"><path d="M8 2L2 6v8h4V9h4v5h4V6z"/></svg></div>
+        <h3>No change management</h3>
+        <p>Staff avoid using a new system when they aren't brought on the journey. Low adoption kills ROI faster than any technical issue ever could.</p>
+      </div>
+      <div class="fc-b">
+        <div class="fc-bl">How Atlas prevents this</div>
+        <p>We run role-based training, hands-on workshops, and post-go-live support so your team uses Salesforce confidently from day one.</p>
+      </div>
+    </div>
+    <div class="fc">
+      <div class="fc-f">
+        <div class="fc-icon"><svg viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="10" rx="1"/><line x1="1" y1="7" x2="15" y2="7"/></svg></div>
+        <h3>Messy data migration</h3>
+        <p>Migrating dirty data just moves the problem. Bad data in Salesforce destroys user trust and reporting accuracy immediately after go-live.</p>
+      </div>
+      <div class="fc-b">
+        <div class="fc-bl">How Atlas prevents this</div>
+        <p>We audit, cleanse, and validate all data before migration — with a rollback plan in place. Clean, reliable data from day one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY TIMELINE -->
+<section class="sec sec-alt">
+  <div class="ey">Our approach</div>
+  <div class="sec-t">Implementation in six clear phases</div>
+  <div class="sec-s">A proven, structured methodology built to reduce risk, accelerate adoption, and get you to go-live on time — every time.</div>
+  <div class="htl">
+    <div class="hts"><div class="hts-c">1</div><h4>Discover</h4><div class="hts-t">Weeks 1–2</div><p>Scope, goals, stakeholders, data audit</p></div>
+    <div class="hts"><div class="hts-c">2</div><h4>Design</h4><div class="hts-t">Weeks 3–4</div><p>Process mapping, solution architecture</p></div>
+    <div class="hts"><div class="hts-c">3</div><h4>Build</h4><div class="hts-t">Weeks 5–8</div><p>Configuration, custom dev, integrations</p></div>
+    <div class="hts"><div class="hts-c">4</div><h4>Test</h4><div class="hts-t">Weeks 9–10</div><p>UAT, bug fixing, data validation</p></div>
+    <div class="hts"><div class="hts-c">5</div><h4>Train</h4><div class="hts-t">Week 11</div><p>Role-based training, admin handover</p></div>
+    <div class="hts"><div class="hts-c">6</div><h4>Go Live</h4><div class="hts-t">Week 12</div><p>Launch, hypercare, ongoing support</p></div>
+  </div>
+</section>
+
+<!-- CLOUDS -->
+<section class="sec">
+  <div class="ey">Platform coverage</div>
+  <div class="sec-t">Salesforce clouds we implement</div>
+  <div class="sec-s">From Sales Cloud to Health Cloud, our certified team has delivered implementations across the full Salesforce platform.</div>
+  <div class="clouds">
+    <div class="cc"><div class="cc-i" style="background:#DBEAFE;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#1D4ED8" stroke-width="1.5"><circle cx="9" cy="6" r="3"/><path d="M3 16c0-3 2.7-5 6-5s6 2 6 5"/></svg></div><h4>Sales Cloud</h4><p>Pipeline, forecasting, opportunity management</p></div>
+    <div class="cc"><div class="cc-i" style="background:#D1FAE5;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#065F46" stroke-width="1.5"><path d="M9 2l7 4v6l-7 4-7-4V6z"/></svg></div><h4>Service Cloud</h4><p>Case management, omni-channel support</p></div>
+    <div class="cc"><div class="cc-i" style="background:#FEE2E2;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#991B1B" stroke-width="1.5"><circle cx="9" cy="9" r="5"/><path d="M6 9h6M9 6v6"/></svg></div><h4>Marketing Cloud</h4><p>Email journeys, automation, segmentation</p></div>
+    <div class="cc"><div class="cc-i" style="background:#EDE9FE;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#5B21B6" stroke-width="1.5"><rect x="3" y="3" width="12" height="12" rx="2"/><path d="M6 9h6M9 6v6"/></svg></div><h4>Experience Cloud</h4><p>Partner portals, customer communities</p></div>
+    <div class="cc"><div class="cc-i" style="background:#FEF3C7;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#B45309" stroke-width="1.5"><polyline points="2,13 6,8 9,10 14,5"/></svg></div><h4>Revenue Cloud</h4><p>CPQ, billing, subscriptions</p></div>
+    <div class="cc"><div class="cc-i" style="background:#FCE7F3;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#9D174D" stroke-width="1.5"><circle cx="9" cy="5" r="3"/><path d="M3 16c0-3 2.7-5 6-5s6 2 6 5"/></svg></div><h4>Field Service</h4><p>Work orders, scheduling, mobile</p></div>
+    <div class="cc"><div class="cc-i" style="background:#E0F2FE;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#0369A1" stroke-width="1.5"><rect x="2" y="6" width="14" height="9" rx="1"/><polyline points="6,6 6,4 12,4 12,6"/></svg></div><h4>Nonprofit Cloud</h4><p>Donor management, fundraising</p></div>
+    <div class="cc"><div class="cc-i" style="background:#F0FDF4;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#15803D" stroke-width="1.5"><path d="M3 9h12M9 3l6 6-6 6"/></svg></div><h4>Health Cloud</h4><p>Patient management, care coordination</p></div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED + OUTCOMES -->
+<section class="sec sec-alt">
+  <div class="ey">What's included</div>
+  <div class="sec-t">Built for seamless Salesforce implementation</div>
+  <div class="split2">
+    <div class="tabs-box">
+      <div class="tab-hs">
+        <div class="tab-h a">Discovery</div>
+        <div class="tab-h">Configuration</div>
+        <div class="tab-h">Data Migration</div>
+        <div class="tab-h">Training</div>
+        <div class="tab-h">Go-Live</div>
+      </div>
+      <div class="tab-bd">
+        <div class="tab-bd-title">Discovery & scoping</div>
+        <div class="ti"><div class="tck"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Stakeholder workshops to map current processes and pain points</p></div>
+        <div class="ti"><div class="tck"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Full data audit — volume, quality, and migration complexity assessment</p></div>
+        <div class="ti"><div class="tck"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Technical requirements document and solution design sign-off</p></div>
+        <div class="ti"><div class="tck"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Fixed-scope project plan with milestone dates and resource allocation</p></div>
+        <div class="tab-hint">Click tabs above to explore each phase →</div>
+      </div>
+    </div>
+    <div class="outs-l">
+      <div class="outs-title">What you'll achieve</div>
+      <div class="oi"><div class="oi-n">01</div><div class="oi-t"><h4>Rapid deployment for quick wins</h4><p>We prioritise critical use cases first to deliver immediate business impact while building for future growth.</p></div></div>
+      <div class="oi"><div class="oi-n">02</div><div class="oi-t"><h4>Tailored process alignment</h4><p>Your Salesforce is configured around how your business works — not the other way around.</p></div></div>
+      <div class="oi"><div class="oi-n">03</div><div class="oi-t"><h4>Seamless data migration</h4><p>Clean, validated data from day one. No duplicates, no gaps, no loss of historical records.</p></div></div>
+      <div class="oi"><div class="oi-n">04</div><div class="oi-t"><h4>User-centric training & adoption</h4><p>Role-based training so every team member uses Salesforce confidently from go-live day.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<section class="sec">
+  <div class="ey">Client stories</div>
+  <div class="sec-t">Implementation outcomes in the real world</div>
+  <div class="case-grid">
+    <div class="ccase">
+      <div class="cch"><div class="cch-i">Financial Services</div><h3>Sales Cloud for a 200-person firm — delivered in 10 weeks</h3></div>
+      <div class="ccb">
+        <div class="cc-meta">
+          <div class="ccf"><label>Challenge</label><p>Spreadsheet-based sales, no pipeline visibility, 4 disconnected tools</p></div>
+          <div class="ccf"><label>Solution</label><p>Sales Cloud + custom dashboards + data migration from 3 legacy systems</p></div>
+        </div>
+        <div class="ccs"><div class="ccs-n">40%</div><div class="ccs-t">Increase in sales team productivity within 60 days of go-live</div></div>
+      </div>
+    </div>
+    <div class="ccase">
+      <div class="cch"><div class="cch-i">Retail & eCommerce</div><h3>Service Cloud replacing a legacy helpdesk — 5,000 records migrated</h3></div>
+      <div class="ccb">
+        <div class="cc-meta">
+          <div class="ccf"><label>Challenge</label><p>High ticket resolution times, no SLA tracking, agents across 3 systems</p></div>
+          <div class="ccf"><label>Solution</label><p>Service Cloud with omni-channel routing, SLA automation, and training</p></div>
+        </div>
+        <div class="ccs"><div class="ccs-n">28%</div><div class="ccs-t">Reduction in average case resolution time within the first 30 days</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec sec-alt">
+  <div class="ey">What our clients say</div>
+  <div class="sec-t">Trusted by teams across the UK & Australia</div>
+  <div class="tg">
+    <div class="tc"><div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><p class="tq">"Atlas delivered our Sales Cloud in under 10 weeks. Every milestone hit on time — the organisation and communication was outstanding throughout the project."</p><div class="tau"><div class="tav" style="background:#DBEAFE;color:#1D4ED8;">MK</div><div><div class="tn">Michael K.</div><div class="tr">Head of Sales, FinServ</div></div></div></div>
+    <div class="tc"><div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><p class="tq">"The data migration was what worried us most. Atlas cleansed everything first and we went live with zero data issues. That gave us instant confidence in the platform."</p><div class="tau"><div class="tav" style="background:#D1FAE5;color:#065F46;">JR</div><div><div class="tn">Jane R.</div><div class="tr">COO, Retail Group</div></div></div></div>
+    <div class="tc"><div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><p class="tq">"Our team was fully comfortable within two weeks of go-live. The adoption rate at month one was 94% — we didn't expect that at all. Brilliant change management."</p><div class="tau"><div class="tav" style="background:#EDE9FE;color:#5B21B6;">SB</div><div><div class="tn">Sam B.</div><div class="tr">VP Operations, Tech</div></div></div></div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="sec">
+  <div class="ey">Meet your team</div>
+  <div class="sec-t">The people who deliver your implementation</div>
+  <div class="team-g">
+    <div class="tmc"><div class="tma" style="background:#DBEAFE;color:#1D4ED8;">RC</div><div class="tmn">Rachel Chen</div><div class="tmr">Implementation Lead</div><div class="certs"><span class="cert">Sales Cloud</span><span class="cert">Service Cloud</span><span class="cert">Admin</span></div></div>
+    <div class="tmc"><div class="tma" style="background:#D1FAE5;color:#065F46;">DM</div><div class="tmn">Daniel Murphy</div><div class="tmr">Solutions Architect</div><div class="certs"><span class="cert">Platform Architect</span><span class="cert">Data Migration</span></div></div>
+    <div class="tmc"><div class="tma" style="background:#FEF3C7;color:#B45309;">AL</div><div class="tmn">Aisha Lowe</div><div class="tmr">Change & Adoption Lead</div><div class="certs"><span class="cert">Training</span><span class="cert">CPQ</span><span class="cert">Marketing Cloud</span></div></div>
+  </div>
+</section>
+
+<!-- INDUSTRIES + PARTNER -->
+<section class="sec sec-alt">
+  <div class="ey">Trusted by businesses across industry sectors</div>
+  <div class="sec-t">Sector expertise that shapes every project</div>
+  <div class="ind-g">
+    <div class="ic"><div class="id" style="background:#DBEAFE;"></div><p>Financial Services</p></div>
+    <div class="ic"><div class="id" style="background:#D1FAE5;"></div><p>Retail & eCommerce</p></div>
+    <div class="ic"><div class="id" style="background:#EDE9FE;"></div><p>Healthcare</p></div>
+    <div class="ic"><div class="id" style="background:#FEF3C7;"></div><p>Manufacturing</p></div>
+    <div class="ic"><div class="id" style="background:#FCE7F3;"></div><p>Professional Services</p></div>
+    <div class="ic"><div class="id" style="background:#D1FAE5;"></div><p>Not-for-Profit</p></div>
+    <div class="ic"><div class="id" style="background:#DBEAFE;"></div><p>Technology</p></div>
+    <div class="ic"><div class="id" style="background:#FEE2E2;"></div><p>Property & Real Estate</p></div>
+  </div>
+  <div class="pstrip">
+    <div class="pb">
+      <div class="pbi"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+      <div class="pbl">Salesforce<br>Summit Partner</div>
+    </div>
+    <div class="pdiv"></div>
+    <div class="ps"><div class="ps-n">160+</div><div class="ps-l">Certifications held</div></div>
+    <div class="pdiv"></div>
+    <div class="ps"><div class="ps-n">12 yrs</div><div class="ps-l">As a Salesforce partner</div></div>
+    <div class="pdiv"></div>
+    <div class="lpills">
+      <div class="lp">Blue Harvest</div>
+      <div class="lp">First Process Quality Network</div>
+      <div class="lp">Budget Australia</div>
+    </div>
+  </div>
+</section>
+
+<!-- READINESS CTA -->
+<div class="cta-wrap">
+  <div class="cta-box">
+    <div>
+      <div class="cta-ey">Free readiness assessment</div>
+      <h2>Is your business ready for Salesforce?</h2>
+      <p>Most implementation delays are avoidable with the right preparation. Our free readiness checklist helps you identify gaps before the project starts — saving time, money, and stress.</p>
+      <div class="cta-btns">
+        <button class="cta-ba">Download the free readiness checklist</button>
+        <button class="cta-bb">Book a free 30-min scoping call →</button>
+      </div>
+    </div>
+    <div class="cl-prev">
+      <div class="cl-t">Salesforce Implementation Readiness Checklist</div>
+      <div class="cr"><div class="cb ck"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Executive sponsor identified and aligned</p></div>
+      <div class="cr"><div class="cb ck"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Current CRM and data sources documented</p></div>
+      <div class="cr"><div class="cb ck"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Key business processes mapped</p></div>
+      <div class="cr"><div class="cb"></div><p>Data cleansing plan in place</p></div>
+      <div class="cr"><div class="cb"></div><p>Integration requirements confirmed</p></div>
+      <div class="cr"><div class="cb"></div><p>Training and change management owner assigned</p></div>
+      <div class="cl-more">+ 12 more checks in the full PDF →</div>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED SERVICES -->
+<section class="sec">
+  <div class="ey">Related services</div>
+  <div class="sec-t">The full implementation journey with Atlas</div>
+  <div class="rel-g">
+    <div class="rc"><div class="ra"></div><h4>Advisory Services</h4><p>Not sure where to start? Our advisory team helps you build a Salesforce strategy before a single line of config is written.</p><div class="rl">Learn more →</div></div>
+    <div class="rc"><div class="ra"></div><h4>Custom Development</h4><p>Need functionality beyond point-and-click? Our developers build tailored components, flows, and integrations during or after your implementation.</p><div class="rl">Learn more →</div></div>
+    <div class="rc"><div class="ra"></div><h4>Salesforce Support</h4><p>After go-live, our managed support team keeps your platform running at its best — monitoring, enhancing, and supporting your users continuously.</p><div class="rl">Learn more →</div></div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="sec sec-alt">
+  <div class="ey">Insights & best practices</div>
+  <div class="sec-t">Implementation insights & best practices</div>
+  <div class="bl-g">
+    <div class="blc">
+      <div class="blt" style="background:#DBEAFE;"></div>
+      <div class="bltg"><span class="btg">Implementation</span></div>
+      <h4>Data migration best practices for a seamless Salesforce transition</h4>
+      <p>Data migration is one of the most critical parts of a successful implementation. Poorly migrated data leads to errors and user distrust...</p>
+    </div>
+    <div class="blc">
+      <div class="blt" style="background:#D1FAE5;"></div>
+      <div class="bltg"><span class="btg">Strategy</span></div>
+      <h4>Building a future-ready Salesforce setup for business growth</h4>
+      <p>Salesforce is more than a CRM. Implemented the right way it becomes a growth engine that helps businesses adapt, scale, and innovate...</p>
+    </div>
+    <div class="blc">
+      <div class="blt" style="background:#FEF3C7;"></div>
+      <div class="bltg"><span class="btg">ROI</span></div>
+      <h4>Accelerating Salesforce ROI: why rapid deployment matters</h4>
+      <p>Speed of implementation is the #1 factor in Salesforce ROI. Slow projects lead to fatigue, scope creep, and organisations that lose faith...</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQS -->
+<section class="sec" style="background:#F8FAFC;">
+  <div class="ey">FAQs</div>
+  <div class="sec-t">Salesforce Implementation FAQs</div>
+  <div class="faq-l">
+    <div class="fq"><div class="fqq">How long does a typical Salesforce implementation take? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div><div class="fqa">Most implementations take between 8 and 16 weeks depending on scope, complexity, and the number of Salesforce clouds involved. Our average go-live time is 12 weeks. We provide a detailed timeline after the Discovery phase so you always know what to expect.</div></div>
+    <div class="fq"><div class="fqq">What industries do you specialise in for Salesforce implementations? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Will Salesforce adapt to my existing business processes? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Can Salesforce scale as my business grows? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">What happens to my existing data during implementation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">How do you ensure my team adopts Salesforce successfully? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Do you provide support after implementation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">How do you minimise risks during implementation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ft">
+  <div class="ft-top">
+    <div><div class="ft-logo">atlas consulting</div><div class="ft-tag">trusted by clients for over 12 years</div></div>
+    <div class="ft-col"><h5>Salesforce Clouds</h5><a href="#">Sales Cloud</a><a href="#">Service Cloud</a><a href="#">Marketing Cloud</a><a href="#">Experience Cloud</a></div>
+    <div class="ft-col"><h5>Services</h5><a href="#">Advisory Services</a><a href="#">Implementation</a><a href="#">Re-implementation</a><a href="#">Custom Development</a><a href="#">Support</a><a href="#">Integration</a></div>
+    <div class="ft-col"><h5>Industries</h5><a href="#">Financial Services</a><a href="#">Retail</a><a href="#">Healthcare</a><a href="#">Manufacturing</a><a href="#">Technology</a></div>
+    <div class="ft-col"><h5>Solutions</h5><a href="#">Payments on Salesforce</a><a href="#">Sales & Marketing</a><a href="#">Data & Analytics</a><a href="#">AI & Automation</a></div>
+  </div>
+  <div class="ft-bot">
+    <p>© 2025 Atlas Consulting. All rights reserved.</p>
+    <p>Privacy · Terms · Contact</p>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

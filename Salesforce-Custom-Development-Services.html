@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salesforce Custom Development — Atlas Consulting (Mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;color:#1a1a1a;background:#fff;}
+.pg{max-width:960px;margin:0 auto;}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid #e5e7eb;background:#fff;position:sticky;top:0;z-index:100;}
+.logo-top{font-family:'Fraunces',serif;font-size:15px;font-weight:500;}
+.logo-sub{font-size:9px;color:#9ca3af;letter-spacing:0.06em;text-transform:uppercase;}
+.nav-links{display:flex;gap:22px;align-items:center;}
+.nav-links a{font-size:12px;color:#6b7280;text-decoration:none;}
+.nav-cta{background:#F59E0B;color:#111;font-size:12px;font-weight:500;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;padding:56px 32px 52px;background:linear-gradient(135deg,#0F172A 0%,#1E293B 100%);align-items:center;}
+.hero-label{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#F59E0B;margin-bottom:12px;}
+.hero h1{font-family:'Fraunces',serif;font-size:40px;font-weight:500;line-height:1.12;margin-bottom:16px;color:#F8FAFC;}
+.hero-desc{font-size:13px;color:#94A3B8;line-height:1.8;margin-bottom:28px;max-width:360px;}
+.hero-btns{display:flex;gap:10px;}
+.btn-a{background:#F59E0B;color:#111;font-size:13px;font-weight:500;padding:11px 22px;border-radius:8px;border:none;cursor:pointer;}
+.btn-b{font-size:13px;color:#94A3B8;padding:11px 18px;border-radius:8px;border:1px solid #334155;background:transparent;cursor:pointer;}
+
+/* HERO TECH VISUAL */
+.hero-vis{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.tech-card{background:#1E293B;border:1px solid #334155;border-radius:10px;padding:14px;}
+.tech-card.highlight{border-color:#F59E0B;background:#1C2B1A;}
+.tech-card-label{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:#64748B;margin-bottom:8px;}
+.tech-pills{display:flex;flex-wrap:wrap;gap:4px;}
+.tech-pill{font-size:10px;padding:3px 8px;border-radius:4px;font-weight:500;}
+.tp-apex{background:#1E3A5F;color:#60A5FA;}
+.tp-lwc{background:#14532D;color:#6EE7B7;}
+.tp-flow{background:#3B1F6B;color:#C4B5FD;}
+.tp-api{background:#7C2D12;color:#FDBA74;}
+.tp-soql{background:#1C3557;color:#93C5FD;}
+.tp-dx{background:#1F2937;color:#9CA3AF;border:1px solid #374151;}
+.tp-ci{background:#1A2E1A;color:#86EFAC;}
+.tp-test{background:#2D1B1B;color:#FCA5A5;}
+.tech-bar{height:4px;border-radius:2px;margin-top:8px;}
+.tech-icon-row{display:flex;gap:6px;align-items:center;margin-top:6px;}
+.t-icon{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;}
+.t-icon svg{width:12px;height:12px;fill:none;stroke-width:1.5;}
+.tech-card-full{grid-column:1/-1;background:#1E293B;border:1px solid #334155;border-radius:10px;padding:14px;}
+.sf-logo-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.sf-badge{background:#00A1E0;color:#fff;font-size:10px;font-weight:500;padding:3px 9px;border-radius:4px;}
+.sf-tagline{font-size:10px;color:#64748B;}
+.sf-clouds-mini{display:flex;gap:6px;}
+.sf-cloud-mini{font-size:10px;background:#1C3557;color:#60A5FA;padding:3px 8px;border-radius:4px;}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);}
+.met{background:#fff;padding:28px 20px;text-align:center;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;}
+.met:first-child{border-left:1px solid #e5e7eb;}
+.met-n{font-family:'Fraunces',serif;font-size:32px;font-weight:500;color:#D97706;line-height:1;}
+.met-l{font-size:11px;color:#6b7280;margin-top:5px;}
+
+/* SECTIONS */
+.sec{padding:56px 32px;}
+.sec-alt{background:#f9fafb;}
+.sec-dark{background:#0F172A;}
+.ey{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#D97706;margin-bottom:10px;}
+.ey-light{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#F59E0B;margin-bottom:10px;}
+.sec-t{font-family:'Fraunces',serif;font-size:30px;font-weight:500;line-height:1.2;margin-bottom:10px;color:#111;}
+.sec-t-light{font-family:'Fraunces',serif;font-size:30px;font-weight:500;line-height:1.2;margin-bottom:10px;color:#F8FAFC;}
+.sec-s{font-size:13px;color:#6b7280;line-height:1.75;max-width:540px;}
+.sec-s-light{font-size:13px;color:#94A3B8;line-height:1.75;max-width:540px;}
+
+/* WHEN DO YOU NEED SECTION */
+.trigger-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:32px;}
+.trig-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;}
+.trig-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.trig-icon svg{width:16px;height:16px;fill:none;stroke-width:1.5;}
+.trig-card h3{font-size:13px;font-weight:500;color:#111;margin-bottom:5px;}
+.trig-card p{font-size:11px;color:#6b7280;line-height:1.6;}
+
+/* CAPABILITY GRID */
+.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.cap-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;}
+.cap-accent{width:3px;height:32px;border-radius:2px;background:#F59E0B;margin-bottom:14px;}
+.cap-card h3{font-size:13px;font-weight:500;color:#111;margin-bottom:6px;}
+.cap-card p{font-size:11px;color:#6b7280;line-height:1.6;margin-bottom:12px;}
+.cap-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.ctag{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:500;}
+.ctag-apex{background:#DBEAFE;color:#1E40AF;}
+.ctag-lwc{background:#D1FAE5;color:#065F46;}
+.ctag-flow{background:#EDE9FE;color:#5B21B6;}
+.ctag-api{background:#FEF3C7;color:#92400E;}
+.ctag-int{background:#FEE2E2;color:#991B1B;}
+
+/* TECH STACK — dark section */
+.stack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:32px;}
+.stack-col{}
+.stack-col-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:#64748B;margin-bottom:10px;}
+.stack-pill{display:flex;align-items:center;gap:7px;background:#1E293B;border:1px solid #334155;border-radius:7px;padding:9px 12px;margin-bottom:6px;}
+.sp-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sp-label{font-size:11px;color:#E2E8F0;}
+
+/* PROCESS SECTION */
+.process-steps{display:grid;grid-template-columns:repeat(5,1fr);position:relative;margin-top:40px;}
+.process-steps::after{content:'';position:absolute;top:17px;left:8%;right:8%;height:2px;background:#FDE68A;z-index:0;}
+.ps{text-align:center;position:relative;z-index:1;}
+.ps-c{width:34px;height:34px;border-radius:50%;background:#F59E0B;color:#111;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+.ps h4{font-size:11px;font-weight:500;color:#111;margin-bottom:2px;}
+.ps p{font-size:10px;color:#6b7280;line-height:1.5;padding:0 4px;margin-top:4px;}
+
+/* QUALITY STANDARDS */
+.quality-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:32px;align-items:start;}
+.quality-list{display:flex;flex-direction:column;gap:14px;}
+.qi{display:flex;gap:12px;align-items:flex-start;}
+.qi-icon{width:32px;height:32px;border-radius:8px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.qi-icon svg{width:15px;height:15px;stroke:#D97706;fill:none;stroke-width:1.5;}
+.qi-t h4{font-size:13px;font-weight:500;color:#111;margin-bottom:3px;}
+.qi-t p{font-size:11px;color:#6b7280;line-height:1.55;}
+.quality-visual{background:#0F172A;border-radius:14px;padding:24px;}
+.qv-title{font-size:11px;font-weight:500;color:#94A3B8;margin-bottom:14px;}
+.qv-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.qv-label{font-size:11px;color:#64748B;min-width:120px;}
+.qv-bar-wrap{flex:1;height:6px;border-radius:3px;background:#1E293B;}
+.qv-bar{height:6px;border-radius:3px;}
+.qv-val{font-size:11px;font-weight:500;min-width:36px;text-align:right;}
+.code-snippet{background:#1E293B;border-radius:8px;padding:14px;margin-top:16px;font-family:monospace;font-size:10px;line-height:1.8;}
+.cs-comment{color:#64748B;}
+.cs-keyword{color:#C4B5FD;}
+.cs-class{color:#60A5FA;}
+.cs-method{color:#6EE7B7;}
+.cs-string{color:#FDBA74;}
+
+/* CASE STUDIES */
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px;}
+.ccase{border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;}
+.cch{background:#1C3557;padding:20px 22px;}
+.cch-i{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#93C5FD;margin-bottom:5px;}
+.cch h3{font-size:13px;font-weight:500;color:#E0F2FE;line-height:1.4;}
+.ccb{padding:18px 22px;}
+.cc-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ccf label{font-size:9px;color:#9ca3af;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.05em;}
+.ccf p{font-size:11px;color:#374151;line-height:1.5;}
+.ccs{background:#FEF3C7;border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:center;}
+.ccs-n{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:#B45309;}
+.ccs-t{font-size:11px;color:#92400E;line-height:1.45;}
+
+/* TESTIMONIALS */
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.tc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;}
+.stars{display:flex;gap:3px;margin-bottom:12px;}
+.star{width:12px;height:12px;background:#F59E0B;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.tq{font-size:12px;color:#6b7280;line-height:1.7;font-style:italic;margin-bottom:14px;}
+.tau{display:flex;align-items:center;gap:9px;}
+.tav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.tn{font-size:12px;font-weight:500;color:#111;}
+.tr{font-size:11px;color:#9ca3af;}
+
+/* TEAM */
+.team-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.tmc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;text-align:center;}
+.tma{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;}
+.tmn{font-size:14px;font-weight:500;color:#111;margin-bottom:2px;}
+.tmr{font-size:11px;color:#9ca3af;margin-bottom:10px;}
+.certs{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
+.cert{font-size:10px;background:#DBEAFE;color:#1E40AF;padding:3px 7px;border-radius:4px;}
+
+/* INDUSTRIES */
+.ind-g{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:28px;}
+.ic{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px;text-align:center;}
+.id{width:28px;height:28px;border-radius:7px;margin:0 auto 8px;}
+.ic p{font-size:11px;color:#6b7280;}
+
+/* PARTNER STRIP */
+.pstrip{display:flex;align-items:center;justify-content:center;gap:32px;padding:30px 32px;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;margin-top:36px;flex-wrap:wrap;}
+.pb{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.pbi{width:42px;height:42px;border-radius:10px;background:#1C3557;display:flex;align-items:center;justify-content:center;}
+.pbi svg{width:20px;height:20px;fill:#93C5FD;}
+.pbl{font-size:10px;color:#9ca3af;text-align:center;line-height:1.4;}
+.pdiv{width:1px;height:36px;background:#e5e7eb;}
+.ps-stat{text-align:center;}
+.ps-n{font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:#D97706;}
+.ps-l{font-size:10px;color:#9ca3af;}
+.lpills{display:flex;gap:8px;flex-wrap:wrap;}
+.lp{background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:8px 14px;font-size:11px;color:#6b7280;}
+
+/* CTA */
+.cta-wrap{padding:0 32px 56px;}
+.cta-box{background:#0F172A;border-radius:16px;padding:44px;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;border:1px solid #1E293B;}
+.cta-ey{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#F59E0B;margin-bottom:10px;}
+.cta-box h2{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:#F8FAFC;line-height:1.25;margin-bottom:10px;}
+.cta-box p{font-size:12px;color:#94A3B8;line-height:1.7;margin-bottom:20px;}
+.cta-btns{display:flex;flex-direction:column;gap:9px;}
+.cta-ba{background:#F59E0B;color:#111;font-size:12px;font-weight:500;padding:11px 18px;border-radius:8px;border:none;cursor:pointer;text-align:left;}
+.cta-bb{background:transparent;color:#94A3B8;font-size:12px;padding:11px 18px;border-radius:8px;border:1px solid #334155;cursor:pointer;text-align:left;}
+.scope-preview{background:#1E293B;border-radius:12px;padding:20px;border:1px solid #334155;}
+.sp-title{font-size:11px;font-weight:500;color:#E2E8F0;margin-bottom:12px;}
+.sp-row{display:flex;gap:8px;align-items:center;margin-bottom:9px;}
+.sp-check{width:14px;height:14px;border-radius:3px;background:#F59E0B;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sp-check svg{width:8px;height:8px;stroke:#111;fill:none;stroke-width:2.5;}
+.sp-row p{font-size:11px;color:#94A3B8;}
+
+/* RELATED */
+.rel-g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;}
+.rc{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:20px;}
+.ra{width:3px;height:30px;border-radius:2px;background:#F59E0B;margin-bottom:12px;}
+.rc h4{font-size:13px;font-weight:500;color:#111;margin-bottom:4px;}
+.rc p{font-size:11px;color:#6b7280;line-height:1.55;margin-bottom:10px;}
+.rl{font-size:11px;color:#D97706;font-weight:500;}
+
+/* BLOG */
+.bl-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.blc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;}
+.blt{height:76px;}
+.bltg{display:flex;gap:5px;padding:12px 14px 0;}
+.btg{font-size:10px;background:#FEF3C7;color:#92400E;padding:3px 7px;border-radius:4px;font-weight:500;}
+.blc h4{font-size:12px;font-weight:500;padding:7px 14px;line-height:1.45;color:#111;}
+.blc p{font-size:11px;color:#9ca3af;padding:0 14px 14px;line-height:1.55;}
+
+/* FAQ */
+.faq-l{margin-top:28px;}
+.fq{border-bottom:1px solid #f3f4f6;padding:15px 0;}
+.fqq{font-size:13px;font-weight:500;display:flex;justify-content:space-between;align-items:center;color:#111;cursor:pointer;}
+.fqq svg{width:14px;height:14px;stroke:#9ca3af;fill:none;stroke-width:2;flex-shrink:0;}
+.fqa{font-size:12px;color:#6b7280;line-height:1.7;margin-top:9px;max-width:660px;}
+
+/* FOOTER */
+.ft{background:#0F172A;padding:44px 32px 24px;}
+.ft-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:24px;margin-bottom:32px;}
+.ft-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:#fff;margin-bottom:4px;}
+.ft-tag{font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;}
+.ft-col h5{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:#94A3B8;margin-bottom:10px;}
+.ft-col a{display:block;font-size:11px;color:#475569;text-decoration:none;margin-bottom:5px;}
+.ft-bot{border-top:1px solid #1E293B;padding-top:18px;display:flex;justify-content:space-between;}
+.ft-bot p{font-size:11px;color:#475569;}
+</style>
+</head>
+<body>
+<div class="pg">
+
+<!-- NAV -->
+<nav class="nav">
+  <div>
+    <div class="logo-top">atlas consulting</div>
+    <div class="logo-sub">trusted by clients for over 12 years</div>
+  </div>
+  <div class="nav-links">
+    <a href="/Salesforce-Advisory-Services.html">Advisory Services</a>
+    <a href="/Salesforce-Implementation-Services.html">Implementation Services</a>
+    <a href="/Salesforce-Re-implementation-Services.html">Re-implementation Services</a>
+    <a href="/Salesforce-Custom-Development-Services.html">Custom Development Services</a>
+    <a href="/Salesforce-Support.html">Salesforce Support</a>
+    <button class="nav-cta">Contact us</button>
+  </div>
+</nav>
+
+<!-- HERO — dark tech theme, based on your existing page -->
+<section class="hero">
+  <div>
+    <div class="hero-label">Salesforce Custom Development</div>
+    <h1>When out-of-the-box isn't enough</h1>
+    <p class="hero-desc">When standard Salesforce features can't keep up, custom development makes the platform fit your business perfectly. We build tailored components, add unique functions, and connect Salesforce with your other systems — delivering scalable, future-ready solutions point-and-click tools simply cannot provide.</p>
+    <div class="hero-btns">
+      <button class="btn-a">Book a technical scoping call</button>
+      <button class="btn-b">See our work →</button>
+    </div>
+  </div>
+  <div class="hero-vis">
+    <div class="tech-card">
+      <div class="tech-card-label">Languages & tools</div>
+      <div class="tech-pills">
+        <span class="tech-pill tp-apex">Apex</span>
+        <span class="tech-pill tp-lwc">LWC</span>
+        <span class="tech-pill tp-flow">Visualforce</span>
+        <span class="tech-pill tp-api">REST APIs</span>
+        <span class="tech-pill tp-soql">SOQL</span>
+      </div>
+    </div>
+    <div class="tech-card highlight">
+      <div class="tech-card-label">Dev standards</div>
+      <div class="tech-pills">
+        <span class="tech-pill tp-dx">Salesforce DX</span>
+        <span class="tech-pill tp-ci">CI/CD</span>
+        <span class="tech-pill tp-test">Test coverage 90%+</span>
+        <span class="tech-pill tp-api">Git version control</span>
+      </div>
+    </div>
+    <div class="tech-card-full">
+      <div class="sf-logo-row">
+        <span class="sf-badge">Salesforce</span>
+        <span class="sf-tagline">Full platform coverage</span>
+      </div>
+      <div class="sf-clouds-mini">
+        <span class="sf-cloud-mini">Sales Cloud</span>
+        <span class="sf-cloud-mini">Service Cloud</span>
+        <span class="sf-cloud-mini">Experience Cloud</span>
+        <span class="sf-cloud-mini">Revenue Cloud</span>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#475569;"><div style="width:6px;height:6px;border-radius:50%;background:#6EE7B7;"></div>DevOps</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#475569;"><div style="width:6px;height:6px;border-radius:50%;background:#60A5FA;"></div>Lightning Dev</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#475569;"><div style="width:6px;height:6px;border-radius:50%;background:#FDBA74;"></div>Integrations</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#475569;"><div style="width:6px;height:6px;border-radius:50%;background:#C4B5FD;"></div>Mobile</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="met"><div class="met-n">200+</div><div class="met-l">Custom components built</div></div>
+  <div class="met"><div class="met-n">90%+</div><div class="met-l">Test coverage maintained</div></div>
+  <div class="met"><div class="met-n">0</div><div class="met-l">Critical production bugs</div></div>
+  <div class="met"><div class="met-n">12 yrs</div><div class="met-l">Salesforce expertise</div></div>
+</div>
+
+<!-- WHEN DO YOU NEED CUSTOM DEV — NEW, unique to this page -->
+<section class="sec">
+  <div class="ey">When you need us</div>
+  <div class="sec-t">When do you need custom development?</div>
+  <div class="sec-s">Point-and-click won't cut it in every situation. These are the six scenarios where custom Salesforce development delivers what no standard feature can.</div>
+  <div class="trigger-grid">
+    <div class="trig-card">
+      <div class="trig-icon" style="background:#DBEAFE;"><svg viewBox="0 0 16 16" stroke="#1D4ED8"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="5" y1="8" x2="11" y2="8"/><line x1="8" y1="5" x2="8" y2="11"/></svg></div>
+      <h3>Complex pricing or quoting logic</h3>
+      <p>Your pricing rules are too dynamic for CPQ out-of-the-box. A custom pricing engine handles your exact logic — discounts, tiers, bundles, and exceptions.</p>
+    </div>
+    <div class="trig-card">
+      <div class="trig-icon" style="background:#D1FAE5;"><svg viewBox="0 0 16 16" stroke="#065F46"><path d="M2 8h3l2-5 3 10 2-5h2"/></svg></div>
+      <h3>Unique business processes</h3>
+      <p>Your approval workflows, case routing, or commission calculations are specific to your business and can't be replicated with standard Salesforce flows.</p>
+    </div>
+    <div class="trig-card">
+      <div class="trig-icon" style="background:#EDE9FE;"><svg viewBox="0 0 16 16" stroke="#5B21B6"><rect x="2" y="4" width="12" height="8" rx="1"/><line x1="2" y1="7" x2="14" y2="7"/></svg></div>
+      <h3>Bespoke user interfaces</h3>
+      <p>Your team needs custom Lightning Web Components — branded portals, specialised data entry screens, or mobile-first experiences the standard UI can't deliver.</p>
+    </div>
+    <div class="trig-card">
+      <div class="trig-icon" style="background:#FEF3C7;"><svg viewBox="0 0 16 16" stroke="#D97706"><circle cx="8" cy="8" r="5"/><line x1="8" y1="5" x2="8" y2="9"/><line x1="8" y1="11" x2="8" y2="12"/></svg></div>
+      <h3>High-volume data processing</h3>
+      <p>Standard Salesforce hits governor limits with large data volumes. Custom Apex batch jobs handle millions of records reliably without hitting those walls.</p>
+    </div>
+    <div class="trig-card">
+      <div class="trig-icon" style="background:#FCE7F3;"><svg viewBox="0 0 16 16" stroke="#9D174D"><path d="M8 2L2 6v8h4V9h4v5h4V6z"/></svg></div>
+      <h3>Deep system integrations</h3>
+      <p>You need Salesforce to write back to your ERP, sync with your payment gateway in real-time, or connect to a legacy system via a custom API — not a middleware workaround.</p>
+    </div>
+    <div class="trig-card">
+      <div class="trig-icon" style="background:#FEE2E2;"><svg viewBox="0 0 16 16" stroke="#DC2626"><path d="M2 13l4-4 3 3 5-6"/><circle cx="13" cy="4" r="2"/></svg></div>
+      <h3>AppExchange product development</h3>
+      <p>Building a managed package to sell on AppExchange? We architect, build, and security-review Salesforce ISV products from the ground up.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES — from your existing "Going beyond out-of-the-box" section, expanded -->
+<section class="sec sec-alt">
+  <div class="ey">What we build</div>
+  <div class="sec-t">Going beyond out-of-the-box Salesforce</div>
+  <div class="sec-s">We create customised solutions using Apex and Lightning components to meet complex business needs — ensuring your Salesforce platform adapts perfectly to your processes, not the other way around.</div>
+  <div class="cap-grid">
+    <div class="cap-card">
+      <div class="cap-accent"></div>
+      <h3>Tailored functionality beyond standard tools</h3>
+      <p>Custom Apex classes, triggers, batch jobs, and scheduled jobs that implement your exact business rules — far beyond what declarative tools can achieve.</p>
+      <div class="cap-tags"><span class="ctag ctag-apex">Apex</span><span class="ctag ctag-apex">Triggers</span><span class="ctag ctag-apex">Batch Jobs</span></div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-accent"></div>
+      <h3>Enhanced user experience through custom interfaces</h3>
+      <p>Lightning Web Components, custom tabs, embedded flows, and branded Experience Cloud pages that give your team a UI built around how they actually work.</p>
+      <div class="cap-tags"><span class="ctag ctag-lwc">LWC</span><span class="ctag ctag-lwc">Experience Cloud</span></div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-accent"></div>
+      <h3>Seamless system integrations</h3>
+      <p>REST and SOAP API integrations, platform events, and custom middleware connectors that make Salesforce talk fluently to your ERP, payment systems, and legacy infrastructure.</p>
+      <div class="cap-tags"><span class="ctag ctag-api">REST API</span><span class="ctag ctag-int">SOAP</span><span class="ctag ctag-api">Platform Events</span></div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-accent"></div>
+      <h3>Scalable and future-ready solutions</h3>
+      <p>Every component we build is architected for the long term — documented, tested, version-controlled, and designed to survive Salesforce upgrades without breaking.</p>
+      <div class="cap-tags"><span class="ctag ctag-apex">Salesforce DX</span><span class="ctag ctag-lwc">CI/CD</span></div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-accent"></div>
+      <h3>Automation beyond point-and-click</h3>
+      <p>Unlock automation possibilities that standard flows or process builders can't achieve. With Apex coding and advanced triggers, we enable smarter, faster, and more reliable business processes.</p>
+      <div class="cap-tags"><span class="ctag ctag-apex">Apex</span><span class="ctag ctag-flow">Flow Builder</span></div>
+    </div>
+    <div class="cap-card">
+      <div class="cap-accent"></div>
+      <h3>Industry-specific customisation</h3>
+      <p>We build domain-specific solutions for financial services, healthcare, manufacturing, and more — combining deep Salesforce knowledge with real understanding of your sector's requirements.</p>
+      <div class="cap-tags"><span class="ctag ctag-api">FinServ</span><span class="ctag ctag-lwc">Healthcare</span><span class="ctag ctag-apex">Manufacturing</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK — NEW, dark section -->
+<section class="sec sec-dark">
+  <div class="ey-light">Technology & tools</div>
+  <div class="sec-t-light">Our technology stack</div>
+  <div class="sec-s-light">We work with the full Salesforce development ecosystem — using modern tooling, enforced standards, and rigorous quality gates on every engagement.</div>
+  <div class="stack-grid">
+    <div class="stack-col">
+      <div class="stack-col-title">Core languages</div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#60A5FA;"></div><span class="sp-label">Apex</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#6EE7B7;"></div><span class="sp-label">Lightning Web Components</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#C4B5FD;"></div><span class="sp-label">Visualforce</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#FDBA74;"></div><span class="sp-label">SOQL / SOSL</span></div>
+    </div>
+    <div class="stack-col">
+      <div class="stack-col-title">Integration & API</div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#34D399;"></div><span class="sp-label">REST APIs</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#60A5FA;"></div><span class="sp-label">SOAP APIs</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#F472B6;"></div><span class="sp-label">Platform Events</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#FDBA74;"></div><span class="sp-label">Change Data Capture</span></div>
+    </div>
+    <div class="stack-col">
+      <div class="stack-col-title">DevOps & tooling</div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#6EE7B7;"></div><span class="sp-label">Salesforce DX (SFDX)</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#FCA5A5;"></div><span class="sp-label">Git / GitHub</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#C4B5FD;"></div><span class="sp-label">CI/CD Pipelines</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#60A5FA;"></div><span class="sp-label">Scratch Orgs</span></div>
+    </div>
+    <div class="stack-col">
+      <div class="stack-col-title">Quality & testing</div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#34D399;"></div><span class="sp-label">90%+ test coverage</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#FDBA74;"></div><span class="sp-label">PMD / ESLint</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#60A5FA;"></div><span class="sp-label">Code peer review</span></div>
+      <div class="stack-pill"><div class="sp-dot" style="background:#C4B5FD;"></div><span class="sp-label">UAT frameworks</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEVELOPMENT PROCESS -->
+<section class="sec">
+  <div class="ey">Our process</div>
+  <div class="sec-t">Engineered for scalable custom development</div>
+  <div class="sec-s">Every custom development engagement follows a structured, agile process — from requirements through to release — with full transparency and regular checkpoints throughout.</div>
+  <div class="process-steps">
+    <div class="ps"><div class="ps-c">1</div><h4>Requirements</h4><p>Workshops to document exact business logic and technical needs</p></div>
+    <div class="ps"><div class="ps-c">2</div><h4>Architecture</h4><p>Solution design, data model, API contracts, and component map</p></div>
+    <div class="ps"><div class="ps-c">3</div><h4>Sprint build</h4><p>Agile 2-week sprints with demos and feedback at each stage</p></div>
+    <div class="ps"><div class="ps-c">4</div><h4>Review & test</h4><p>Code review, PMD scan, 90%+ coverage, UAT sign-off</p></div>
+    <div class="ps"><div class="ps-c">5</div><h4>Release</h4><p>Sandbox validation, change set deploy, documentation handover</p></div>
+  </div>
+</section>
+
+<!-- CODE QUALITY & GOVERNANCE — NEW -->
+<section class="sec sec-alt">
+  <div class="ey">Quality & governance</div>
+  <div class="sec-t">Code quality standards that protect your investment</div>
+  <div class="sec-s">Custom code that isn't built to a high standard becomes technical debt fast. Every line of code we write is held to strict quality gates — so your org stays healthy, upgradeable, and maintainable for years.</div>
+  <div class="quality-grid">
+    <div class="quality-list">
+      <div class="qi">
+        <div class="qi-icon"><svg viewBox="0 0 15 15"><polyline points="2,8 5,11 13,4"/></svg></div>
+        <div class="qi-t"><h4>Minimum 90% Apex test coverage</h4><p>We enforce 90%+ test coverage on all Apex code — well above Salesforce's 75% minimum — so your code behaves predictably in production.</p></div>
+      </div>
+      <div class="qi">
+        <div class="qi-icon"><svg viewBox="0 0 15 15"><rect x="2" y="2" width="11" height="11" rx="2"/><polyline points="5,7.5 7,9.5 10,6"/></svg></div>
+        <div class="qi-t"><h4>PMD & ESLint code scanning</h4><p>Every deployment is scanned with PMD for Apex and ESLint for LWC — catching security vulnerabilities, performance issues, and bad patterns before they reach production.</p></div>
+      </div>
+      <div class="qi">
+        <div class="qi-icon"><svg viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="5"/><line x1="7.5" y1="4.5" x2="7.5" y2="8"/><line x1="7.5" y1="10" x2="7.5" y2="11"/></svg></div>
+        <div class="qi-t"><h4>Mandatory peer code review</h4><p>No code goes to staging without a second developer review. This catches logic errors, improves readability, and shares knowledge across the team.</p></div>
+      </div>
+      <div class="qi">
+        <div class="qi-icon"><svg viewBox="0 0 15 15"><path d="M2 10l3-6 3 4 2-2 3 4"/></svg></div>
+        <div class="qi-t"><h4>Full documentation & handover</h4><p>Every component is documented with technical specifications, deployment instructions, and admin guidance — so your team can maintain it confidently after we're done.</p></div>
+      </div>
+    </div>
+    <div class="quality-visual">
+      <div class="qv-title" style="color:#94A3B8;">Code quality metrics — typical delivery</div>
+      <div class="qv-row">
+        <div class="qv-label" style="color:#64748B;">Apex test coverage</div>
+        <div class="qv-right"><div class="qv-bar-wrap"><div class="qv-bar" style="width:92%;background:#6EE7B7;"></div></div><div class="qv-val" style="color:#34D399;">92%</div></div>
+      </div>
+      <div class="qv-row">
+        <div class="qv-label" style="color:#64748B;">PMD violations</div>
+        <div class="qv-right"><div class="qv-bar-wrap"><div class="qv-bar" style="width:4%;background:#FCA5A5;"></div></div><div class="qv-val" style="color:#F87171;">0</div></div>
+      </div>
+      <div class="qv-row">
+        <div class="qv-label" style="color:#64748B;">Peer review pass rate</div>
+        <div class="qv-right"><div class="qv-bar-wrap"><div class="qv-bar" style="width:100%;background:#60A5FA;"></div></div><div class="qv-val" style="color:#60A5FA;">100%</div></div>
+      </div>
+      <div class="qv-row">
+        <div class="qv-label" style="color:#64748B;">Deployment success rate</div>
+        <div class="qv-right"><div class="qv-bar-wrap"><div class="qv-bar" style="width:98%;background:#C4B5FD;"></div></div><div class="qv-val" style="color:#A78BFA;">98%</div></div>
+      </div>
+      <div class="code-snippet">
+        <div class="cs-comment">// Atlas Apex standard — every class tested & documented</div>
+        <div><span class="cs-keyword">public class</span> <span class="cs-class">OpportunityHandler</span> {</div>
+        <div>&nbsp;&nbsp;<span class="cs-keyword">@TestVisible</span></div>
+        <div>&nbsp;&nbsp;<span class="cs-keyword">private static</span> <span class="cs-method">void</span> <span class="cs-method">updateStage</span>(List&lt;Opportunity&gt; opps) {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cs-comment">// Business logic — fully tested, PMD clean</span></div>
+        <div>&nbsp;&nbsp;}</div>
+        <div>}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES — NEW -->
+<section class="sec">
+  <div class="ey">Client stories</div>
+  <div class="sec-t">Custom development in the real world</div>
+  <div class="case-grid">
+    <div class="ccase">
+      <div class="cch">
+        <div class="cch-i">Financial Services</div>
+        <h3>Custom CPQ pricing engine for a complex financial products firm — 400+ pricing rules automated</h3>
+      </div>
+      <div class="ccb">
+        <div class="cc-meta">
+          <div class="ccf"><label>Challenge</label><p>Standard CPQ couldn't handle dynamic pricing across 400+ product combinations with regulatory constraints</p></div>
+          <div class="ccf"><label>Solution</label><p>Custom Apex pricing engine + LWC quote builder with real-time margin calculations and compliance checks</p></div>
+        </div>
+        <div class="ccs"><div class="ccs-n">85%</div><div class="ccs-t">Reduction in quote generation time — from 2 hours to under 15 minutes</div></div>
+      </div>
+    </div>
+    <div class="ccase">
+      <div class="cch">
+        <div class="cch-i">Retail & eCommerce</div>
+        <h3>Real-time Salesforce to ERP sync — 50,000 orders per day processed without middleware</h3>
+      </div>
+      <div class="ccb">
+        <div class="cc-meta">
+          <div class="ccf"><label>Challenge</label><p>Orders created in Salesforce weren't syncing to their ERP for hours — causing fulfilment delays and customer complaints</p></div>
+          <div class="ccf"><label>Solution</label><p>Custom REST API integration with Platform Events, retry logic, error handling, and a monitoring dashboard</p></div>
+        </div>
+        <div class="ccs"><div class="ccs-n">99.9%</div><div class="ccs-t">API uptime achieved with real-time order sync and zero fulfilment delays</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec sec-alt">
+  <div class="ey">What our clients say</div>
+  <div class="sec-t">Trusted by technical teams across the UK & Australia</div>
+  <div class="tg">
+    <div class="tc">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="tq">"The custom pricing engine Atlas built us does things we were told were impossible in Salesforce. It handles 400+ rules in real-time and the code is clean, documented, and our team can actually maintain it."</p>
+      <div class="tau"><div class="tav" style="background:#DBEAFE;color:#1D4ED8;">RH</div><div><div class="tn">Richard H.</div><div class="tr">Head of Technology, FinServ</div></div></div>
+    </div>
+    <div class="tc">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="tq">"We'd had two other agencies try to build this integration and fail. Atlas got it right first time — proper architecture, proper testing, and it's been in production for 18 months without a single issue."</p>
+      <div class="tau"><div class="tav" style="background:#D1FAE5;color:#065F46;">SM</div><div><div class="tn">Sophie M.</div><div class="tr">CTO, Retail Group</div></div></div>
+    </div>
+    <div class="tc">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="tq">"What impressed me most was the quality of their code. 94% test coverage, fully documented, passed the AppExchange security review first time. That's rare and incredibly valuable."</p>
+      <div class="tau"><div class="tav" style="background:#EDE9FE;color:#5B21B6;">AF</div><div><div class="tn">Alex F.</div><div class="tr">Founder, SaaS ISV</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="sec">
+  <div class="ey">Meet the developers</div>
+  <div class="sec-t">The engineers behind your custom build</div>
+  <div class="team-g">
+    <div class="tmc">
+      <div class="tma" style="background:#1E293B;color:#60A5FA;">PK</div>
+      <div class="tmn">Priya Kumar</div>
+      <div class="tmr">Lead Salesforce Developer</div>
+      <div class="certs"><span class="cert">Platform Dev I</span><span class="cert">Platform Dev II</span><span class="cert">Apex</span></div>
+    </div>
+    <div class="tmc">
+      <div class="tma" style="background:#1E293B;color:#6EE7B7;">TN</div>
+      <div class="tmn">Tom Nguyen</div>
+      <div class="tmr">Solutions Architect</div>
+      <div class="certs"><span class="cert">Technical Architect</span><span class="cert">Integration</span></div>
+    </div>
+    <div class="tmc">
+      <div class="tma" style="background:#1E293B;color:#C4B5FD;">EB</div>
+      <div class="tmn">Emma Burke</div>
+      <div class="tmr">LWC & UI Specialist</div>
+      <div class="certs"><span class="cert">LWC</span><span class="cert">Experience Cloud</span><span class="cert">JavaScript</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES + PARTNER STRIP -->
+<section class="sec sec-alt">
+  <div class="ey">Trusted by businesses across industry sectors</div>
+  <div class="sec-t">Industry-specific customisation, not generic code</div>
+  <div class="ind-g">
+    <div class="ic"><div class="id" style="background:#DBEAFE;"></div><p>Financial Services</p></div>
+    <div class="ic"><div class="id" style="background:#D1FAE5;"></div><p>Retail & eCommerce</p></div>
+    <div class="ic"><div class="id" style="background:#EDE9FE;"></div><p>Healthcare</p></div>
+    <div class="ic"><div class="id" style="background:#FEF3C7;"></div><p>Manufacturing</p></div>
+    <div class="ic"><div class="id" style="background:#FCE7F3;"></div><p>Professional Services</p></div>
+    <div class="ic"><div class="id" style="background:#D1FAE5;"></div><p>Not-for-Profit</p></div>
+    <div class="ic"><div class="id" style="background:#DBEAFE;"></div><p>Technology / ISV</p></div>
+    <div class="ic"><div class="id" style="background:#FEE2E2;"></div><p>Property & Real Estate</p></div>
+  </div>
+  <div class="pstrip">
+    <div class="pb">
+      <div class="pbi"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+      <div class="pbl">Salesforce<br>Summit Partner</div>
+    </div>
+    <div class="pdiv"></div>
+    <div class="ps-stat"><div class="ps-n">160+</div><div class="ps-l">Certifications held</div></div>
+    <div class="pdiv"></div>
+    <div class="ps-stat"><div class="ps-n">200+</div><div class="ps-l">Custom builds delivered</div></div>
+    <div class="pdiv"></div>
+    <div class="lpills">
+      <div class="lp">accan</div>
+      <div class="lp">AVIS Australia</div>
+      <div class="lp">Blue Harvest</div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNICAL SCOPING CTA — NEW, unique to this page -->
+<div class="cta-wrap">
+  <div class="cta-box">
+    <div>
+      <div class="cta-ey">Free technical scoping call</div>
+      <h2>Tell us what you need to build — we'll tell you how</h2>
+      <p>Not sure if your requirement needs custom Apex, a LWC, an integration, or just a clever flow? Our senior developers will talk through your challenge and tell you the right approach — with no commitment and no sales pitch.</p>
+      <div class="cta-btns">
+        <button class="cta-ba">Book a free technical scoping call</button>
+        <button class="cta-bb">Download our custom dev capability guide →</button>
+      </div>
+    </div>
+    <div class="scope-preview">
+      <div class="sp-title">What we cover in your scoping call</div>
+      <div class="sp-row"><div class="sp-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Review your exact business requirement</p></div>
+      <div class="sp-row"><div class="sp-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Assess whether custom code or config is right</p></div>
+      <div class="sp-row"><div class="sp-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Identify risks, dependencies, and constraints</p></div>
+      <div class="sp-row"><div class="sp-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Provide a rough effort and timeline estimate</p></div>
+      <div class="sp-row"><div class="sp-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Recommend the best tech stack and approach</p></div>
+      <div class="sp-row"><div class="sp-check"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Answer any technical questions you have</p></div>
+      <div style="font-size:10px;color:#475569;margin-top:12px;">30-minute call · Senior developer · No obligation</div>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED SERVICES -->
+<section class="sec">
+  <div class="ey">Related services</div>
+  <div class="sec-t">Custom development in context</div>
+  <div class="rel-g">
+    <div class="rc"><div class="ra"></div><h4>Salesforce Implementation</h4><p>Need standard Salesforce set up before layering in custom code? Our implementation team builds the foundation your custom development sits on.</p><div class="rl">Learn more →</div></div>
+    <div class="rc"><div class="ra"></div><h4>Salesforce Integration</h4><p>Custom development often goes hand-in-hand with complex integrations. Our integration specialists connect Salesforce to your wider tech stack securely and reliably.</p><div class="rl">Learn more →</div></div>
+    <div class="rc"><div class="ra"></div><h4>Salesforce Support</h4><p>After delivery, our managed support team maintains your custom code — applying updates, monitoring performance, and extending functionality as your needs evolve.</p><div class="rl">Learn more →</div></div>
+  </div>
+</section>
+
+<!-- BLOG — kept from your page, enhanced -->
+<section class="sec sec-alt">
+  <div class="ey">Insights & best practices</div>
+  <div class="sec-t">Custom development insights & best practices</div>
+  <div class="bl-g">
+    <div class="blc">
+      <div class="blt" style="background:#1E293B;"></div>
+      <div class="bltg"><span class="btg">Development</span></div>
+      <h4>Best practices for managing custom Salesforce code</h4>
+      <p>Custom Salesforce code can unlock powerful automation and tailored experiences. However, when not managed properly, it quickly turns into technical debt that slows...</p>
+    </div>
+    <div class="blc">
+      <div class="blt" style="background:#DBEAFE;"></div>
+      <div class="bltg"><span class="btg">Strategy</span></div>
+      <h4>When out-of-the-box Salesforce isn't enough: why custom development matters</h4>
+      <p>Salesforce is powerful right out of the box, but no two businesses operate the same way. Default features are great for getting started, but as your processes grow more...</p>
+    </div>
+    <div class="blc">
+      <div class="blt" style="background:#D1FAE5;"></div>
+      <div class="bltg"><span class="btg">Components</span></div>
+      <h4>Top 5 business challenges solved with Salesforce custom components</h4>
+      <p>Standard Salesforce features are powerful, but growing businesses often reach a point where native capabilities fall short. That's where custom components step in...</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQS — kept from your page + expanded -->
+<section class="sec" style="background:#F8FAFC;">
+  <div class="ey">FAQs</div>
+  <div class="sec-t">Salesforce Custom Development FAQs</div>
+  <div class="faq-l">
+    <div class="fq">
+      <div class="fqq">What is Salesforce custom development? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div>
+      <div class="fqa">Salesforce custom development refers to building bespoke functionality on top of the Salesforce platform using Apex (Salesforce's programming language), Lightning Web Components (LWC), custom APIs, and other developer tools. It goes beyond what declarative point-and-click tools like Flow or Process Builder can achieve — delivering unique business logic, custom UI, and deep system integrations.</div>
+    </div>
+    <div class="fq"><div class="fqq">Can Salesforce be integrated with other systems? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">When do I need Apex development in Salesforce? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Do you offer industry-specific Salesforce customisation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Are custom Salesforce solutions scalable? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">How does custom development improve Salesforce automation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Will custom code break when Salesforce releases updates? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">How do you ensure code quality in custom Salesforce development? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ft">
+  <div class="ft-top">
+    <div>
+      <div class="ft-logo">atlas consulting</div>
+      <div class="ft-tag">trusted by clients for over 12 years</div>
+    </div>
+    <div class="ft-col">
+      <h5>Salesforce Clouds</h5>
+      <a href="#">Sales Cloud</a>
+      <a href="#">Service Cloud</a>
+      <a href="#">Marketing Cloud</a>
+      <a href="#">Experience Cloud</a>
+    </div>
+    <div class="ft-col">
+      <h5>Services</h5>
+      <a href="#">Advisory Services</a>
+      <a href="#">Implementation</a>
+      <a href="#">Re-implementation</a>
+      <a href="#">Custom Development</a>
+      <a href="#">Support</a>
+      <a href="#">Integration</a>
+    </div>
+    <div class="ft-col">
+      <h5>Industries</h5>
+      <a href="#">Financial Services</a>
+      <a href="#">Retail</a>
+      <a href="#">Healthcare</a>
+      <a href="#">Manufacturing</a>
+      <a href="#">Technology</a>
+    </div>
+    <div class="ft-col">
+      <h5>Solutions</h5>
+      <a href="#">Payments on Salesforce</a>
+      <a href="#">Sales & Marketing</a>
+      <a href="#">Data & Analytics</a>
+      <a href="#">AI & Automation</a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <p>© 2025 Atlas Consulting. All rights reserved.</p>
+    <p>Privacy · Terms · Contact</p>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

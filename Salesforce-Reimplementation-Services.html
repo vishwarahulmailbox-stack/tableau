@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salesforce Re-implementation — Atlas Consulting (Mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;color:#1a1a1a;background:#fff;}
+.pg{max-width:960px;margin:0 auto;}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid #e5e7eb;background:#fff;position:sticky;top:0;z-index:100;}
+.logo-top{font-family:'Fraunces',serif;font-size:15px;font-weight:500;}
+.logo-sub{font-size:9px;color:#9ca3af;letter-spacing:0.06em;text-transform:uppercase;}
+.nav-links{display:flex;gap:22px;align-items:center;}
+.nav-links a{font-size:12px;color:#6b7280;text-decoration:none;}
+.nav-cta{background:#F59E0B;color:#111;font-size:12px;font-weight:500;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:56px 32px 52px;background:linear-gradient(135deg,#FFFBF0 0%,#FFF7ED 100%);}
+.hero-label{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#D97706;margin-bottom:12px;}
+.hero h1{font-family:'Fraunces',serif;font-size:40px;font-weight:500;line-height:1.12;margin-bottom:16px;color:#111;}
+.hero-desc{font-size:13px;color:#6b7280;line-height:1.8;margin-bottom:28px;max-width:360px;}
+.hero-btns{display:flex;gap:10px;}
+.btn-a{background:#F59E0B;color:#111;font-size:13px;font-weight:500;padding:11px 22px;border-radius:8px;border:none;cursor:pointer;}
+.btn-b{font-size:13px;color:#6b7280;padding:11px 18px;border-radius:8px;border:1px solid #d1d5db;background:transparent;cursor:pointer;}
+
+/* HERO VISUAL — benefits ring */
+.hero-vis{display:flex;flex-direction:column;gap:8px;justify-content:center;}
+.benefit-row{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:13px 18px;}
+.benefit-row.highlighted{border-color:#F59E0B;background:#FFFBF0;}
+.ben-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ben-icon svg{width:16px;height:16px;fill:none;stroke-width:1.5;}
+.ben-label{font-size:13px;font-weight:500;color:#111;}
+.ben-sub{font-size:11px;color:#9ca3af;}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);}
+.met{background:#fff;padding:28px 20px;text-align:center;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;}
+.met:first-child{border-left:1px solid #e5e7eb;}
+.met-n{font-family:'Fraunces',serif;font-size:32px;font-weight:500;color:#D97706;line-height:1;}
+.met-l{font-size:11px;color:#6b7280;margin-top:5px;}
+
+/* SECTIONS */
+.sec{padding:56px 32px;}
+.sec-alt{background:#f9fafb;}
+.ey{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#D97706;margin-bottom:10px;}
+.sec-t{font-family:'Fraunces',serif;font-size:30px;font-weight:500;line-height:1.2;margin-bottom:10px;color:#111;}
+.sec-s{font-size:13px;color:#6b7280;line-height:1.75;max-width:540px;}
+
+/* SYMPTOM CHECKLIST */
+.symptom-intro{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:32px;align-items:start;}
+.symptom-list{display:flex;flex-direction:column;gap:10px;}
+.symptom-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:10px;border:1px solid #FEE2E2;background:#FEF2F2;}
+.sym-icon{width:28px;height:28px;border-radius:6px;background:#FEE2E2;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.sym-icon svg{width:13px;height:13px;stroke:#DC2626;fill:none;stroke-width:1.5;}
+.sym-text h4{font-size:12px;font-weight:500;color:#991B1B;margin-bottom:2px;}
+.sym-text p{font-size:11px;color:#B91C1C;line-height:1.5;}
+.symptom-cta-box{background:#1C3557;border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:16px;}
+.scta-label{font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#93C5FD;}
+.scta-box h3{font-family:'Fraunces',serif;font-size:20px;font-weight:500;color:#E0F2FE;line-height:1.3;margin-bottom:6px;}
+.scta-box p{font-size:12px;color:#93C5FD;line-height:1.65;margin-bottom:4px;}
+.scta-checks{display:flex;flex-direction:column;gap:8px;margin-bottom:4px;}
+.scta-row{display:flex;align-items:center;gap:8px;}
+.scta-cb{width:14px;height:14px;border-radius:3px;background:#10B981;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.scta-cb svg{width:8px;height:8px;stroke:#fff;fill:none;stroke-width:2.5;}
+.scta-row p{font-size:11px;color:#BAE6FD;}
+.scta-btn{background:#F59E0B;color:#111;font-size:12px;font-weight:500;padding:11px 18px;border-radius:8px;border:none;cursor:pointer;text-align:center;}
+
+/* COMPARISON — before / after */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:32px;border-radius:14px;overflow:hidden;border:1px solid #e5e7eb;}
+.compare-col-header{padding:16px 24px;font-size:12px;font-weight:500;}
+.before-header{background:#FEF2F2;color:#991B1B;border-right:1px solid #FEE2E2;}
+.after-header{background:#F0FDF4;color:#065F46;}
+.compare-header-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;opacity:0.7;margin-bottom:2px;}
+.compare-items{display:contents;}
+.compare-row{display:grid;grid-template-columns:1fr 1fr;}
+.compare-cell{padding:14px 24px;font-size:12px;border-top:1px solid #f3f4f6;display:flex;align-items:flex-start;gap:9px;}
+.before-cell{background:#fff;border-right:1px solid #f3f4f6;color:#6b7280;}
+.after-cell{background:#F9FAFB;color:#374151;}
+.cell-dot-red{width:6px;height:6px;border-radius:50%;background:#FCA5A5;flex-shrink:0;margin-top:4px;}
+.cell-dot-green{width:6px;height:6px;border-radius:50%;background:#6EE7B7;flex-shrink:0;margin-top:4px;}
+
+/* METHODOLOGY */
+.method-grid{display:grid;grid-template-columns:repeat(7,1fr);position:relative;margin-top:40px;}
+.method-grid::after{content:'';position:absolute;top:18px;left:6%;right:6%;height:2px;background:#FDE68A;z-index:0;}
+.mstep{text-align:center;position:relative;z-index:1;}
+.mstep-c{width:36px;height:36px;border-radius:50%;background:#F59E0B;color:#111;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
+.mstep h4{font-size:11px;font-weight:500;color:#111;margin-bottom:2px;}
+.mstep-t{font-size:9px;color:#9ca3af;}
+.mstep p{font-size:9px;color:#6b7280;line-height:1.5;padding:0 3px;margin-top:4px;}
+
+/* INCLUDED SCOPE */
+.scope-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.scope-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;}
+.scope-accent{width:3px;height:32px;border-radius:2px;background:#F59E0B;margin-bottom:14px;}
+.scope-card h3{font-size:13px;font-weight:500;color:#111;margin-bottom:6px;}
+.scope-card p{font-size:11px;color:#6b7280;line-height:1.6;margin-bottom:12px;}
+.scope-tags{display:flex;flex-wrap:wrap;gap:4px;}
+.stag{font-size:10px;background:#FEF3C7;color:#92400E;padding:2px 7px;border-radius:4px;}
+
+/* RISKS */
+.risk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.risk-card{border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;}
+.risk-front{background:#FEF2F2;padding:20px;}
+.risk-icon{width:32px;height:32px;border-radius:8px;background:#FEE2E2;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.risk-icon svg{width:15px;height:15px;stroke:#DC2626;fill:none;stroke-width:1.5;}
+.risk-front h3{font-size:13px;font-weight:500;color:#991B1B;margin-bottom:5px;}
+.risk-front p{font-size:11px;color:#B91C1C;line-height:1.6;}
+.risk-back{background:#F0FDF4;padding:14px 20px;border-top:1px solid #BBF7D0;}
+.risk-back-label{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:#15803D;margin-bottom:4px;}
+.risk-back p{font-size:11px;color:#166534;line-height:1.55;}
+
+/* CASE STUDIES */
+.case-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:32px;}
+.ccase{border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;}
+.cch{background:#1C3557;padding:20px 22px;}
+.cch-i{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#93C5FD;margin-bottom:5px;}
+.cch h3{font-size:13px;font-weight:500;color:#E0F2FE;line-height:1.4;}
+.ccb{padding:18px 22px;}
+.cc-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.ccf label{font-size:9px;color:#9ca3af;display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.05em;}
+.ccf p{font-size:11px;color:#374151;line-height:1.5;}
+.ccs{background:#FEF3C7;border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:center;}
+.ccs-n{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:#B45309;}
+.ccs-t{font-size:11px;color:#92400E;line-height:1.45;}
+
+/* TESTIMONIALS */
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.tc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;}
+.stars{display:flex;gap:3px;margin-bottom:12px;}
+.star{width:12px;height:12px;background:#F59E0B;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.tq{font-size:12px;color:#6b7280;line-height:1.7;font-style:italic;margin-bottom:14px;}
+.tau{display:flex;align-items:center;gap:9px;}
+.tav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.tn{font-size:12px;font-weight:500;color:#111;}
+.tr{font-size:11px;color:#9ca3af;}
+
+/* TEAM */
+.team-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.tmc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:22px;text-align:center;}
+.tma{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;}
+.tmn{font-size:14px;font-weight:500;color:#111;margin-bottom:2px;}
+.tmr{font-size:11px;color:#9ca3af;margin-bottom:10px;}
+.certs{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
+.cert{font-size:10px;background:#DBEAFE;color:#1E40AF;padding:3px 7px;border-radius:4px;}
+
+/* INDUSTRIES */
+.ind-g{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:28px;}
+.ic{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px;text-align:center;}
+.id{width:28px;height:28px;border-radius:7px;margin:0 auto 8px;}
+.ic p{font-size:11px;color:#6b7280;}
+
+/* PARTNER STRIP */
+.pstrip{display:flex;align-items:center;justify-content:center;gap:32px;padding:30px 32px;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;margin-top:36px;flex-wrap:wrap;}
+.pb{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.pbi{width:42px;height:42px;border-radius:10px;background:#1C3557;display:flex;align-items:center;justify-content:center;}
+.pbi svg{width:20px;height:20px;fill:#93C5FD;}
+.pbl{font-size:10px;color:#9ca3af;text-align:center;line-height:1.4;}
+.pdiv{width:1px;height:36px;background:#e5e7eb;}
+.ps{text-align:center;}
+.ps-n{font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:#D97706;}
+.ps-l{font-size:10px;color:#9ca3af;}
+.lpills{display:flex;gap:8px;flex-wrap:wrap;}
+.lp{background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:8px 14px;font-size:11px;color:#6b7280;}
+
+/* FREE AUDIT CTA */
+.cta-wrap{padding:0 32px 56px;}
+.cta-box{background:#1C3557;border-radius:16px;padding:44px;display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center;}
+.cta-ey{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#93C5FD;margin-bottom:10px;}
+.cta-box h2{font-family:'Fraunces',serif;font-size:26px;font-weight:500;color:#E0F2FE;line-height:1.25;margin-bottom:10px;}
+.cta-box p{font-size:12px;color:#93C5FD;line-height:1.7;margin-bottom:20px;}
+.cta-btns{display:flex;flex-direction:column;gap:9px;}
+.cta-ba{background:#F59E0B;color:#111;font-size:12px;font-weight:500;padding:11px 18px;border-radius:8px;border:none;cursor:pointer;text-align:left;}
+.cta-bb{background:transparent;color:#93C5FD;font-size:12px;padding:11px 18px;border-radius:8px;border:1px solid #2563EB;cursor:pointer;text-align:left;}
+.audit-preview{background:rgba(255,255,255,0.08);border-radius:12px;padding:22px;border:1px solid rgba(255,255,255,0.12);}
+.ap-title{font-size:11px;font-weight:500;color:#E0F2FE;margin-bottom:14px;}
+.ap-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:10px;}
+.ap-label{font-size:11px;color:#BAE6FD;}
+.ap-bar-wrap{display:flex;align-items:center;gap:8px;justify-content:flex-end;}
+.ap-score{font-size:11px;font-weight:500;color:#F59E0B;}
+.ap-bar{width:60px;height:5px;border-radius:3px;background:rgba(255,255,255,0.15);}
+.ap-bar-fill{height:5px;border-radius:3px;}
+
+/* RELATED */
+.rel-g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;}
+.rc{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:20px;}
+.ra{width:3px;height:30px;border-radius:2px;background:#F59E0B;margin-bottom:12px;}
+.rc h4{font-size:13px;font-weight:500;color:#111;margin-bottom:4px;}
+.rc p{font-size:11px;color:#6b7280;line-height:1.55;margin-bottom:10px;}
+.rl{font-size:11px;color:#D97706;font-weight:500;}
+
+/* BLOG */
+.bl-g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;}
+.blc{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;}
+.blt{height:76px;}
+.bltg{display:flex;gap:5px;padding:12px 14px 0;}
+.btg{font-size:10px;background:#FEF3C7;color:#92400E;padding:3px 7px;border-radius:4px;font-weight:500;}
+.blc h4{font-size:12px;font-weight:500;padding:7px 14px;line-height:1.45;color:#111;}
+.blc p{font-size:11px;color:#9ca3af;padding:0 14px 14px;line-height:1.55;}
+
+/* FAQ */
+.faq-l{margin-top:28px;}
+.fq{border-bottom:1px solid #f3f4f6;padding:15px 0;}
+.fqq{font-size:13px;font-weight:500;display:flex;justify-content:space-between;align-items:center;color:#111;cursor:pointer;}
+.fqq svg{width:14px;height:14px;stroke:#9ca3af;fill:none;stroke-width:2;flex-shrink:0;}
+.fqa{font-size:12px;color:#6b7280;line-height:1.7;margin-top:9px;max-width:660px;}
+
+/* FOOTER */
+.ft{background:#0F172A;padding:44px 32px 24px;}
+.ft-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:24px;margin-bottom:32px;}
+.ft-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:#fff;margin-bottom:4px;}
+.ft-tag{font-size:9px;color:#475569;text-transform:uppercase;letter-spacing:0.07em;}
+.ft-col h5{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:#94A3B8;margin-bottom:10px;}
+.ft-col a{display:block;font-size:11px;color:#475569;text-decoration:none;margin-bottom:5px;}
+.ft-bot{border-top:1px solid #1E293B;padding-top:18px;display:flex;justify-content:space-between;}
+.ft-bot p{font-size:11px;color:#475569;}
+
+/* OUTCOMES SPLIT */
+.outcomes-split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-top:32px;}
+.out-list{display:flex;flex-direction:column;gap:14px;}
+.out-item{display:flex;gap:12px;align-items:flex-start;}
+.out-num{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:#F59E0B;min-width:32px;line-height:1;}
+.out-t h4{font-size:13px;font-weight:500;color:#111;margin-bottom:3px;}
+.out-t p{font-size:11px;color:#6b7280;line-height:1.55;}
+.out-visual{background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:24px;}
+.ov-title{font-size:11px;font-weight:500;color:#6b7280;margin-bottom:14px;}
+.ov-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-bottom:10px;}
+.ov-label{font-size:11px;color:#6b7280;}
+.ov-right{display:flex;align-items:center;gap:8px;}
+.ov-bar-wrap{width:80px;height:5px;border-radius:3px;background:#e5e7eb;}
+.ov-bar{height:5px;border-radius:3px;background:#F59E0B;}
+.ov-pct{font-size:11px;font-weight:500;color:#D97706;min-width:36px;text-align:right;}
+</style>
+</head>
+<body>
+<div class="pg">
+
+<!-- NAV -->
+<nav class="nav">
+  <div>
+    <div class="logo-top">atlas consulting</div>
+    <div class="logo-sub">trusted by clients for over 12 years</div>
+  </div>
+  <div class="nav-links">
+    <a href="/Salesforce-Advisory-Services.html">Advisory Services</a>
+    <a href="/Salesforce-Implementation-Services.html">Implementation Services</a>
+    <a href="/Salesforce-Re-implementation-Services.html">Re-implementation Services</a>
+    <a href="/Salesforce-Custom-Development-Services.html">Custom Development Services</a>
+    <a href="/Salesforce-Support.html">Salesforce Support</a>
+    <button class="nav-cta">Contact us</button>
+  </div>
+</nav>
+
+<!-- HERO — based on your existing page, enhanced -->
+<section class="hero">
+  <div>
+    <div class="hero-label">Salesforce Re-implementation</div>
+    <h1>Your Salesforce, rebuilt for where you're going</h1>
+    <p class="hero-desc">Many organisations outgrow their first Salesforce setup — causing inefficiencies, silos, and missed opportunities. A re-implementation realigns Salesforce with your changing business needs, delivering smoother operations, stronger user adoption, and a scalable system — without starting over.</p>
+    <div class="hero-btns">
+      <button class="btn-a">Get a free org audit</button>
+      <button class="btn-b">See our work →</button>
+    </div>
+  </div>
+
+  <!-- BENEFITS PANEL — replaces your circular diagram with a more readable card stack -->
+  <div class="hero-vis">
+    <div style="font-size:11px;font-weight:500;color:#9ca3af;margin-bottom:10px;letter-spacing:0.04em;">Re-implementation benefits</div>
+    <div class="benefit-row highlighted">
+      <div class="ben-icon" style="background:#FEF3C7;"><svg viewBox="0 0 18 18" stroke="#D97706"><polyline points="3,12 7,8 10,11 15,5"/></svg></div>
+      <div><div class="ben-label">Faster operations</div><div class="ben-sub">Eliminate bottlenecks & manual workarounds</div></div>
+    </div>
+    <div class="benefit-row">
+      <div class="ben-icon" style="background:#DBEAFE;"><svg viewBox="0 0 18 18" stroke="#1D4ED8"><circle cx="9" cy="6" r="3"/><path d="M3 16c0-3 2.7-5 6-5s6 2 6 5"/></svg></div>
+      <div><div class="ben-label">Better engagement</div><div class="ben-sub">Teams actually use the platform</div></div>
+    </div>
+    <div class="benefit-row">
+      <div class="ben-icon" style="background:#D1FAE5;"><svg viewBox="0 0 18 18" stroke="#065F46"><rect x="3" y="3" width="12" height="12" rx="2"/><polyline points="6,9 8,11 12,7"/></svg></div>
+      <div><div class="ben-label">Trusted insights</div><div class="ben-sub">Clean data you can rely on</div></div>
+    </div>
+    <div class="benefit-row">
+      <div class="ben-icon" style="background:#EDE9FE;"><svg viewBox="0 0 18 18" stroke="#5B21B6"><circle cx="9" cy="9" r="5"/><line x1="9" y1="5" x2="9" y2="13"/><line x1="5" y1="9" x2="13" y2="9"/></svg></div>
+      <div><div class="ben-label">Less admin work</div><div class="ben-sub">Automation replaces manual tasks</div></div>
+    </div>
+    <div class="benefit-row">
+      <div class="ben-icon" style="background:#FCE7F3;"><svg viewBox="0 0 18 18" stroke="#9D174D"><path d="M9 3l2 4 5 .7-3.5 3.5.8 5L9 14l-4.3 2.2.8-5L2 7.7 7 7z"/></svg></div>
+      <div><div class="ben-label">Growth enabled</div><div class="ben-sub">A scalable platform built for your future</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="met"><div class="met-n">40+</div><div class="met-l">Re-implementations delivered</div></div>
+  <div class="met"><div class="met-n">45%</div><div class="met-l">Avg. adoption improvement</div></div>
+  <div class="met"><div class="met-n">£0</div><div class="met-l">Data loss — guaranteed</div></div>
+  <div class="met"><div class="met-n">98%</div><div class="met-l">Client satisfaction</div></div>
+</div>
+
+<!-- SYMPTOM CHECKLIST — NEW, unique to this page -->
+<section class="sec">
+  <div class="ey">The problem we solve</div>
+  <div class="sec-t">Signs your Salesforce needs a re-implementation</div>
+  <div class="sec-s">If any of these feel familiar, your existing setup may be holding your business back. You're not alone — most organisations hit these walls 2–4 years after their first implementation.</div>
+  <div class="symptom-intro">
+    <div class="symptom-list">
+      <div class="symptom-item">
+        <div class="sym-icon"><svg viewBox="0 0 13 13"><line x1="2" y1="11" x2="11" y2="2"/><line x1="2" y1="2" x2="11" y2="11"/></svg></div>
+        <div class="sym-text"><h4>Workarounds everywhere</h4><p>Your team has built spreadsheet-based processes to compensate for what Salesforce can't do in its current state.</p></div>
+      </div>
+      <div class="symptom-item">
+        <div class="sym-icon"><svg viewBox="0 0 13 13"><line x1="2" y1="11" x2="11" y2="2"/><line x1="2" y1="2" x2="11" y2="11"/></svg></div>
+        <div class="sym-text"><h4>Low user adoption</h4><p>Staff avoid Salesforce and log data inconsistently — or not at all. Leadership has no confidence in the numbers it produces.</p></div>
+      </div>
+      <div class="symptom-item">
+        <div class="sym-icon"><svg viewBox="0 0 13 13"><line x1="2" y1="11" x2="11" y2="2"/><line x1="2" y1="2" x2="11" y2="11"/></svg></div>
+        <div class="sym-text"><h4>Siloed, dirty data</h4><p>Duplicate records, inconsistent fields, and data that can't be trusted for reporting or decision-making.</p></div>
+      </div>
+      <div class="symptom-item">
+        <div class="sym-icon"><svg viewBox="0 0 13 13"><line x1="2" y1="11" x2="11" y2="2"/><line x1="2" y1="2" x2="11" y2="11"/></svg></div>
+        <div class="sym-text"><h4>Business has outgrown the setup</h4><p>New teams, new processes, acquisitions — but Salesforce is still configured for how you worked 3 years ago.</p></div>
+      </div>
+      <div class="symptom-item">
+        <div class="sym-icon"><svg viewBox="0 0 13 13"><line x1="2" y1="11" x2="11" y2="2"/><line x1="2" y1="2" x2="11" y2="11"/></svg></div>
+        <div class="sym-text"><h4>Technical debt building up</h4><p>Legacy automations, broken flows, and unused customisations have made the org fragile and difficult to change.</p></div>
+      </div>
+    </div>
+    <div class="scta-box">
+      <div class="scta-label">Free Salesforce org audit</div>
+      <h3>Not sure if you need a re-implementation?</h3>
+      <p>Our certified consultants will review your current Salesforce environment, identify what's holding you back, and recommend next steps — at no cost and no obligation.</p>
+      <div class="scta-checks">
+        <div class="scta-row"><div class="scta-cb"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Full org health review included</p></div>
+        <div class="scta-row"><div class="scta-cb"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Data quality assessment</p></div>
+        <div class="scta-row"><div class="scta-cb"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Adoption gaps identified</p></div>
+        <div class="scta-row"><div class="scta-cb"><svg viewBox="0 0 8 8"><polyline points="1,4 3.2,6 7,2"/></svg></div><p>Written recommendations provided</p></div>
+      </div>
+      <button class="scta-btn">Book your free org audit →</button>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER COMPARISON — NEW, unique to this page -->
+<section class="sec sec-alt">
+  <div class="ey">The transformation</div>
+  <div class="sec-t">Before re-implementation vs after</div>
+  <div class="sec-s">A re-implementation isn't just a technical fix — it's a business transformation. Here's what organisations typically experience before and after working with Atlas.</div>
+  <div class="compare-grid" style="margin-top:32px;">
+    <div class="compare-col-header before-header">
+      <div class="compare-header-label">Before</div>
+      Current state — what's holding you back
+    </div>
+    <div class="compare-col-header after-header">
+      <div class="compare-header-label">After Atlas re-implementation</div>
+      What your Salesforce looks like at the end
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell before-cell"><div class="cell-dot-red"></div>Teams use spreadsheets alongside Salesforce because the system doesn't fit their process</div>
+      <div class="compare-cell after-cell"><div class="cell-dot-green"></div>Salesforce is the single source of truth — all workflows run inside the platform</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell before-cell"><div class="cell-dot-red"></div>Duplicate records, inconsistent data entry, and no field standards across the org</div>
+      <div class="compare-cell after-cell"><div class="cell-dot-green"></div>Clean, deduplicated data with enforced standards and validation rules throughout</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell before-cell"><div class="cell-dot-red"></div>User adoption is below 50% — staff log in reluctantly and the data can't be trusted</div>
+      <div class="compare-cell after-cell"><div class="cell-dot-green"></div>Adoption above 90% — teams find Salesforce easier than their old workarounds</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell before-cell"><div class="cell-dot-red"></div>Reports take hours to produce manually and leadership still questions the accuracy</div>
+      <div class="compare-cell after-cell"><div class="cell-dot-green"></div>Real-time dashboards give leadership instant visibility into sales, service, and operations</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell before-cell"><div class="cell-dot-red"></div>Every change takes weeks due to legacy automations and technical debt in the org</div>
+      <div class="compare-cell after-cell"><div class="cell-dot-green"></div>A clean, documented org that your admins can confidently maintain and extend</div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY — from your page, significantly enhanced -->
+<section class="sec">
+  <div class="ey">Our approach</div>
+  <div class="sec-t">Re-implementation in seven clear phases</div>
+  <div class="sec-s">Re-implementation is more complex than a fresh start — it requires careful handling of your existing data, configurations, and users. Our proven methodology protects what's valuable while rebuilding what isn't.</div>
+  <div class="method-grid">
+    <div class="mstep"><div class="mstep-c">1</div><h4>Audit</h4><div class="mstep-t">Week 1–2</div><p>Org health check, data quality, config review</p></div>
+    <div class="mstep"><div class="mstep-c">2</div><h4>Plan</h4><div class="mstep-t">Week 3</div><p>Scope definition, risk map, migration plan</p></div>
+    <div class="mstep"><div class="mstep-c">3</div><h4>Cleanse</h4><div class="mstep-t">Week 4–5</div><p>Data deduplication, field standardisation</p></div>
+    <div class="mstep"><div class="mstep-c">4</div><h4>Rebuild</h4><div class="mstep-t">Week 6–10</div><p>New config, automation, process redesign</p></div>
+    <div class="mstep"><div class="mstep-c">5</div><h4>Migrate</h4><div class="mstep-t">Week 11</div><p>Validated data move with rollback plan</p></div>
+    <div class="mstep"><div class="mstep-c">6</div><h4>Train</h4><div class="mstep-t">Week 12</div><p>Role-based retraining & change management</p></div>
+    <div class="mstep"><div class="mstep-c">7</div><h4>Go Live</h4><div class="mstep-t">Week 13+</div><p>Hypercare, monitoring, post-launch support</p></div>
+  </div>
+</section>
+
+<!-- SCOPE BREAKDOWN — from your page, expanded -->
+<section class="sec sec-alt">
+  <div class="ey">What's included</div>
+  <div class="sec-t">How we rebuild your Salesforce for success</div>
+  <div class="sec-s">Every re-implementation engagement covers six core work streams — each designed to leave your Salesforce in a fundamentally better state than before.</div>
+  <div class="scope-grid">
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Assessing your current environment</h3>
+      <p>A detailed evaluation of your existing Salesforce setup to identify gaps, redundancies, and misalignments. The new structure directly addresses inefficiencies while preserving valuable customisations.</p>
+      <div class="scope-tags"><span class="stag">Org audit</span><span class="stag">Gap analysis</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Process realignment for better efficiency</h3>
+      <p>We map your current business processes against how Salesforce is configured and identify where misalignment is causing friction — then redesign flows to match how your teams actually work.</p>
+      <div class="scope-tags"><span class="stag">Process mapping</span><span class="stag">Workflow redesign</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Data optimisation & cleansing</h3>
+      <p>We audit, deduplicate, standardise, and validate your data before migration. You go live with clean records your team can trust from day one.</p>
+      <div class="scope-tags"><span class="stag">Deduplication</span><span class="stag">Data validation</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Maximise what you already own</h3>
+      <p>Many organisations don't realise the full value of their existing Salesforce licences. We identify underused features and activate them as part of the rebuild — at no extra licence cost.</p>
+      <div class="scope-tags"><span class="stag">Licence review</span><span class="stag">Feature activation</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Future-ready foundation</h3>
+      <p>The rebuilt org is documented, scalable, and designed to accommodate your business as it grows — so you don't hit the same walls again in two years.</p>
+      <div class="scope-tags"><span class="stag">Scalable architecture</span><span class="stag">Documentation</span></div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-accent"></div>
+      <h3>Higher user adoption</h3>
+      <p>Change management and role-based retraining ensure your team embraces the new Salesforce with confidence — not resistance. We measure adoption as a project KPI, not an afterthought.</p>
+      <div class="scope-tags"><span class="stag">Change management</span><span class="stag">Retraining</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- RISKS WE PROTECT YOU FROM — NEW -->
+<section class="sec">
+  <div class="ey">Risk management</div>
+  <div class="sec-t">Risks we protect you from</div>
+  <div class="sec-s">Re-implementation carries real risks — data loss, business disruption, and poor adoption are the most common. Every phase of our approach is designed to eliminate them.</div>
+  <div class="risk-grid">
+    <div class="risk-card">
+      <div class="risk-front">
+        <div class="risk-icon"><svg viewBox="0 0 15 15"><ellipse cx="7.5" cy="7.5" rx="5.5" ry="5.5"/><line x1="7.5" y1="4.5" x2="7.5" y2="7.5"/><line x1="7.5" y1="9.5" x2="7.5" y2="10.5"/></svg></div>
+        <h3>Data loss during migration</h3>
+        <p>Moving data between org configurations is the highest-risk moment in a re-implementation. One mistake can be catastrophic and irreversible.</p>
+      </div>
+      <div class="risk-back">
+        <div class="risk-back-label">How Atlas protects you</div>
+        <p>Every migration includes a full pre-migration backup, validation checks at each stage, and a tested rollback plan before we touch production data.</p>
+      </div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-front">
+        <div class="risk-icon"><svg viewBox="0 0 15 15"><rect x="2" y="2" width="11" height="11" rx="1"/><line x1="2" y1="6" x2="13" y2="6"/></svg></div>
+        <h3>Business disruption at go-live</h3>
+        <p>A poorly managed cutover can bring sales, service, and operations to a halt. Some organisations experience outages lasting days or weeks.</p>
+      </div>
+      <div class="risk-back">
+        <div class="risk-back-label">How Atlas protects you</div>
+        <p>We plan cutover to the hour — with phased rollouts, a hypercare period, and dedicated support available immediately post-launch to resolve any issues.</p>
+      </div>
+    </div>
+    <div class="risk-card">
+      <div class="risk-front">
+        <div class="risk-icon"><svg viewBox="0 0 15 15"><circle cx="7.5" cy="5" r="2.5"/><path d="M2.5 14c0-2.8 2.2-5 5-5s5 2.2 5 5"/></svg></div>
+        <h3>Staff reverting to old habits</h3>
+        <p>A technically perfect re-implementation still fails if your team ignores the new system and goes back to spreadsheets within a month of go-live.</p>
+      </div>
+      <div class="risk-back">
+        <div class="risk-back-label">How Atlas protects you</div>
+        <p>Change management and adoption monitoring are built into every engagement. We track adoption KPIs post-launch and intervene if numbers don't improve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES — based on your existing "Engineered for long-term success" section -->
+<section class="sec sec-alt">
+  <div class="ey">What you'll achieve</div>
+  <div class="sec-t">Engineered for long-term Salesforce success</div>
+  <div class="outcomes-split">
+    <div class="out-list">
+      <div class="out-item">
+        <div class="out-num">01</div>
+        <div class="out-t"><h4>Reduce ongoing admin effort</h4><p>With a cleaner structure and more automation, your team spends less time on manual tasks and more time on strategic work that drives business value.</p></div>
+      </div>
+      <div class="out-item">
+        <div class="out-num">02</div>
+        <div class="out-t"><h4>Future-ready foundation</h4><p>A documented, scalable Salesforce org that your admins can maintain confidently — and that grows with your business without requiring another rebuild.</p></div>
+      </div>
+      <div class="out-item">
+        <div class="out-num">03</div>
+        <div class="out-t"><h4>Higher user adoption</h4><p>When Salesforce fits how your team works, they use it. Adoption above 90% is our benchmark — not 50% which most organisations accept as normal.</p></div>
+      </div>
+      <div class="out-item">
+        <div class="out-num">04</div>
+        <div class="out-t"><h4>Stronger return on investment</h4><p>Realise the full value of your Salesforce licences — most clients find they've been paying for features they weren't using because the org wasn't set up correctly.</p></div>
+      </div>
+    </div>
+    <div class="out-visual">
+      <div class="ov-title">Typical client improvements post re-implementation</div>
+      <div class="ov-row">
+        <div class="ov-label">User adoption rate</div>
+        <div class="ov-right"><div class="ov-bar-wrap"><div class="ov-bar" style="width:90%;background:#F59E0B;"></div></div><div class="ov-pct">+90%</div></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-label">Data quality score</div>
+        <div class="ov-right"><div class="ov-bar-wrap"><div class="ov-bar" style="width:80%;background:#F59E0B;"></div></div><div class="ov-pct">+80%</div></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-label">Admin time saved</div>
+        <div class="ov-right"><div class="ov-bar-wrap"><div class="ov-bar" style="width:65%;background:#F59E0B;"></div></div><div class="ov-pct">-65%</div></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-label">Report accuracy</div>
+        <div class="ov-right"><div class="ov-bar-wrap"><div class="ov-bar" style="width:95%;background:#F59E0B;"></div></div><div class="ov-pct">+95%</div></div>
+      </div>
+      <div class="ov-row">
+        <div class="ov-label">Licence utilisation</div>
+        <div class="ov-right"><div class="ov-bar-wrap"><div class="ov-bar" style="width:70%;background:#F59E0B;"></div></div><div class="ov-pct">+70%</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDIES — NEW -->
+<section class="sec">
+  <div class="ey">Client stories</div>
+  <div class="sec-t">Re-implementation outcomes in the real world</div>
+  <div class="case-grid">
+    <div class="ccase">
+      <div class="cch">
+        <div class="cch-i">Manufacturing</div>
+        <h3>Re-implementing a 5-year-old Sales Cloud org with 40,000 duplicate records and broken automations</h3>
+      </div>
+      <div class="ccb">
+        <div class="cc-meta">
+          <div class="ccf"><label>Before state</label><p>23% user adoption, 40k duplicate records, 60+ broken automations, no reporting confidence</p></div>
+          <div class="ccf"><label>What we did</label><p>Full org audit, data cleanse, process redesign, retraining programme, phased go-live</p></div>
+        </div>
+        <div class="ccs"><div class="ccs-n">91%</div><div class="ccs-t">User adoption achieved within 60 days of re-launch — up from 23%</div></div>
+      </div>
+    </div>
+    <div class="ccase">
+      <div class="cch">
+        <div class="cch-i">Financial Services</div>
+        <h3>Post-acquisition Salesforce consolidation — merging two orgs into one clean platform</h3>
+      </div>
+      <div class="ccb">
+        <div class="cc-meta">
+          <div class="ccf"><label>Before state</label><p>Two separate Salesforce orgs post-acquisition, incompatible data models, two sets of users</p></div>
+          <div class="ccf"><label>What we did</label><p>Org consolidation strategy, unified data model, change management across both teams</p></div>
+        </div>
+        <div class="ccs"><div class="ccs-n">£320k</div><div class="ccs-t">Estimated annual savings from licence consolidation and reduced admin overhead</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec sec-alt">
+  <div class="ey">What our clients say</div>
+  <div class="sec-t">Trusted by teams across the UK & Australia</div>
+  <div class="tg">
+    <div class="tc">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="tq">"We were nervous about disrupting the business during the re-implementation. Atlas managed the entire process so smoothly that our team barely noticed the transition — and the end result was transformational."</p>
+      <div class="tau"><div class="tav" style="background:#DBEAFE;color:#1D4ED8;">KP</div><div><div class="tn">Kate P.</div><div class="tr">Head of Operations, Manufacturing</div></div></div>
+    </div>
+    <div class="tc">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="tq">"Our old org had 5 years of technical debt. Atlas audited it in week one, told us exactly what to keep and what to rebuild — and the final product was everything our original implementation should have been."</p>
+      <div class="tau"><div class="tav" style="background:#D1FAE5;color:#065F46;">MT</div><div><div class="tn">Marcus T.</div><div class="tr">CTO, FinServ Group</div></div></div>
+    </div>
+    <div class="tc">
+      <div class="stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="tq">"Our adoption went from below 30% to over 90% in two months. The change management programme Atlas ran alongside the rebuild made the difference — staff genuinely wanted to use the new system."</p>
+      <div class="tau"><div class="tav" style="background:#EDE9FE;color:#5B21B6;">LW</div><div><div class="tn">Laura W.</div><div class="tr">VP People, Retail Group</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="sec">
+  <div class="ey">Meet your team</div>
+  <div class="sec-t">The people who rebuild your Salesforce</div>
+  <div class="team-g">
+    <div class="tmc">
+      <div class="tma" style="background:#DBEAFE;color:#1D4ED8;">NB</div>
+      <div class="tmn">Natalie Byrne</div>
+      <div class="tmr">Re-implementation Lead</div>
+      <div class="certs"><span class="cert">Sales Cloud</span><span class="cert">Service Cloud</span><span class="cert">Data Migration</span></div>
+    </div>
+    <div class="tmc">
+      <div class="tma" style="background:#D1FAE5;color:#065F46;">JO</div>
+      <div class="tmn">James O'Brien</div>
+      <div class="tmr">Solutions Architect</div>
+      <div class="certs"><span class="cert">Platform Architect</span><span class="cert">Integration</span></div>
+    </div>
+    <div class="tmc">
+      <div class="tma" style="background:#FEF3C7;color:#B45309;">CM</div>
+      <div class="tmn">Clara Mills</div>
+      <div class="tmr">Change & Adoption Lead</div>
+      <div class="certs"><span class="cert">Change Management</span><span class="cert">Training</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- INDUSTRIES + PARTNER STRIP — kept from your page -->
+<section class="sec sec-alt">
+  <div class="ey">Trusted by businesses across industry sectors</div>
+  <div class="sec-t">Sector expertise across every re-implementation</div>
+  <div class="ind-g">
+    <div class="ic"><div class="id" style="background:#DBEAFE;"></div><p>Financial Services</p></div>
+    <div class="ic"><div class="id" style="background:#D1FAE5;"></div><p>Retail & eCommerce</p></div>
+    <div class="ic"><div class="id" style="background:#EDE9FE;"></div><p>Healthcare</p></div>
+    <div class="ic"><div class="id" style="background:#FEF3C7;"></div><p>Manufacturing</p></div>
+    <div class="ic"><div class="id" style="background:#FCE7F3;"></div><p>Professional Services</p></div>
+    <div class="ic"><div class="id" style="background:#D1FAE5;"></div><p>Not-for-Profit</p></div>
+    <div class="ic"><div class="id" style="background:#DBEAFE;"></div><p>Technology</p></div>
+    <div class="ic"><div class="id" style="background:#FEE2E2;"></div><p>Property & Real Estate</p></div>
+  </div>
+  <div class="pstrip">
+    <div class="pb">
+      <div class="pbi"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+      <div class="pbl">Salesforce<br>Summit Partner</div>
+    </div>
+    <div class="pdiv"></div>
+    <div class="ps"><div class="ps-n">160+</div><div class="ps-l">Certifications held</div></div>
+    <div class="pdiv"></div>
+    <div class="ps"><div class="ps-n">12 yrs</div><div class="ps-l">As a Salesforce partner</div></div>
+    <div class="pdiv"></div>
+    <div class="lpills">
+      <div class="lp">accan</div>
+      <div class="lp">AVIS Australia</div>
+      <div class="lp">Blue Harvest</div>
+    </div>
+  </div>
+</section>
+
+<!-- FREE ORG AUDIT CTA — NEW, unique to this page -->
+<div class="cta-wrap">
+  <div class="cta-box">
+    <div>
+      <div class="cta-ey">Free Salesforce org audit</div>
+      <h2>Let us look under the hood — for free</h2>
+      <p>Not sure whether you need a re-implementation or just some optimisation? Our certified consultants will review your existing Salesforce org, identify what's broken, and give you an honest recommendation — at no cost and no commitment.</p>
+      <div class="cta-btns">
+        <button class="cta-ba">Book your free org audit</button>
+        <button class="cta-bb">Download our re-implementation guide →</button>
+      </div>
+    </div>
+    <div class="audit-preview">
+      <div class="ap-title">What we assess in your free audit</div>
+      <div class="ap-row">
+        <div class="ap-label">Data quality & duplicates</div>
+        <div class="ap-bar-wrap"><div class="ap-score">Scored</div></div>
+      </div>
+      <div class="ap-row">
+        <div class="ap-label">User adoption rate</div>
+        <div class="ap-bar-wrap"><div class="ap-score">Measured</div></div>
+      </div>
+      <div class="ap-row">
+        <div class="ap-label">Automation health</div>
+        <div class="ap-bar-wrap"><div class="ap-score">Reviewed</div></div>
+      </div>
+      <div class="ap-row">
+        <div class="ap-label">Licence utilisation</div>
+        <div class="ap-bar-wrap"><div class="ap-score">Analysed</div></div>
+      </div>
+      <div class="ap-row">
+        <div class="ap-label">Technical debt level</div>
+        <div class="ap-bar-wrap"><div class="ap-score">Identified</div></div>
+      </div>
+      <div class="ap-row">
+        <div class="ap-label">Security & compliance gaps</div>
+        <div class="ap-bar-wrap"><div class="ap-score">Flagged</div></div>
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:12px;">Written report delivered within 5 business days</div>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED SERVICES -->
+<section class="sec">
+  <div class="ey">Related services</div>
+  <div class="sec-t">The full journey with Atlas</div>
+  <div class="rel-g">
+    <div class="rc"><div class="ra"></div><h4>Advisory Services</h4><p>Need strategic guidance before deciding on re-implementation? Our advisory team will map your current state and recommend the right path forward.</p><div class="rl">Learn more →</div></div>
+    <div class="rc"><div class="ra"></div><h4>Custom Development</h4><p>Once rebuilt, need bespoke functionality your out-of-the-box config can't deliver? Our developers build tailored components and integrations.</p><div class="rl">Learn more →</div></div>
+    <div class="rc"><div class="ra"></div><h4>Salesforce Support</h4><p>After re-implementation, our managed support team keeps your rebuilt platform running at its best — monitoring, optimising, and supporting your users.</p><div class="rl">Learn more →</div></div>
+  </div>
+</section>
+
+<!-- BLOG — kept from your page, enhanced -->
+<section class="sec sec-alt">
+  <div class="ey">Insights & best practices</div>
+  <div class="sec-t">Re-implementation insights & best practices</div>
+  <div class="bl-g">
+    <div class="blc">
+      <div class="blt" style="background:#FEF3C7;"></div>
+      <div class="bltg"><span class="btg">Re-implementation</span></div>
+      <h4>When is it time to re-implement Salesforce? Signs you shouldn't ignore</h4>
+      <p>Salesforce is powerful, but over time even the best setup can start slowing your team down. Here are the warning signs that matter...</p>
+    </div>
+    <div class="blc">
+      <div class="blt" style="background:#DBEAFE;"></div>
+      <div class="bltg"><span class="btg">Data</span></div>
+      <h4>The role of clean data in a successful Salesforce transformation</h4>
+      <p>A successful Salesforce transformation starts with clean, accurate data. Without it, even the most sophisticated setup will fail to deliver value...</p>
+    </div>
+    <div class="blc">
+      <div class="blt" style="background:#D1FAE5;"></div>
+      <div class="bltg"><span class="btg">Strategy</span></div>
+      <h4>Top 5 benefits of Salesforce re-implementation over starting fresh</h4>
+      <p>Many organisations struggle with outdated or poorly configured setups. Should you start fresh or re-implement? The answer may surprise you...</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQS — kept from your page, enhanced -->
+<section class="sec" style="background:#F8FAFC;">
+  <div class="ey">FAQs</div>
+  <div class="sec-t">Salesforce Re-implementation FAQs</div>
+  <div class="faq-l">
+    <div class="fq">
+      <div class="fqq">What is Salesforce re-implementation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div>
+      <div class="fqa">Salesforce re-implementation is the process of rebuilding and reconfiguring your existing Salesforce environment to better align with your current business needs — without starting from scratch. It involves auditing your existing setup, cleansing your data, redesigning processes, and retraining your team on the improved platform.</div>
+    </div>
+    <div class="fq"><div class="fqq">How do I know if my business needs re-implementation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Can Salesforce re-implementation support future scaling? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Will I lose my existing data and configurations? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">How does re-implementation improve user adoption? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">Is Salesforce re-implementation disruptive to business operations? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">How long does a re-implementation typically take? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+    <div class="fq"><div class="fqq">What's the difference between re-implementation and optimisation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="ft">
+  <div class="ft-top">
+    <div>
+      <div class="ft-logo">atlas consulting</div>
+      <div class="ft-tag">trusted by clients for over 12 years</div>
+    </div>
+    <div class="ft-col">
+      <h5>Salesforce Clouds</h5>
+      <a href="#">Sales Cloud</a>
+      <a href="#">Service Cloud</a>
+      <a href="#">Marketing Cloud</a>
+      <a href="#">Experience Cloud</a>
+    </div>
+    <div class="ft-col">
+      <h5>Services</h5>
+      <a href="#">Advisory Services</a>
+      <a href="#">Implementation</a>
+      <a href="#">Re-implementation</a>
+      <a href="#">Custom Development</a>
+      <a href="#">Support</a>
+      <a href="#">Integration</a>
+    </div>
+    <div class="ft-col">
+      <h5>Industries</h5>
+      <a href="#">Financial Services</a>
+      <a href="#">Retail</a>
+      <a href="#">Healthcare</a>
+      <a href="#">Manufacturing</a>
+      <a href="#">Technology</a>
+    </div>
+    <div class="ft-col">
+      <h5>Solutions</h5>
+      <a href="#">Payments on Salesforce</a>
+      <a href="#">Sales & Marketing</a>
+      <a href="#">Data & Analytics</a>
+      <a href="#">AI & Automation</a>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <p>© 2025 Atlas Consulting. All rights reserved.</p>
+    <p>Privacy · Terms · Contact</p>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>

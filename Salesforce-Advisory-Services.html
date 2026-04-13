@@ -1,0 +1,561 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--color-background-primary);color:var(--color-text-primary);}
+.page{max-width:900px;margin:0 auto;}
+
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:500;color:var(--color-text-primary);}
+.nav-logo span{color:#1D9E75;}
+.nav-links{display:flex;gap:24px;align-items:center;}
+.nav-links a{font-size:12px;color:var(--color-text-secondary);text-decoration:none;}
+.nav-cta{background:#042C53;color:#E6F1FB;font-size:12px;font-weight:500;padding:7px 16px;border-radius:6px;border:none;cursor:pointer;}
+
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:64px 32px 56px;}
+.hero-eyebrow{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#1D9E75;margin-bottom:14px;}
+.hero h1{font-family:'Fraunces',serif;font-size:42px;font-weight:500;line-height:1.15;color:var(--color-text-primary);margin-bottom:18px;}
+.hero-desc{font-size:14px;color:var(--color-text-secondary);line-height:1.75;margin-bottom:28px;max-width:380px;}
+.hero-actions{display:flex;gap:10px;align-items:center;}
+.btn-primary{background:#042C53;color:#E6F1FB;font-size:13px;font-weight:500;padding:11px 22px;border-radius:8px;border:none;cursor:pointer;}
+.btn-secondary{font-size:13px;color:var(--color-text-secondary);text-decoration:none;display:flex;align-items:center;gap:5px;}
+.hero-visual{background:#F1EFE8;border-radius:16px;height:320px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:20px;width:100%;}
+.hero-card{background:var(--color-background-primary);border-radius:10px;padding:14px;border:0.5px solid var(--color-border-tertiary);}
+.hero-card-label{font-size:10px;color:var(--color-text-secondary);margin-bottom:8px;}
+.hero-bar{height:5px;border-radius:3px;background:#E1F5EE;margin-bottom:4px;}
+.hero-bar-fill{height:5px;border-radius:3px;background:#1D9E75;}
+
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--color-border-tertiary);border-top:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);}
+.metric{background:var(--color-background-primary);padding:28px 24px;text-align:center;}
+.metric-num{font-family:'Fraunces',serif;font-size:32px;font-weight:500;color:#042C53;line-height:1;}
+.metric-label{font-size:12px;color:var(--color-text-secondary);margin-top:4px;}
+
+.section{padding:64px 32px;}
+.section-alt{background:var(--color-background-secondary);}
+.section-eyebrow{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#1D9E75;margin-bottom:10px;}
+.section-title{font-family:'Fraunces',serif;font-size:30px;font-weight:500;line-height:1.2;color:var(--color-text-primary);margin-bottom:12px;}
+.section-sub{font-size:14px;color:var(--color-text-secondary);line-height:1.7;max-width:520px;}
+
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;}
+.prob-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:24px;}
+.prob-icon{width:36px;height:36px;border-radius:8px;background:#E1F5EE;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.prob-icon svg{width:18px;height:18px;stroke:#1D9E75;fill:none;stroke-width:1.5;}
+.prob-card h3{font-size:14px;font-weight:500;margin-bottom:6px;color:var(--color-text-primary);}
+.prob-card p{font-size:12px;color:var(--color-text-secondary);line-height:1.65;}
+
+.method-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:40px;position:relative;}
+.method-steps::after{content:'';position:absolute;top:20px;left:10%;right:10%;height:1px;background:var(--color-border-secondary);z-index:0;}
+.step{text-align:center;position:relative;z-index:1;}
+.step-circle{width:40px;height:40px;border-radius:50%;background:#042C53;color:#E6F1FB;font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+.step h4{font-size:13px;font-weight:500;margin-bottom:5px;color:var(--color-text-primary);}
+.step p{font-size:11px;color:var(--color-text-secondary);line-height:1.6;padding:0 8px;}
+
+.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px;}
+.svc-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:24px;display:flex;gap:16px;}
+.svc-accent{width:3px;border-radius:2px;background:#1D9E75;flex-shrink:0;}
+.svc-body h3{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;}
+.svc-body p{font-size:12px;color:var(--color-text-secondary);line-height:1.65;margin-bottom:10px;}
+.svc-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.svc-tag{font-size:10px;background:#E1F5EE;color:#0F6E56;padding:2px 8px;border-radius:4px;}
+
+.outcomes-split{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-top:40px;}
+.outcomes-list{display:flex;flex-direction:column;gap:14px;}
+.outcome-item{display:flex;gap:12px;align-items:flex-start;}
+.outcome-check{width:20px;height:20px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.outcome-check svg{width:10px;height:10px;stroke:#1D9E75;fill:none;stroke-width:2.5;}
+.outcome-text h4{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px;}
+.outcome-text p{font-size:12px;color:var(--color-text-secondary);line-height:1.55;}
+.outcome-visual{background:#F1EFE8;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:12px;}
+.ov-row{display:flex;justify-content:space-between;align-items:center;}
+.ov-label{font-size:11px;color:var(--color-text-secondary);}
+.ov-bar-wrap{flex:1;margin:0 12px;height:6px;background:var(--color-border-tertiary);border-radius:3px;}
+.ov-bar{height:6px;border-radius:3px;background:#1D9E75;}
+.ov-pct{font-size:11px;font-weight:500;color:#0F6E56;}
+
+.testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;}
+.testi-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:22px;}
+.testi-stars{display:flex;gap:3px;margin-bottom:12px;}
+.star{width:12px;height:12px;background:#BA7517;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.testi-quote{font-size:12px;color:var(--color-text-secondary);line-height:1.7;font-style:italic;margin-bottom:14px;}
+.testi-author{display:flex;align-items:center;gap:10px;}
+.testi-avatar{width:32px;height:32px;border-radius:50%;background:#B5D4F4;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#0C447C;flex-shrink:0;}
+.testi-name{font-size:12px;font-weight:500;color:var(--color-text-primary);}
+.testi-role{font-size:11px;color:var(--color-text-secondary);}
+
+.case-studies{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px;}
+.case-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;overflow:hidden;}
+.case-header{background:#042C53;padding:20px 22px;}
+.case-industry{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:#9FE1CB;margin-bottom:4px;}
+.case-header h3{font-size:14px;font-weight:500;color:#E6F1FB;line-height:1.4;}
+.case-body{padding:20px 22px;}
+.case-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.case-field label{font-size:10px;color:var(--color-text-secondary);display:block;margin-bottom:3px;}
+.case-field p{font-size:12px;color:var(--color-text-primary);line-height:1.5;}
+.case-result{background:#E1F5EE;border-radius:8px;padding:12px;display:flex;gap:10px;align-items:center;}
+.case-stat{font-family:'Fraunces',serif;font-size:24px;font-weight:500;color:#0F6E56;}
+.case-stat-label{font-size:11px;color:#085041;line-height:1.4;}
+
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;}
+.team-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;padding:22px;text-align:center;}
+.team-avatar{width:56px;height:56px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:500;}
+.team-card h3{font-size:14px;font-weight:500;margin-bottom:2px;}
+.team-card .role{font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;}
+.cert-badges{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;}
+.cert{font-size:10px;background:#E6F1FB;color:#185FA5;padding:2px 7px;border-radius:4px;}
+
+.industries{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:32px;}
+.ind-tile{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:16px;text-align:center;}
+.ind-icon{width:32px;height:32px;border-radius:8px;margin:0 auto 8px;}
+.ind-tile p{font-size:12px;color:var(--color-text-secondary);}
+
+.partner-bar{display:flex;align-items:center;justify-content:center;gap:32px;padding:32px;border-top:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);margin-top:40px;flex-wrap:wrap;}
+.partner-badge{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.partner-badge-icon{width:44px;height:44px;border-radius:10px;background:#042C53;display:flex;align-items:center;justify-content:center;}
+.partner-badge-icon svg{width:22px;height:22px;fill:#9FE1CB;}
+.partner-badge span{font-size:11px;color:var(--color-text-secondary);text-align:center;}
+
+.logos-row{display:flex;align-items:center;justify-content:center;gap:36px;margin-top:32px;flex-wrap:wrap;}
+.logo-pill{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px 22px;font-size:13px;font-weight:500;color:var(--color-text-secondary);}
+
+.cta-section{background:#042C53;border-radius:16px;padding:48px;text-align:center;margin:0 32px 64px;}
+.cta-eyebrow{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#9FE1CB;margin-bottom:12px;}
+.cta-section h2{font-family:'Fraunces',serif;font-size:28px;font-weight:500;color:#E6F1FB;margin-bottom:10px;}
+.cta-section p{font-size:14px;color:#85B7EB;margin-bottom:28px;line-height:1.65;}
+.cta-actions{display:flex;gap:12px;justify-content:center;}
+.cta-btn-main{background:#1D9E75;color:#fff;font-size:13px;font-weight:500;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;}
+.cta-btn-sec{background:transparent;color:#85B7EB;font-size:13px;padding:12px 24px;border-radius:8px;border:0.5px solid #185FA5;cursor:pointer;}
+
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;}
+.blog-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:12px;overflow:hidden;}
+.blog-thumb{height:80px;background:#E1F5EE;display:flex;align-items:center;justify-content:center;}
+.blog-tag-bar{display:flex;gap:6px;padding:14px 16px 0;}
+.blog-tag{font-size:10px;background:#E6F1FB;color:#185FA5;padding:2px 7px;border-radius:4px;}
+.blog-card h4{font-size:13px;font-weight:500;padding:8px 16px;line-height:1.45;color:var(--color-text-primary);}
+.blog-card p{font-size:11px;color:var(--color-text-secondary);padding:0 16px 14px;line-height:1.55;}
+
+.faq-list{margin-top:32px;display:flex;flex-direction:column;gap:0;}
+.faq-item{border-bottom:0.5px solid var(--color-border-tertiary);padding:16px 0;}
+.faq-q{font-size:14px;font-weight:500;color:var(--color-text-primary);display:flex;justify-content:space-between;align-items:center;}
+.faq-q svg{width:14px;height:14px;stroke:var(--color-text-secondary);fill:none;stroke-width:2;flex-shrink:0;}
+.faq-a{font-size:12px;color:var(--color-text-secondary);line-height:1.7;margin-top:10px;max-width:680px;}
+
+.footer-bar{background:var(--color-background-secondary);padding:24px 32px;display:flex;justify-content:space-between;align-items:center;border-top:0.5px solid var(--color-border-tertiary);}
+.footer-bar p{font-size:12px;color:var(--color-text-secondary);}
+.footer-links{display:flex;gap:20px;}
+.footer-links a{font-size:12px;color:var(--color-text-secondary);text-decoration:none;}
+</style>
+
+<h2 class="sr-only">Advisory Services page mockup for Atlas Consulting</h2>
+
+<div class="page">
+
+<nav class="nav">
+  <div class="nav-logo">atlas<span>.</span>consulting</div>
+  <div class="nav-links">
+    <a href="/Salesforce-Advisory-Services.html">Advisory Services</a>
+    <a href="/Salesforce-Implementation-Services.html">Implementation Services</a>
+    <a href="/Salesforce-Re-implementation-Services.html">Re-implementation Services</a>
+    <a href="/Salesforce-Custom-Development-Services.html">Custom Development Services</a>
+    <a href="/Salesforce-Support.html">Salesforce Support</a>
+    <button class="nav-cta">Contact us</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">Advisory Services</div>
+    <h1>Your Salesforce, strategically guided</h1>
+    <p class="hero-desc">We give you expert guidance to handle challenges, find new opportunities, and reach your business goals — with clear insights that drive efficiency, compliance, and long-term growth.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Book a free consultation</button>
+      <a href="#" class="btn-secondary">See our work <span>→</span></a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-grid">
+      <div class="hero-card">
+        <div class="hero-card-label">Progress overview</div>
+        <div class="hero-bar"><div class="hero-bar-fill" style="width:75%"></div></div>
+        <div class="hero-bar"><div class="hero-bar-fill" style="width:55%"></div></div>
+        <div class="hero-bar"><div class="hero-bar-fill" style="width:88%"></div></div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Performance metrics</div>
+        <div style="display:flex;gap:6px;align-items:flex-end;height:40px;margin-top:4px;">
+          <div style="flex:1;background:#E1F5EE;height:60%;border-radius:2px 2px 0 0;"></div>
+          <div style="flex:1;background:#1D9E75;height:80%;border-radius:2px 2px 0 0;"></div>
+          <div style="flex:1;background:#E1F5EE;height:45%;border-radius:2px 2px 0 0;"></div>
+          <div style="flex:1;background:#1D9E75;height:95%;border-radius:2px 2px 0 0;"></div>
+          <div style="flex:1;background:#9FE1CB;height:70%;border-radius:2px 2px 0 0;"></div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Compliance status</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+          <div style="width:36px;height:36px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#1D9E75" stroke-width="2"><polyline points="3,8 6,11 13,5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:500;color:var(--color-text-primary);">All checks passed</div>
+            <div style="font-size:10px;color:var(--color-text-secondary);">Last reviewed today</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-label">Growth forecast</div>
+        <div style="display:flex;align-items:flex-end;gap:2px;height:40px;margin-top:4px;">
+          <div style="flex:1;background:#E1F5EE;height:30%;border-radius:2px 2px 0 0;"></div>
+          <div style="flex:1;background:#E1F5EE;height:40%;border-radius:2px 2px 0 0;"></div>
+          <div style="flex:1;background:#9FE1CB;height:55%;border-radius:2px 2px 0 0;"></div>
+          <div style="flex:1;background:#5DCAA5;height:70%;border-radius:2px 2px 0 0;"></div>
+          <div style="flex:1;background:#1D9E75;height:90%;border-radius:2px 2px 0 0;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="metrics">
+  <div class="metric"><div class="metric-num">120+</div><div class="metric-label">Advisory engagements</div></div>
+  <div class="metric"><div class="metric-num">£40M+</div><div class="metric-label">Client ROI generated</div></div>
+  <div class="metric"><div class="metric-num">15+</div><div class="metric-label">Industries served</div></div>
+  <div class="metric"><div class="metric-num">98%</div><div class="metric-label">Client satisfaction</div></div>
+</div>
+
+<section class="section">
+  <div class="section-eyebrow">The problem we solve</div>
+  <div class="section-title">Why businesses need advisory</div>
+  <div class="section-sub">Most organisations invest in Salesforce but don't get the value they expected. These are the pain points we solve every day.</div>
+  <div class="problem-grid">
+    <div class="prob-card">
+      <div class="prob-icon">
+        <svg viewBox="0 0 18 18"><circle cx="9" cy="9" r="7"/><line x1="9" y1="5" x2="9" y2="9"/><line x1="9" y1="12" x2="9" y2="13"/></svg>
+      </div>
+      <h3>No clear Salesforce strategy</h3>
+      <p>Salesforce was implemented but there's no roadmap. Teams use it differently, data is inconsistent, and leadership can't see what's working.</p>
+    </div>
+    <div class="prob-card">
+      <div class="prob-icon">
+        <svg viewBox="0 0 18 18"><rect x="2" y="2" width="14" height="14" rx="2"/><line x1="6" y1="9" x2="12" y2="9"/><line x1="9" y1="6" x2="9" y2="12"/></svg>
+      </div>
+      <h3>Wasted Salesforce spend</h3>
+      <p>Licences are underused, automation isn't configured, and the platform isn't aligned to how your business actually operates — money is being left on the table.</p>
+    </div>
+    <div class="prob-card">
+      <div class="prob-icon">
+        <svg viewBox="0 0 18 18"><path d="M9 2L2 7v9h5v-4h4v4h5V7z"/></svg>
+      </div>
+      <h3>Poor user adoption</h3>
+      <p>Staff avoid using the platform, workarounds are everywhere, and without proper guidance your team can't adopt Salesforce confidently in their daily workflows.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="section-eyebrow">Our approach</div>
+  <div class="section-title">Advisory in four clear steps</div>
+  <div class="section-sub">A structured process that turns ambiguity into a clear, actionable Salesforce strategy — built around your business goals.</div>
+  <div class="method-steps">
+    <div class="step">
+      <div class="step-circle">1</div>
+      <h4>Assess</h4>
+      <p>We audit your current Salesforce environment, processes, and team maturity.</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">2</div>
+      <h4>Strategise</h4>
+      <p>We map out a tailored strategy aligned to your business goals and growth plans.</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">3</div>
+      <h4>Roadmap</h4>
+      <p>You get a prioritised, executable roadmap with quick wins and long-term milestones.</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">4</div>
+      <h4>Review</h4>
+      <p>We stay alongside you with regular reviews and strategic guidance as your business evolves.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-eyebrow">What's included</div>
+  <div class="section-title">Our advisory service areas</div>
+  <div class="services-grid">
+    <div class="svc-card">
+      <div class="svc-accent"></div>
+      <div class="svc-body">
+        <h3>Tailored digital roadmaps</h3>
+        <p>We design a Salesforce strategy that identifies opportunities for growth, initiatives, and a clear roadmap that enables measurable outcomes and sustainable growth.</p>
+        <div class="svc-tags"><span class="svc-tag">Process design</span><span class="svc-tag">Workflow optimisation</span></div>
+      </div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-accent"></div>
+      <div class="svc-body">
+        <h3>Technology & platform assessment</h3>
+        <p>We evaluate your existing technology stack, identify redundancies, and recommend the right Salesforce products aligned to your current and future needs.</p>
+        <div class="svc-tags"><span class="svc-tag">Platform review</span><span class="svc-tag">Licence optimisation</span></div>
+      </div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-accent"></div>
+      <div class="svc-body">
+        <h3>Change management & user adoption</h3>
+        <p>A digital transformation only succeeds when your people embrace it. We provide guidance, training, and adoption strategies so your team uses Salesforce every day with confidence.</p>
+        <div class="svc-tags"><span class="svc-tag">Training</span><span class="svc-tag">Adoption strategy</span></div>
+      </div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-accent"></div>
+      <div class="svc-body">
+        <h3>Risk mitigation & compliance</h3>
+        <p>We identify vulnerabilities in your Salesforce setup, ensure data governance is in place, and help you stay compliant with industry regulations and best practices.</p>
+        <div class="svc-tags"><span class="svc-tag">Data governance</span><span class="svc-tag">Risk review</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="section-eyebrow">What you'll achieve</div>
+  <div class="section-title">Measurable outcomes from day one</div>
+  <div class="outcomes-split">
+    <div class="outcomes-list">
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div>
+        <div class="outcome-text">
+          <h4>Stronger ROI on your Salesforce investment</h4>
+          <p>Realise more value from your existing licences and configuration — without additional spend.</p>
+        </div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div>
+        <div class="outcome-text">
+          <h4>Improved pipeline visibility</h4>
+          <p>Your leadership team gets clear, real-time insights across sales, service, and operations.</p>
+        </div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div>
+        <div class="outcome-text">
+          <h4>Reduced operational inefficiency</h4>
+          <p>Eliminate workarounds and manual processes — your team works faster with less friction.</p>
+        </div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div>
+        <div class="outcome-text">
+          <h4>A scalable platform, built for growth</h4>
+          <p>Your Salesforce grows with you — not against you — as your business evolves.</p>
+        </div>
+      </div>
+    </div>
+    <div class="outcome-visual">
+      <div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px;">Typical client improvements</div>
+      <div class="ov-row" style="margin-bottom:8px;"><span class="ov-label">User adoption</span><div class="ov-bar-wrap"><div class="ov-bar" style="width:85%"></div></div><span class="ov-pct">+85%</span></div>
+      <div class="ov-row" style="margin-bottom:8px;"><span class="ov-label">Process efficiency</span><div class="ov-bar-wrap"><div class="ov-bar" style="width:60%"></div></div><span class="ov-pct">+60%</span></div>
+      <div class="ov-row" style="margin-bottom:8px;"><span class="ov-label">Licence utilisation</span><div class="ov-bar-wrap"><div class="ov-bar" style="width:72%"></div></div><span class="ov-pct">+72%</span></div>
+      <div class="ov-row"><span class="ov-label">Reporting accuracy</span><div class="ov-bar-wrap"><div class="ov-bar" style="width:90%"></div></div><span class="ov-pct">+90%</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-eyebrow">Client stories</div>
+  <div class="section-title">Advisory outcomes in the real world</div>
+  <div class="case-studies">
+    <div class="case-card">
+      <div class="case-header">
+        <div class="case-industry">Financial services</div>
+        <h3>Transforming a fragmented Salesforce org into a single source of truth</h3>
+      </div>
+      <div class="case-body">
+        <div class="case-row">
+          <div class="case-field"><label>Challenge</label><p>3 teams using Salesforce differently, no visibility across the business</p></div>
+          <div class="case-field"><label>Solution</label><p>Full advisory engagement — strategy, roadmap, and change management</p></div>
+        </div>
+        <div class="case-result">
+          <div class="case-stat">35%</div>
+          <div class="case-stat-label">Reduction in manual reporting time within 90 days of engagement</div>
+        </div>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-header">
+        <div class="case-industry">Retail</div>
+        <h3>Rescuing a Salesforce investment that was delivering no measurable ROI</h3>
+      </div>
+      <div class="case-body">
+        <div class="case-row">
+          <div class="case-field"><label>Challenge</label><p>Low adoption, unused licences, and leadership had no confidence in the data</p></div>
+          <div class="case-field"><label>Solution</label><p>Advisory assessment, licence audit, user adoption programme</p></div>
+        </div>
+        <div class="case-result">
+          <div class="case-stat">£280k</div>
+          <div class="case-stat-label">Annual licence savings identified and reallocated in year one</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="section-eyebrow">What our clients say</div>
+  <div class="section-title">Trusted by teams across the UK</div>
+  <div class="testimonials">
+    <div class="testi-card">
+      <div class="testi-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="testi-quote">"Atlas gave us the strategic clarity we'd been missing for two years. Within weeks we had a roadmap we could actually act on."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">JH</div>
+        <div><div class="testi-name">James H.</div><div class="testi-role">CTO, FinServ firm</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="testi-quote">"Their advisory team didn't just recommend — they got into the detail with us. Our Salesforce adoption went from 40% to over 90% in four months."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#E1F5EE;color:#085041;">SR</div>
+        <div><div class="testi-name">Sarah R.</div><div class="testi-role">VP Operations, Retail</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div>
+      <p class="testi-quote">"We were wasting over £200k a year on licences we didn't need. Atlas found that in week one. The ROI on the advisory engagement paid for itself immediately."</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#EEEDFE;color:#3C3489;">DK</div>
+        <div><div class="testi-name">David K.</div><div class="testi-role">CFO, Manufacturing</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-eyebrow">Meet your advisors</div>
+  <div class="section-title">The people behind the strategy</div>
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-avatar" style="background:#E6F1FB;color:#0C447C;">AM</div>
+      <h3>Alex Mitchell</h3>
+      <div class="role">Head of Advisory</div>
+      <div class="cert-badges"><span class="cert">Sales Cloud</span><span class="cert">Service Cloud</span><span class="cert">Architect</span></div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:#E1F5EE;color:#085041;">PL</div>
+      <h3>Priya Lal</h3>
+      <div class="role">Senior Consultant</div>
+      <div class="cert-badges"><span class="cert">Marketing Cloud</span><span class="cert">CPQ</span></div>
+    </div>
+    <div class="team-card">
+      <div class="team-avatar" style="background:#EEEDFE;color:#3C3489;">TW</div>
+      <h3>Tom Walsh</h3>
+      <div class="role">Solutions Architect</div>
+      <div class="cert-badges"><span class="cert">Platform Dev</span><span class="cert">Integration</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="section-eyebrow">Industries we serve</div>
+  <div class="section-title">Deep expertise across your sector</div>
+  <div class="industries">
+    <div class="ind-tile"><div class="ind-icon" style="background:#E6F1FB;"></div><p>Financial Services</p></div>
+    <div class="ind-tile"><div class="ind-icon" style="background:#E1F5EE;"></div><p>Retail & eCommerce</p></div>
+    <div class="ind-tile"><div class="ind-icon" style="background:#EEEDFE;"></div><p>Healthcare</p></div>
+    <div class="ind-tile"><div class="ind-icon" style="background:#FAEEDA;"></div><p>Manufacturing</p></div>
+    <div class="ind-tile"><div class="ind-icon" style="background:#FAECE7;"></div><p>Professional Services</p></div>
+    <div class="ind-tile"><div class="ind-icon" style="background:#E1F5EE;"></div><p>Not-for-Profit</p></div>
+    <div class="ind-tile"><div class="ind-icon" style="background:#E6F1FB;"></div><p>Technology</p></div>
+    <div class="ind-tile"><div class="ind-icon" style="background:#FBEAF0;"></div><p>Property & Real Estate</p></div>
+  </div>
+
+  <div class="partner-bar">
+    <div class="partner-badge">
+      <div class="partner-badge-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <span>Salesforce<br>Summit Partner</span>
+    </div>
+    <div style="width:0.5px;height:40px;background:var(--color-border-tertiary);"></div>
+    <div style="text-align:center;"><div style="font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:#1D9E75;">160+</div><div style="font-size:11px;color:var(--color-text-secondary);">Salesforce certifications</div></div>
+    <div style="width:0.5px;height:40px;background:var(--color-border-tertiary);"></div>
+    <div style="text-align:center;"><div style="font-family:'Fraunces',serif;font-size:22px;font-weight:500;color:#1D9E75;">10+</div><div style="font-size:11px;color:var(--color-text-secondary);">Years as a partner</div></div>
+    <div style="width:0.5px;height:40px;background:var(--color-border-tertiary);"></div>
+    <div class="logos-row" style="margin:0;gap:12px;">
+      <div class="logo-pill">accan</div>
+      <div class="logo-pill">AVIS</div>
+      <div class="logo-pill">Blue Harvest</div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-section">
+  <div class="cta-eyebrow">Free advisory session</div>
+  <h2>Not sure where your Salesforce strategy stands?</h2>
+  <p>Book a free 30-minute health check with one of our senior advisors. No commitment, no pitch — just honest insight into where you are and what's possible.</p>
+  <div class="cta-actions">
+    <button class="cta-btn-main">Book your free session</button>
+    <button class="cta-btn-sec">Download our advisory guide</button>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-eyebrow">Insights & perspectives</div>
+  <div class="section-title">Salesforce advisory thinking</div>
+  <div class="blog-grid">
+    <div class="blog-card">
+      <div class="blog-thumb" style="background:#E1F5EE;"></div>
+      <div class="blog-tag-bar"><span class="blog-tag">Advisory</span></div>
+      <h4>Aligning Salesforce with your business goals — a guide for executives</h4>
+      <p>For many organisations, Salesforce is more than a CRM. Here's how to make it a strategic asset.</p>
+    </div>
+    <div class="blog-card">
+      <div class="blog-thumb" style="background:#E6F1FB;"></div>
+      <div class="blog-tag-bar"><span class="blog-tag">Strategy</span></div>
+      <h4>5 steps to building a Salesforce strategy that delivers business impact</h4>
+      <p>Salesforce is more than a CRM platform that can transform your business — but without a clear strategy, results remain elusive.</p>
+    </div>
+    <div class="blog-card">
+      <div class="blog-thumb" style="background:#EEEDFE;"></div>
+      <div class="blog-tag-bar"><span class="blog-tag">Advisory</span></div>
+      <h4>Common pitfalls in Salesforce implementations — and how advisory helps avoid them</h4>
+      <p>Implementing Salesforce without strategic guidance leads to the same costly mistakes, time and again.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="section-eyebrow">FAQs</div>
+  <div class="section-title">Advisory services, answered</div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">What is Salesforce Advisory Services? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div>
+      <div class="faq-a">Advisory is a strategic engagement where our certified consultants assess your Salesforce environment, understand your business goals, and provide a clear roadmap and recommendations to maximise your investment.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">When should my business consider Advisory Services? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do Advisory Services differ from implementation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do you help with process and workflow optimisation? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do you assess my existing technology before recommending Salesforce solutions? <svg viewBox="0 0 14 14"><polyline points="3,5 7,9 11,5"/></svg></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer-bar">
+  <p>© 2025 Atlas Consulting. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+</div>
